@@ -58,8 +58,11 @@
 	<!-- Sidebar -->
 	<?php include "php/misc/sidebar.php"; ?>
 
+	<!-- MODALS -->
 	<!-- Modal window with render settings for the active graph -->
 	<?php include "php/graph/activeGraphRenderSettings.php"; ?>
+	<!-- Modal window with profile view/add/delete dialogs -->
+	<?php include "php/profiles/profilesModifyModal.php" ?>
 	
 	<?php include "php/misc/lookup.php"; ?>
 	<!--a class="btn btn-default" id="menu-toggle" href="#menu-toggle">Toggle Menu</a-->

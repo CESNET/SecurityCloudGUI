@@ -32,12 +32,15 @@ TODOLIST
 [ ] Zarovnat do tabulky, odsadit, přidat "Edit" "Add subprofile" jako modal
 [X] Delete prototyp
 [X] Add prototyp
-[ ] Modify prototyp
+[/] Modify prototyp
 [ ] Delete full
 [ ] Add full
 [ ] Modify full
-[ ] Delete profile ???
-[ ] Allow profile renaming ???
+[/] Delete profile ???
+[/] Allow profile renaming ???
+[ ] Buttons group + right
+[ ] Buttons delete doprava, view->info color, add->success color
+[ ] tree view s glyph plus + minus
 
 *** TESTING ***
 [/] thumbs dygraphed

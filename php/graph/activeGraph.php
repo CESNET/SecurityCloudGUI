@@ -3,7 +3,7 @@
 		<div class="row" style="vertical-align: middle;">
 			<div class="col-sm-11" id="ActiveGraphLabel">Flows Any</div>
 			<div class="col-sm-1 text-right">
-				<a href="#" style="color: white;" data-toggle="modal" data-target="#myModal">
+				<a href="#" style="color: white;" data-toggle="modal" data-target="#ActiveGraphRenderSettings">
 					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 				</a>
 			</div>

@@ -16,7 +16,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	
 	/* CREATE A MASTER TREE FROM XML */
 	$TREE_PROFILE = new Profile();												// Full tree of profiles
-	createProfileTreeFromXml(loadXmlFile("../../data/profiles.xml"), "/", $TREE_PROFILE);	// Fill it with ALL necessary data
+	createProfileTreeFromXml(loadXmlFile($IPFIXCOL_CFG), "/", $TREE_PROFILE);	// Fill it with ALL necessary data
 	
 	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
 	$ARR_AVAILS = getAvailableProfiles("me");

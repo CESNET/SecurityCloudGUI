@@ -1,26 +1,36 @@
+<script>
+	function _fillProfileModal(mode) {
+		var ajax = Utility.initAjax();
+		
+		ajax.onreadystatechange = function () {
+			if (ajax.readyState == 4) {
+				document.getElementById("ProfilesModalContent").innerHTML = ajax.responseText;
+			}
+		}
+		
+		ajax.open("GET", "php/async/profileModalFill.php?mode="+mode, true);
+		ajax.send(null);
+	}
+</script>
+
 <?php
 	/**
 	 *	Prints the profile tree in a format convenient for the GUI, alongside with the
 	 *	valid URL links for changing the profiles.
 	 */
-	function printProfileTree($object) {
-		$str = preg_replace("/^\/[a-zA-Z0-9_\/]+\//", "", $object->getName());
-		echo "<ul>";
-		echo "<li><a href='index.php?profile=".$object->getName()."'>$str</a></li>";
-		
-		foreach($object->getChildren() as $o) {
-			printProfileTree($o);
-		}
-		
-		echo "</ul>";
-	}
-	
 	function printProfileTree2($object, $level) {
 		echo "<tr><td>";
 		
 		/* Print offset */
 		for ($i = 0; $i < $level; $i++) {
-			echo "<span class='glyphicon glyphicon-play'></span>";
+			echo "&nbsp;&nbsp;&nbsp;";
+		}
+		
+		if ($level % 2 == 0) {
+			echo "&nbsp;&#9679;&nbsp;";
+		}
+		else {
+			echo "&nbsp;&#9900;&nbsp;";
 		}
 		
 		/* Print name */
@@ -32,15 +42,15 @@
 		/* Print sources */
 		echo "</td><td>";
 		foreach ($object->getChannels() as $src) {
-			echo $src->getName()." ";
+			echo "<span class='label label-default'>".$src->getName()."</span> ";
 		}
 		
-		echo "</td><td>";
-		echo "<button class='btn btn-primary'>Edit profile</button> ";
-		echo "<button class='btn btn-danger'>Delete profile</button> ";
-		echo "<button class='btn btn-info'>Add subprofile</button> ";
+		echo "</td><td align='right' style='width: 30%; min-width: 350px;'><div class='btn-group'>";
+		echo "<button class='btn btn-info' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('view');\">View profile</button>";
+		echo "<button class='btn btn-success' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('add');\">Add subprofile</button>";
+		echo "<button class='btn btn-danger' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('delete');\">Delete profile</button>";
 		
-		echo "</td></tr>";
+		echo "</div></td></tr>";
 		
 		/* Do children */
 		foreach($object->getChildren() as $o) {
@@ -55,7 +65,14 @@
 	</div>
 	
 	<div class="panel-body">
-		<table class="table table-striped table-condensed table-bordered"><tbody>
+		<table class="table table-striped table-condensed table-hover"><!-- table-bordered -->
+			<tr>
+				<thead>
+					<th>Profile</th>
+					<th>Channels</th>
+					<th>Options</th>
+				</thead>
+			</tr><tbody>
 		<?php
 			$object;
 			foreach($ARR_AVAILS as $av) {
