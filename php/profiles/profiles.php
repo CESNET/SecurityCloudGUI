@@ -1,14 +1,18 @@
 <script>
-	function _fillProfileModal(mode) {
+	function _fillProfileModal(mode, profile) {
 		var ajax = Utility.initAjax();
 		
 		ajax.onreadystatechange = function () {
 			if (ajax.readyState == 4) {
 				document.getElementById("ProfilesModalContent").innerHTML = ajax.responseText;
+				
+				if (mode == "add") {
+					_addChannel();
+				}
 			}
 		}
 		
-		ajax.open("GET", "php/async/profileModalFill.php?mode="+mode, true);
+		ajax.open("GET", "php/async/profileModalFill.php?mode="+mode+"&profile="+profile, true);
 		ajax.send(null);
 	}
 </script>
@@ -35,7 +39,7 @@
 		
 		/* Print name */
 		$str = preg_replace("/^\/[a-zA-Z0-9_\/]+\//", "", $object->getName());
-		echo $str;
+		echo "<a href='index.php?profile=".$object->getName()."'>$str</a>";
 		
 		
 		
@@ -46,9 +50,9 @@
 		}
 		
 		echo "</td><td align='right' style='width: 30%; min-width: 350px;'><div class='btn-group'>";
-		echo "<button class='btn btn-info' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('view');\">View profile</button>";
-		echo "<button class='btn btn-success' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('add');\">Add subprofile</button>";
-		echo "<button class='btn btn-danger' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('delete');\">Delete profile</button>";
+		echo "<button class='btn btn-info' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('view', '".$object->getName()."');\">View profile</button>";
+		echo "<button class='btn btn-success' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('add', '".$object->getName()."');\">Add subprofile</button>";
+		echo "<button class='btn btn-danger' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('delete', '".$object->getName()."');\">Delete profile</button>";
 		
 		echo "</div></td></tr>";
 		

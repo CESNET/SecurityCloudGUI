@@ -29,18 +29,19 @@ TODOLIST
 *** PROFILES ***
 [X] Verify profiles page and a validity of the links
 [ ] Proper function of shadow profiles (ipfixcol fix)
-[ ] Zarovnat do tabulky, odsadit, přidat "Edit" "Add subprofile" jako modal
+[X] Zarovnat do tabulky, odsadit, přidat "Edit" "Add subprofile" jako modal
 [X] Delete prototyp
 [X] Add prototyp
 [/] Modify prototyp
 [ ] Delete full
 [ ] Add full
-[ ] Modify full
+[X] Modify full
 [/] Delete profile ???
 [/] Allow profile renaming ???
-[ ] Buttons group + right
-[ ] Buttons delete doprava, view->info color, add->success color
-[ ] tree view s glyph plus + minus
+[X] Buttons group + right
+[X] Buttons delete doprava, view->info color, add->success color
+[/] tree view s glyph plus + minus
+[ ] Normal mouse cursor for disabled inputs
 
 *** TESTING ***
 [/] thumbs dygraphed

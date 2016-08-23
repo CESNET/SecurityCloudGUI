@@ -23,7 +23,7 @@
 		<div class="form-group">
 			<label for="ProfilesChannelFilter" class="col-sm-2 control-label">Filter:</label>
 			<div class="col-sm-10">
-				<textarea value="" rows="3" id="ProfileChannelFilter" class="form-control"></textarea>
+				<textarea placeholder="*" rows="3" id="ProfileChannelFilter" class="form-control"></textarea>
 			</div>
 		</div>
 		

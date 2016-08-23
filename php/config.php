@@ -1,6 +1,6 @@
 <?php
 	// Full path to the index.php file of the GUI
-	$BASE_DIR			= "/var/www/html/sc";
+	$BASE_DIR			= "/var/www/html";
 	
 	// Maximum of tabs for parallel fdistdump querries
 	$MAX_TABS 			= 8;
@@ -22,7 +22,7 @@
 	
 	// Path to the ipfixcol profile configuration
 	// file.
-	$IPFIXCOL_CFG		= $BASE_DIR."/data/ipfixcol.xml";
+	$IPFIXCOL_CFG		= $BASE_DIR."/data/profiles.xml";
 	
 	// Path to the pidfile of the ipfixcol. This file has
 	// to exist (and has to be valid) in order to reconfigure

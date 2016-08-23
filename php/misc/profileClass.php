@@ -9,6 +9,7 @@
 	class ProfileChannel {
 		private $name		= "default";
 		private $filter		= "";
+		private $sources	= null;
 		
 		/**
 		 *  Sets a name of the channel
@@ -22,6 +23,10 @@
 		 */
 		public function setFilter($filter) {
 			$this->filter = $filter;
+		}
+		
+		public function setSources($src) {
+			$this->sources = $src;
 		}
 		
 		/**
@@ -38,6 +43,10 @@
 		 */
 		public function getFilter() {
 			return $this->filter;
+		}
+		
+		public function getSources() {
+			return $this->sources;
 		}
 	};
 
@@ -95,10 +104,11 @@
 		/**
 		 *  Adds a channel to the profile. Channel must have everything defined: name, filter and array of sources
 		 */
-		public function addChannel($name, $filter) {
+		public function addChannel($name, $filter, $sources) {
 			$chnl = new ProfileChannel();
 			$chnl->setName($name);
 			$chnl->setFilter($filter);
+			$chnl->setSources($sources);
 			
 			array_push($this->channels, $chnl);
 			$this->chnlPtr++;

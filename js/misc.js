@@ -89,17 +89,17 @@ function lookupGrabGeolc(ipaddr) {
 			modal.innerHTML = "";
 			
 			for(var i = 0; i < items.length; i++) {
-				modal.innerHTML += items[i]+tabs[i]+json[items[i]];//+"\n";
+				modal.innerHTML += items[i]+tabs[i]+json.contents[items[i]];//+"\n";
 				
 				if (i == 2) {
-					modal.innerHTML += " <img src='blank.gif' class='flag flag-"+json[items[i]].toLowerCase()+"' />";
+					modal.innerHTML += " <img src='blank.gif' class='flag flag-"+json.contents[items[i]].toLowerCase()+"' />";
 				}
 				modal.innerHTML += "\n";
 			}
 		}
 	}
 	
-	ajax.open("GET", "http://ip-api.com/json/"+ipaddr, true);
+	ajax.open("GET", "php/async/proxy.php?url="+encodeURIComponent("http://ip-api.com/json/"+ipaddr), true);
 	ajax.send(null);
 }
 

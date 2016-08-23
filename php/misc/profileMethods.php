@@ -49,10 +49,17 @@ function createProfileTreeFromXml ($xml, $prefix, &$object) {
 					if ($chProp->getName() == "filter") {
 						$filter = $chProp;
 					}
+					else if ($chProp->getName() == "sourceList") {
+						$sources = array();
+						foreach($chProp->children() as $src) {
+							$sources[] = $src;
+						}
+					}
 				}
 				
 				$part = $node->attributes();
-				$object->addChannel($part[0], $filter);
+				
+				$object->addChannel($part[0], $filter, $sources);
 			}
 		}
 		else if ($ch->getName() == "type") {
