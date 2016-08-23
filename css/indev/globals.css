@@ -1,0 +1,49 @@
+body {
+	background-color: #CCCCCC;
+}
+
+#ActiveGraphControl {
+	margin:				0px;
+	padding:			0px;
+}
+#ActiveGraphControl>div:nth-child(even) {
+	background-color:	#DFDFDF;
+}
+#ActiveGraphControl>div:nth-child(odd) {
+	background-color:	#D0D0D0;
+}
+#ActiveGraphControl>div {
+	margin:				0px;
+	padding:			5px;
+	font-weight:		bold;
+	text-decoration:	none;
+}
+#ActiveGraphControl>div:hover {
+	background-color:	#AAAAAA;
+	cursor:				pointer;
+}
+
+.popover {
+	color: black;
+	width: 200px;
+}
+
+.popover-title{
+	background: #ffff99;
+}
+
+#ActiveGraphControl2>div>a {
+	margin:				0px;
+	width:				100%;
+}
+
+.panel-heading {
+	text-align: center;
+}
+
+.row-eq-height {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display:         flex;
+}
