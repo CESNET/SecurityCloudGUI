@@ -1,0 +1,59 @@
+TODOLIST
+
+*** GENERAL ***
+[X] Run the GUI on a clean machine
+> [X] install nf-tools
+> [X] install fdistdump
+> [X] install ipfixcol
+> [X] install webserver
+> [X] install rrdtool 1.6
+> [X] install php
+> [X] install gui
+[ ] Write down a comprehensive installation notes
+
+*** STATS ***
+[X] Choose proper design
+[X] Get the data (fdistdump fix)
+[ ] Highlight most important data
+[X] Get time window data
+[ ] Total
+[ ] Channel
+
+*** DATABASE ***
+[ ] Source selection (ipfixcol fix)
+> [ ] Shadow profile source selection (grab filter only of selected filters)
+[X] Test the transaction cleanup when querry is running and user closes the page
+[X] Hangs if only stderr is provided
+[ ] Delete json files !!!!
+
+*** PROFILES ***
+[X] Verify profiles page and a validity of the links
+[ ] Proper function of shadow profiles (ipfixcol fix)
+[ ] Zarovnat do tabulky, odsadit, přidat "Edit" "Add subprofile" jako modal
+[X] Delete prototyp
+[X] Add prototyp
+[ ] Modify prototyp
+[ ] Delete full
+[ ] Add full
+[ ] Modify full
+[ ] Delete profile ???
+[ ] Allow profile renaming ???
+
+*** TESTING ***
+[/] thumbs dygraphed
+
+*** SECURITY ***
+[+] Stuff going to the createGraph.php can be injected
+[X] Stuff passed in the fdistdump filter can be ?injected? <-- (not sure, this stuff is in quotes)
+[X] Stuff passed in the fdistdump opts/src can be injected
+
+NOTES:
+	escapeshellarg na každý jednotlivý argument shellu
+	pokud by pak byl problém s UTF8 oproti ASCII: <?php setlocale(LC_CTYPE, "en_US.UTF-8"); ?>
+	možná praktičtější by bylo zkusit escapeshellcmd, který se aplikuje na příkaz jako na celek
+	složky s daty potřebují oprávnění i pro zápis (json file) anebo bude potřeba to lifrovat zase do transakčního folderu
+
+--output-items=m --output-format=csv --output-volume-conv=metric-prefix
+
+	Statistiky z fdistdump se musí vzít v nativním CSV formátu a také v tom metric-prefix formátu
+	Musí se vzít pro každý prefix separátně a pak pro všechny naráz a všechno tohle info se nějak musí zpracovat v loopu a vypsat
