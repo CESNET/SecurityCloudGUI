@@ -1,14 +1,20 @@
-Prerequisities:
-	- rrdtool 1.6 (or 1.5 if it supports graph JSONTIME export format. 1.4 does not)
-	- fdistdump
-	- webserver with php5 or higher
-	- both fdistdump and rrdtool must be in $PATH of apache user
-	- ipfixcol with plugins: profiler, profile_stats (intermediate) and lnfstore (storage)
-	
-Recommended
-	- mod_ssl and openssl for webserver
-	
-INSTALATION
+# SecurityCloud GUI
+## Introduction
+This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows you to visualize and analyze your internet flows collected by the ipfix collector.
+
+The GUI also allows you to do easy querries on the data using the fdistdump and also to organize and manage export profiles of the ipfixcol.
+
+## Prerequisities:
+- rrdtool 1.6
+- [ipfixcol]() with the following 3rd party plugins:
+	> profile_stats (intermediate)
+	> profiler (intermediate)
+	> lnfstore (storage)
+- [fdistdump]()
+- webserver with php5 or higher
+- rrdtool **must** be in the $PATH of the apache user
+
+## Instalation
 1) Copy all files to your webserver folder (example: '/var/www/html/')
 2) Set owner of these files to root
 3) All files should have readonly permissions for nonroot users
