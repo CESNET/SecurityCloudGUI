@@ -1,22 +1,3 @@
-<script>
-	function _fillProfileModal(mode, profile) {
-		var ajax = Utility.initAjax();
-		
-		ajax.onreadystatechange = function () {
-			if (ajax.readyState == 4) {
-				document.getElementById("ProfilesModalContent").innerHTML = ajax.responseText;
-				
-				if (mode == "add") {
-					_addChannel();
-				}
-			}
-		}
-		
-		ajax.open("GET", "php/async/profileModalFill.php?mode="+mode+"&profile="+profile, true);
-		ajax.send(null);
-	}
-</script>
-
 <?php
 	/**
 	 *	Prints the profile tree in a format convenient for the GUI, alongside with the
@@ -50,9 +31,9 @@
 		}
 		
 		echo "</td><td align='right' style='width: 30%; min-width: 350px;'><div class='btn-group'>";
-		echo "<button class='btn btn-info' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('view', '".$object->getName()."');\">View profile</button>";
-		echo "<button class='btn btn-success' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('add', '".$object->getName()."');\">Add subprofile</button>";
-		echo "<button class='btn btn-danger' data-toggle='modal' data-target='#ProfilesModal' onclick=\"_fillProfileModal('delete', '".$object->getName()."');\">Delete profile</button>";
+		echo "<button class='btn btn-info' data-toggle='modal' data-target='#ProfilesModal' onclick=\"Profile.fillModal('view', '".$object->getName()."');\">View profile</button>";
+		echo "<button class='btn btn-".($object->getShadow() ? "default" : "success")."' data-toggle='modal' data-target='#ProfilesModal' onclick=\"Profile.fillModal('create', '".$object->getName()."');\"".($object->getShadow() ? "disabled" : "").">Add subprofile</button>";
+		echo "<button class='btn btn-danger' data-toggle='modal' data-target='#ProfilesModal' onclick=\"Profile.fillModal('delete', '".$object->getName()."');\">Delete profile</button>";
 		
 		echo "</div></td></tr>";
 		

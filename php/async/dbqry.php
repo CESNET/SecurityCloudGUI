@@ -65,7 +65,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$opts = escapeshellcmd($opts);
 	
 	// *** proc_open params ***
-	$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TRANS_FOLDER.$stamp.".$tab.json $src";	// <---------- $CMD --------------
+	$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json $src";	// <---------- $CMD --------------
 	$desc = array(
 		0 => array ('pipe', 'r'),
 		1 => array ('pipe', 'w'),
@@ -73,7 +73,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	);
 	$pipes = array();
 	
-	$lock = fopen("../misc/transactions/$stamp.lock", "r");					// Apply mutex, so the transaction file can only be modified by this thread
+	$lock = fopen($TMP_DIR.$stamp.".lock", "r");					// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
 		echo "<div class='panel panel-danger'>";							// Print this *very* serious error
 		echo "<div class='panel-heading'>Error</div>";
@@ -93,7 +93,7 @@ function execDbRequest() {														// This gets called when this thread is 
 
 	$stats = proc_get_status($p);
 	
-	addTransaction("../misc/transactions/$stamp", $tab, $stats['pid']);	
+	addTransaction($TMP_DIR.$stamp, $tab, $stats['pid']);	
 	
 	flock($lock, LOCK_UN);													// Release the lock
 	fclose($lock);															// And close the lock file
@@ -117,7 +117,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		}
 	}
 	
-	$lock = fopen("../misc/transactions/$stamp.lock", "r");					// Apply mutex, so the transaction file can only be modified by this thread
+	$lock = fopen($TMP_DIR.$stamp.".lock", "r");					// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
 		echo "<div class='panel panel-danger'>";							// Print this *very* serious error
 		echo "<div class='panel-heading'>Error</div>";
@@ -126,10 +126,10 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);															// And end this thread )
 	}																		// Else
 	
-	$index = findTransaction("../misc/transactions/".$stamp, $tab, $pid);	// Find our transaction (pid is not needed, but it is a mandatory argument for function call)
+	$index = findTransaction($TMP_DIR.$stamp, $tab, $pid);	// Find our transaction (pid is not needed, but it is a mandatory argument for function call)
 	
 	if($index != -1) {														// If index was found (i.e. nobody stopped this querry)
-		removeTransaction("../misc/transactions/".$stamp, $index);			// Remove the transaction with success
+		removeTransaction($TMP_DIR.$stamp, $index);			// Remove the transaction with success
 	}
 	
 	flock($lock, LOCK_UN);													// Release the lock
@@ -191,18 +191,18 @@ else if($mode == "kill") {
 	$tab	= $_GET["tab"];
 
 	// Acquire lock
-	$lock = fopen("../misc/transactions/$stamp.lock", "r");
+	$lock = fopen($TMP_DIR.$stamp.".lock", "r");
 	if(flock($lock, LOCK_EX) == false) {
 		echo "Flock failed.\n";
 	}
 
-	if(($index = findTransaction("../misc/transactions/".$stamp, $tab, $pid)) != -1) {
+	if(($index = findTransaction($TMP_DIR.$stamp, $tab, $pid)) != -1) {
 		// Kill the process
 		echo "PID = ".$pid.", index = ".$index;
 		exec("kill -9 $pid");
 		
 		// Clear the transaction
-		removeTransaction("../misc/transactions/".$stamp, $index);
+		removeTransaction($TMP_DIR.$stamp, $index);
 	}
 	else {
 		echo "Transaction does not exist";

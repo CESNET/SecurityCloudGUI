@@ -1,0 +1,217 @@
+Checklist
+
+I!      ip version	//Zmena oproti nfdump - inet <num> alebo ipv <num> 
+           inet  or ipv4 for IPv4
+           inet6 or ipv6 for IPv6
+
+IT     protocol
+           proto <protocol>
+           proto <number>
+           where <protocol> is known protocol such as tcp, udp, icmp, icmp6, gre, esp, ah, etc.  or  a
+           valid protocol number: 6, 17 etc.
+
+IT     IP address	//BEZ DNS prekladu
+           [src|dst] ip <ipaddr>
+           [src|dst] host <ipaddr>
+           with  <ipaddr> as any valid IPv4, IPv6 address, or a full qualified hostname.  In case of a
+           hostname, the IP address is looked up in DNS.  If more than a single IP address  is  found,
+           all IP addresses are chained together. (ip1 or ip2 or ip3 ... )
+
+           To check if an IP address is in a known IP list, use
+           [src|dst] ip in [ <iplist> ]
+           [src|dst] host in [ <iplist> ]
+           <iplist>  is a space or comma separated list of individual <ipaddr> or full qualified host‐
+           names, which are looked up in DNS. If more than a  single  IP  address  is  found,  all  IP
+           addresses are put into the list.
+
+       [src|dst]
+           IP  addresses,  networks,  ports,  AS  number  etc. can be specifically selected by using a
+           direction qualifier, such as src or dst.  They can also be used in combination with and and
+           or.  such as src and dst ip ...
+
+IT      network
+           [src|dst] net a.b.c.d m.n.r.s
+           Select the IPv4 network a.b.c.d with netmask m.n.r.s.
+
+IT         [src|dst] net <net>/<num>
+           with  <net> as a valid IPv4 or IPv6 network and <num> as maskbits.  The number of mask bits
+           must match the appropriate address familiy in IPv4 or IPv6. Networks may be abreviated such
+           as 172.16/16 if they are unambiguous.
+          
+IT     Port
+           [src|dst] port [comp] <num>
+           with <num> as any valid port number.  If comp is omitted,
+            '=' is assumed. comp is explained more detailed below.
+           [src|dst] port in [ <portlist> ]
+           A  port  can be compared against a know list, where <portlist> is a space separated list of
+           individual port numbers.
+
+I      ICMP	//TODO imply ICMP
+           icmp-type <num>
+           icmp-code <num>
+           with <num> as a valid icmp type/code. This automatically implies proto icmp.	 
+
+I      Router ID
+           engine-type <num>
+           engine-id <num>
+           sysid <num>		//Not known conversion
+           with <num> as a valid router engine type/id or exporter ID(0..255).
+
+I      Interface
+           [in|out] if <num>
+           Select input or output or either interface ID, with num as the SNMP interface number.
+           Example: in if 3
+
+I      AS numbers
+           [src|dst|prev|next] as [comp] <num>
+           Selects source, dstination, previous, next or any AS number with <num> as any valid as num‐
+           ber.  32bit  AS numbers are suported. If comp is omitted, '=' is assumed. comp is explained
+           more detailed below.
+
+           [src|dst|prev|next] as in [ <ASlist> ]
+           An AS number can be compared against a know list, where <ASlist> is a space or comma  sepa‐
+           rated list of individual AS numbers.
+
+I      Prefix mask bits
+           [src|dst] mask <bits>
+           with <bits> as any valid prefix mask bit value.
+
+I      Vlan labels
+           [src|dst] vlan <num>
+           with <num> as any valid vlan label.
+           
+IT     Flags
+           flags <tcpflags>
+           with <tcpflags> as a combination of:
+              A    ACK.
+              S    SYN.
+              F    FIN.
+              R    Reset.
+              P    Push.
+              U    Urgent.
+              X    All flags on.
+       The  ordering  of the flags is not relevant. Flags not mentioned are treated as don't care.  In
+       order to get those flows with only the SYN flag set, use the syntax  'flags  S  and  not  flags
+       AFRPU'.
+
+I      Next hop IP
+           next ip <ipaddr>
+           with <ipaddr> as IPv4/IPv6 IP address of next hop router.
+
+I      Next-hop router's IP in the BGP domain
+           bgpnext ip <ipaddr>
+           with <ipaddr> as IPv4/IPv6 next-hop router's IP in the BGP domain. ( v9 #18 )
+
+I      Router IP
+           router ip <ipaddr>
+           Filter the flows according the IP address of the exporting router.
+
+I      MAC addresses
+           [InOutSrcDst] mac <addr>
+           With <addr> any valid MAC address. mac can be more specific specified by using any combina‐
+           tion of a direction specifier as defined by CISCO v9.  in src, in dst, out src, out dst.
+
+N      MPLS labels
+           mpls label<n> [comp] <num>
+           With <n> as any mpls label number 1..10. Filters exactly specified label<n>.
+           mpls eos [comp] <num>
+           Filters End of Stack label for a given value <num>.
+           mpls exp<n> [comp] <bits>
+           Filters experimental bits of label <n> with <bits> 0..7.
+
+I      Packets
+           packets [comp] <num> [scale]
+           To filter for netflow records with a specific packet count.
+           Example: packets > 1k
+
+I      Bytes
+           bytes [comp] <num> [scale]
+           To filter for netflow records with a specific byte count.
+           Example: bytes 46 filters all empty IPv4 packets
+           
+I      Aggregated flows
+           flows [comp] <num> [scale]
+           To filter for netflow records with a specific number of aggregated flows.
+
+I      Type of Service (TOS)
+           [SourceDestination] tos <num>
+           With <num> 0..255. For compatibility with nfump 1.5.x: tos <num> is equivalent with src tos
+           <num>
+
+IT     Packets per second: Calculated value.
+           pps [comp] num [scale]
+           To filter for flows with specific packets per second.
+
+IT     Duration: Calculated value
+           duration [comp] num
+           To filter for flows with specific duration in miliseconds.
+
+I      Bits per second: Calculated value.
+           bps [comp] num [scale]
+           To filter for flows with specific bytes per second.
+
+IT     Bytes per packet: Calculated value.
+           bpp [comp] num [scale]
+           To filter for flows with specific bytes per packet.
+
+       scale scaling factor. Maybe k m g. Factor is 1000
+
+       comp The following comparators are supported:
+           =, ==, >, <, EQ, LT, GT .  If comp is omitted, '=' is assumed.
+
+
+       NSEL/ASA specific filters:
+
+N      NSEL/ASA Event
+           asa event <ignore|create|term|delete|deny>
+           asa event [comp] <number>
+           select  NSEL/ASA event by name or number. If given as number it can be compared with a num‐
+           ber
+
+       NSEL/ASA denied reason
+           asa event denied <ingress|egress|interface|nosyn>
+           Select a NSEL/ASA denied event by type
+
+N      NSEL/ASA extended events
+           asa xevent [comp] <num>
+           Select an extended NSELL ASA event by number, or optionally compared by a number.
+
+?      X-late IP addresses and ports
+           [src|dst] xip <ip>
+           Select the translated IP address
+
+?          [src|dst] xnet <net>/<num>
+           with <net> as a valid translated IPv4 or IPv6 network and <num> as maskbits.  The number of
+           mask bits must match the appropriate address familiy in IPv4 or IPv6. Networks may be abre‐
+           viated such as 172.16/16 if they are unambiguous.
+
+?          [src|dst] xport <port>
+           Select the translated port
+
+       NSEL/ASA ingress/egress
+           ingress <ACL|ACE|XACE> [comp] number
+           Select/compare an ingress ACL
+
+           egress ACL [comp] <number>
+           Select/compare an egress ACL
+
+       NEL specific NAT filters:
+
+?      NAT Event
+           nat event <add|delete>
+           nat event [comp] <number>
+           select NEL NAT event by name or number. If given as number it can be compared with a number
+
+I      NEL NAT ip addresses and ports
+           [src|dst] nip <ip>
+           Select the NAT IP address
+
+I          [src|dst] nport <port>
+           Select the NAT port
+
+I      NEL NAT vrf
+           ingress vrf <num> Select the vrf
+
+
+
+

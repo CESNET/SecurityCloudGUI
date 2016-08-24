@@ -18,7 +18,7 @@
 	// Folder for storing transactions of the GUI.
 	// User apache needs privileges to write into this
 	// folder.
-	$TRANS_FOLDER		= $BASE_DIR."/php/misc/transactions/";
+	$TMP_DIR			= "/tmp/scgui/";
 	
 	// Path to the ipfixcol profile configuration
 	// file.
@@ -29,5 +29,5 @@
 	// collector on the run as the users create new profiles
 	// in the gui.
 	// ipfixcol is updated by sending SIGUSR1 to it's running process
-	$PIDFILE			= "/tmp/ipfixcol/pidfile.txt";
+	$PIDFILE			= $TMP_DIR."pidfile.txt";
 ?>

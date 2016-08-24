@@ -135,12 +135,13 @@
 	<script src="js/thirdparty/bootstrap-datetimepicker.min.js"></script>
 	<script src="js/thirdparty/dygraph-combined.min.js"></script>
 	
-	<script src="js/utility.min.js"></script>									<!-- Utility class -->
+	<script src="js/utility.js"></script>									<!-- Utility class -->
 	<script src="js/graph.js"></script>											<!-- Graph class -->
 	<script src="js/graphManagement.js"></script>
 	<script src="js/dbqry.js"></script>
-	<script src="js/transactions.min.js"></script>
+	<script src="js/transactions.js"></script>
 	<script src="js/misc.js"></script>											<!-- gotoPage() -->
+	<script src="js/profiles.js"></script>
 
 	<!-- Menu Toggle Script -->
 	<script>
