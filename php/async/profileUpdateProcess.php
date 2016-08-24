@@ -38,16 +38,55 @@
 	$ARR_AVAILS = getAvailableProfiles("me");
 	$PROFILE = $prefix;
 	if (!verifySelectedProfile($PROFILE, $ARR_AVAILS)) {
-		echo "You don't have the privileges to access the profile $PROFILE<br>";
+		?>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4>Error</h4>
+		</div>
+		<div class="modal-body">
+			You don't have the privileges to access the profile <?php echo $PROFILE; ?>
+			<span style="display: none" id="AsyncQuerryResult">fail</span>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-default" data-dismiss="modal">Okay</button>
+		</div>
+		<?php
 		exit(1);
 	}
 	
 	$parent = null;
 	findParentNode($xml, "", $prefix, $parent);
 	
+	if ($parent == null) {
+		?>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4>Error</h4>
+		</div>
+		<div class="modal-body">
+			The path <?php echo $parent; ?> does not even exist in the profiles hierarchy.
+			<span style="display: none" id="AsyncQuerryResult">fail</span>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-default" data-dismiss="modal">Okay</button>
+		</div>
+		<?php
+		exit(1);
+	}
+	
+	/* ========= */
+	/* MAIN CODE */
+	/* ========= */
 	if ($mode == "create") {
 		$type	= $_GET["type"];												//	...
 		$chnls	= $_GET["channels"];
+		
+		if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $flname) {
+			// Echo error profile name
+		}
+		else if ($type != "normal" || $type != "shadow") {
+			// Echo error profile type
+		}
 	
 		if (empty($parent->subprofileList)) {								//	If profile has no children [
 			$list = $parent->addChild("subprofileList");					//		add one
@@ -64,6 +103,12 @@
 		foreach ($channels as $c) {											//	For every channel [
 			$buf = explode (":", $c);										// 		break it to bits
 			
+			if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $buf[0]) {
+				// Echo error profile name
+			}
+			// somehow test the filter (safely)
+			// Build a PROFILE_TREE and check agains source names?!
+			
 			$channel = $chlist->addChild("channel");						//		add <channel> to <channelList>
 			$channel->addAttribute("name", $buf[0]);						//		modify <channel name="">
 
@@ -78,7 +123,8 @@
 	}																		// )
 	else if ($mode == "delete") {
 		if ($name != "/live") {
-			if (sizeof($parent->subprofileList->children()) == 1) {?>
+			if (sizeof($parent->subprofileList->children()) == 1) {
+				?>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h4>Deletion successful</h4>
@@ -87,7 +133,8 @@
 					The profile was deleted successfully. Reload the page.
 					<span style="display: none" id="AsyncQuerryResult">success</span>
 				</div>
-				<?php unset($parent->subprofileList);
+				<?php
+				unset($parent->subprofileList);
 			}
 			else {
 				foreach ($parent->subprofileList->children() as $c) {

@@ -10,7 +10,7 @@ TODOLIST
 > [X] install php
 > [X] install gui
 [ ] Write down a comprehensive installation notes
-[ ] Na každou stránku přidat bar, který říká, který profil je používanej
+[X] Na každou stránku přidat bar, který říká, který profil je používanej
 
 *** STATS ***
 [X] Choose proper design
@@ -43,7 +43,7 @@ TODOLIST
 [X] Buttons delete doprava, view->info color, add->success color
 [/] tree view s glyph plus + minus
 [ ] Normal mouse cursor for disabled inputs
-[ ] Vracet odpověď add/delete do modal okna
+[X] Vracet odpověď add/delete do modal okna
 [X] Generovat odpověď pro gui
 [X] JS->odchytni výsledek --> pokud error, vypiš; jinak reload page
 [X] mutex na editaci ipfixcol_CFG
