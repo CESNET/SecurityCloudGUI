@@ -1,4 +1,15 @@
 <?php
+	/**
+	 *  @brief Brief
+	 *  
+	 *  @param [in] $root Parameter_Description
+	 *  @param [in] $prefix Parameter_Description
+	 *  @param [in] $search Parameter_Description
+	 *  @param [in] $result Parameter_Description
+	 *  @return Return_Description
+	 *  
+	 *  @details Details
+	 */
 	function findParentNode($root, $prefix, $search, &$result) {
 		$attr = $root->attributes();
 		$match = $prefix."/".$attr[0];
@@ -19,14 +30,28 @@
 	}
 
 	include "../config.php";
-	//include "../misc/profileClasses.php";
 	include "../misc/profileMethods.php";
 	
 	$mode = $_GET["mode"];
 	$name = $_GET["name"];
 	
 	$lock = fopen("../app.lock", "r");
-	flock($lock, LOCK_EX);
+	if(!flock($lock, LOCK_EX)) {
+		?>
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4>Error</h4>
+		</div>
+		<div class="modal-body">
+			The GUI was not set up properly. You have to set up corrent privileges for the app.lock file. Consult the installation guide.
+			<span style="display: none" id="AsyncQuerryResult">fail</span>
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-default" data-dismiss="modal">Okay</button>
+		</div>
+		<?php
+		exit(1);
+	}
 	
 	$xml = simplexml_load_file($IPFIXCOL_CFG);
 	
@@ -78,24 +103,53 @@
 	/* MAIN CODE */
 	/* ========= */
 	if ($mode == "create") {
-		$type	= $_GET["type"];												//	...
+		$type	= $_GET["type"];
 		$chnls	= $_GET["channels"];
 		
-		if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $flname) {
-			// Echo error profile name
+		if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $flname)) {			// ERROR handling (BADNAME)
+			?>
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>Error</h4>
+			</div>
+			<div class="modal-body">
+				The profile name does not comply with the ipfixcol naming convention. First letter of the name must be a alphabetical letter, rest can be letters, numbers or underscores.
+				<span style="display: none" id="AsyncQuerryResult">fail</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Okay</button>
+			</div>
+			<?php
+			exit(2);
 		}
-		else if ($type != "normal" || $type != "shadow") {
-			// Echo error profile type
+		else if ($type != "normal" && $type != "shadow") {					// ERROR handling (BADTYPE)
+			?>
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4>Error</h4>
+			</div>
+			<div class="modal-body">
+				Please stop trying to hack this... Profile type can be 'normal' or 'shadow', nothing else.
+				<span style="display: none" id="AsyncQuerryResult">fail</span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" data-dismiss="modal">Okay</button>
+			</div>
+			<?php
+			exit(3);
 		}
 	
 		if (empty($parent->subprofileList)) {								//	If profile has no children [
 			$list = $parent->addChild("subprofileList");					//		add one
 		}																	//	]
+		else {
+			$list = $parent->subprofileList;
+		}
 		
 		$profile = $list->addChild("profile");								// 	Add <profile> element
 		$profile->addAttribute("name", $flname);							// 	Modify <profile name="">
 		$profile->addChild("type", $type);									// 	Add <type> to <profile>
-		$profile->addChild("directory", $base_dir.$name);					// 	Add <directory> to <profile>
+		$profile->addChild("directory", $IPFIXCOL_DATA.$name);				// 	Add <directory> to <profile>
 		
 		$chlist = $profile->addChild("channelList");						// 	Add <channelList> to <profile>
 		$channels = explode(";", $chnls);									//	Break $chnls to list of channels
@@ -103,15 +157,29 @@
 		foreach ($channels as $c) {											//	For every channel [
 			$buf = explode (":", $c);										// 		break it to bits
 			
-			if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $buf[0]) {
-				// Echo error profile name
+			if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $buf[0])) {
+				?>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4>Error</h4>
+				</div>
+				<div class="modal-body">
+					The channel name does not comply with the ipfixcol naming convention. First letter of the name must be a alphabetical letter, rest can be letters, numbers or underscores.
+					<span style="display: none" id="AsyncQuerryResult">fail</span>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Okay</button>
+				</div>
+				<?php
+				exit(4);
 			}
-			// somehow test the filter (safely)
+			
+			// TODO: somehow test the filter (safely)
 			// Build a PROFILE_TREE and check agains source names?!
 			
 			$channel = $chlist->addChild("channel");						//		add <channel> to <channelList>
 			$channel->addAttribute("name", $buf[0]);						//		modify <channel name="">
-
+			
 			$srclist = $channel->addChild("sourceList");					//		add <sourceList> to <channel>
 			
 			for ($i = 2; $i < sizeof($buf); $i++) {							//		for every source of channel {
@@ -124,16 +192,6 @@
 	else if ($mode == "delete") {
 		if ($name != "/live") {
 			if (sizeof($parent->subprofileList->children()) == 1) {
-				?>
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4>Deletion successful</h4>
-				</div>
-				<div class="modal-body">
-					The profile was deleted successfully. Reload the page.
-					<span style="display: none" id="AsyncQuerryResult">success</span>
-				</div>
-				<?php
 				unset($parent->subprofileList);
 			}
 			else {
@@ -151,12 +209,29 @@
 		}
 	}
 	else {
+		?>
+		<div class="modal-body">
+			Unknown mode selected: <?php echo $mode; ?>
+			<span style="display: none" id="AsyncQuerryResult">success</span>
+		</div>
+		<?php
 		exit(69);
 	}
 	
+	// Rewrite the original ipfixcol cfg file
 	$xml->asXML($IPFIXCOL_CFG);
+	
+	// Find out the ipfixcol PID and reload it's configuration
+	$pid = exec("head -1 $PIDFILE");
+	$rtn = exec("kill -10 $pid && echo $?");
 	
 	// Release the lock
 	flock($lock, LOCK_UN);
 	fclose($lock);
-?>
+	
+	?>
+<!-- Success msg back to GUI -->
+<div class="modal-body">
+	Success. Page will reload shortly... <?php echo $rtn."...".$pid; ?>
+	<span style="display: none" id="AsyncQuerryResult">success</span>
+</div>

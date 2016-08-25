@@ -1,9 +1,10 @@
+<?xml version="1.0"?>
 <!-- Live profile (default - always must exists) -->
 <profile name="live">
 	<!--## Type of a profile -->
 	<type>normal</type>
 	<!--## Directory for data store of valuable data and statistics -->
-	<directory>/var/www/html/secloud-web-v2/data/live/</directory>
+	<directory>/data/live/</directory>
 
 	<!-- List of channels that belong to the profile -->
 	<channelList>
@@ -29,7 +30,7 @@
 		<!--## Example subprofile for -->
 		<profile name="emails">
 			<type>normal</type>
-			<directory>/var/www/html/secloud-web-v2/data/live/emails/</directory>
+			<directory>/data/live/emails/</directory>
 
 			<channelList>
 				<!-- POP3 flows -->
@@ -75,56 +76,6 @@
 					</filter>
 				</channel>
 			</channelList>
-			
-			<!--## Subprofiles can also have their own subprofiles -->
-			<subprofileList>
-				<profile name="test">
-					<type>shadow</type>
-					<directory>/var/www/html/secloud-web-v2/data/live/emails/test/</directory>
-					
-					<channelList>
-						<channel name="shadowSource">
-							<sourceList>
-								<source>imap</source>
-								<source>pop3</source>
-							</sourceList>
-							<filter>
-								dstport > 1024
-							</filter>
-						</channel>
-					</channelList>
-				</profile>
-			</subprofileList>
-			
 		</profile>
-		
-		<profile name="brute">
-		      <type>normal</type>
-		      <directory>/var/www/html/secloud-web-v2/data/live/brute/</directory>
-		      
-		      <channelList>
-		      <!-- POP3 flows -->
-			<channel name="ssh">
-				<sourceList>
-					<!--## Sources are channels only from the parent profile -->
-					<source>ch1</source>
-					<source>ch2</source>
-				</sourceList>
-				<filter>
-					sourceTransportPort == 22 OR
-					destinationTransportPort == 22
-				</filter>
-			</channel>
-		      </channelList>
-		</profile>
-
-	<!-- Other subprofiles goes here -->
-	<!--
-		<profile name="http">
-		...
-		</profile>
-	-->
-	
 	</subprofileList>
 </profile>
-

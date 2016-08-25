@@ -24,6 +24,7 @@ function initTransactions($stamp) {
 }
 
 function deinitTransactions($stamp) {
+	include "../config.php";
 	// Empty transactions first
 	$lock = fopen($TMP_DIR.$stamp.".lock", "r");
 	flock($lock, LOCK_EX);
@@ -41,8 +42,12 @@ function deinitTransactions($stamp) {
 	fclose($lock);
 	
 	// Remove the transaction file and a protection lock file
-	unlink($TMP_DIR.$stamp.".lock");
-	unlink($TMP_DIR.$stamp);
+	if (!unlink($TMP_DIR.$stamp.".lock")) {
+		echo "Could not unlink the lock file";
+	}
+	if (!unlink($TMP_DIR.$stamp)) {
+		echo "Could not unlink the regular file";
+	}
 	
 	echo "Transactions were all removed.";
 }

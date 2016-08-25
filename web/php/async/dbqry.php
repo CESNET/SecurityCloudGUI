@@ -82,7 +82,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);															// And end this thread )
 	}																		// Else
 	
-	$p = proc_open($cmd, $desc, $pipes, "../../data$profile/");				// Execute the program command
+	$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/");		// Execute the program command
 	if($p == false) {														// If execution failed (
 		echo "<div class='panel panel-danger'>";							// Print this *very* serious error
 		echo "<div class='panel-heading'>Error</div>";
@@ -117,7 +117,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		}
 	}
 	
-	$lock = fopen($TMP_DIR.$stamp.".lock", "r");					// Apply mutex, so the transaction file can only be modified by this thread
+	$lock = fopen($TMP_DIR.$stamp.".lock", "r");							// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
 		echo "<div class='panel panel-danger'>";							// Print this *very* serious error
 		echo "<div class='panel-heading'>Error</div>";
@@ -142,7 +142,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	// BOOTSTRAP CODE:
 	echo "<div class='panel panel-info'>";									// Print info about used parameters
 	echo "<div class='panel-heading'>Querry parameters</div>";				// Heading will be light blue
-	echo "<div class='panel-body'><pre>$cmdBackup</pre></div>";					// Print commands
+	echo "<div class='panel-body'><pre>$cmdBackup</pre></div>";				// Print commands
 	echo "</div>";
 	if (strlen($buffer) > 0) {
 		echo "<div class='panel panel-success'>";							// Print stdout from fdistdump
@@ -171,11 +171,12 @@ function execDbRequest() {														// This gets called when this thread is 
 		echo "</div>";
 	}
 	if(strlen($errlog) > 0) {
-		echo "<div class='panel panel-danger'>";							// Print stderr from fdistdump
-		echo "<div class='panel-heading'>Querry errors</div>";				// Heading will be red
-		echo "<div class='panel-body'><pre>$errlog</pre></div>";			// Print stderr
-		echo "</div>";
-	}
+?>
+<div class='panel panel-danger'>
+	<div class='panel-heading'>Querry errors</div>
+	<div class='panel-body'><pre><?php echo $errlog; ?></pre></div>
+</div>
+<?php }
 }
 
 $mode	= $_GET["mode"];

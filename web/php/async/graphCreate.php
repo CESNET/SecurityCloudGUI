@@ -54,6 +54,8 @@
 		return $result;
 	}
 	
+	include "../config.php";
+	
 	$var		= $_GET["var"];		// Which variable to display
 	$mode		= $_GET["mode"];	// 'thumb' OR 'json'
 	$profile	= $_GET["profile"];	// TODO: Verify profile via user control
@@ -78,10 +80,8 @@
 	// Descriptor array for proc open. Do not change unless you know what you're doing
 	$desc = array(0 => array ('pipe', 'r'), 1 => array ('pipe', 'w'), 2 => array ('pipe', 'w') );
 	
-	//echo "../../data$profile/rrd/channels/";
-	
 	// Create the image
-	$p = proc_open("exec /opt/rrdtool16/bin/rrdtool graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render", $desc, $pipes, "../../data$profile/rrd/channels/");
+	$p = proc_open("exec /opt/rrdtool16/bin/rrdtool graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render", $desc, $pipes, $IPFIXCOL_DATA."$profile/rrd/channels/");
 
 	//echo "exec rrdtool graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render"; exit;
 	

@@ -1,8 +1,24 @@
-var Profile = {	
+var Profile = {
+	/**
+	 *  @brief Brief
+	 *  
+	 *  @return Return_Description
+	 *  
+	 *  @details Details
+	 */
 	addChannel: function() {
 		document.getElementById("ProfilesModalChannels").innerHTML += document.getElementById("ProfilesModalChannelsMacro").innerHTML;
 	},
 	
+			/**
+		 *  @brief Brief
+		 *  
+		 *  @param [in] mode Parameter_Description
+		 *  @param [in] profile Parameter_Description
+		 *  @return Return_Description
+		 *  
+		 *  @details Details
+		 */
 	fillModal: function(mode, profile) {
 		var ajax = Utility.initAjax();
 		
@@ -20,6 +36,13 @@ var Profile = {
 		ajax.send(null);
 	},
 	
+	/**
+	 *  @brief Brief
+	 *  
+	 *  @return Return_Description
+	 *  
+	 *  @details Details
+	 */
 	mergeChannels: function() {
 		var result = "";
 		var list = document.getElementById("ProfilesModalChannels").getElementsByClassName("channel");
@@ -43,6 +66,13 @@ var Profile = {
 		return result;
 	},
 
+	/**
+	 *  @brief Brief
+	 *  
+	 *  @return Return_Description
+	 *  
+	 *  @details Details
+	 */
 	creationProcess: function() {
 		var name = document.getElementById("ProfilesModalParent").value+"/"+document.getElementById("ProfilesModalName").value;
 		var type = document.getElementById("ProfilesModalType").value;
@@ -52,7 +82,12 @@ var Profile = {
 		
 		ajax.onreadystatechange = function() {
 			if (ajax.readyState == 4) {
-				location.reload();
+				document.getElementById("ProfilesModalContent").innerHTML = ajax.responseText;
+				var result = document.getElementById("AsyncQuerryResult").innerHTML;
+				
+				if (result == "success") {
+					location.reload();
+				}
 			}
 		}
 		
@@ -60,6 +95,13 @@ var Profile = {
 		ajax.send(null);
 	},
 	
+	/**
+	 *  @brief Brief
+	 *  
+	 *  @return Return_Description
+	 *  
+	 *  @details Details
+	 */
 	deletionProcess: function() {
 		var name = document.getElementById("ProfileDeleteName").innerHTML;
 		var ajax = Utility.initAjax();
@@ -70,7 +112,7 @@ var Profile = {
 				var result = document.getElementById("AsyncQuerryResult").innerHTML;
 				
 				if (result == "success") {
-					location.reload();
+					location.replace("index.php");
 				}
 			}
 		}

@@ -26,7 +26,6 @@
 	}
 	
 	$flname	= preg_replace("/^(\/[a-zA-Z_][a-zA-Z0-9_]*)*\//", "", $aux->getName());
-
 ?>	
 <div id="ProfilesModalChannelsMacro" style="display: none;">
 	<div class="channel">
@@ -173,7 +172,7 @@
 			<button class="btn btn-info" onclick="Profile.addChannel();">Add channel</button>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-success" data-dismiss="modal" onclick="Profile.creationProcess();">Add</button>
+			<button type="button" class="btn btn-success" onclick="Profile.creationProcess();">Add</button>
 			<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		</div>
 		<?php
