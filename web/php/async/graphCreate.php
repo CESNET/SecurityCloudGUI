@@ -45,22 +45,35 @@
 	*	definitions.
 	*/
 	function createRenderRules($sources) {
-		$result	= "AREA:foo1#000000:\"$sources[0]\" ";
+		$base = 224;
+		$ratio = 192 / sizeof($sources);
+		
+		$c = dechex($base - $ratio);
+		$result	= "AREA:foo1#$c".$c."$c:\"$sources[0]\" ";
 			
 		for($i = 1; $i < sizeof($sources); $i++) {
-			$result .= "AREA:foo".strval($i+1)."#000000:\"$sources[$i]\":STACK ";
+			$c = dechex($base - ($i + 1) * $ratio);
+			$result .= "AREA:foo".strval($i+1)."#$c".$c."$c:\"$sources[$i]\":STACK ";
 		}
 		
 		return $result;
 	}
 	
 	include "../config.php";
+	include "../misc/profileMethods.php";
 	
 	$var		= $_GET["var"];		// Which variable to display
 	$mode		= $_GET["mode"];	// 'thumb' OR 'json'
-	$profile	= $_GET["profile"];	// TODO: Verify profile via user control
-	$sources	= $_GET["sources"];	// TODO: Load from $profile
+	$sources	= $_GET["sources"];	// Channels; bad naming in during early development
 	$time		= $_GET["time"];
+	
+	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
+	$ARR_AVAILS = getAvailableProfiles("me");
+	$profile = getCurrentProfile();
+	if (!verifySelectedProfile($profile, $ARR_AVAILS)) {
+		echo "You don't have the privileges to access the profile $profile<br>";
+		exit(1);
+	}
 	
 	$timeSplit	= explode(":", $time);
 	$srcSplit	= explode(":", $sources);
