@@ -1,11 +1,17 @@
 # SecurityCloud GUI
-## Introduction
+## Table of Contents
+1. [Introduction](#intro)
+2. [Prerequisities](#pre)
+3. [Instalation](#install)
+4. [Troubleshooting](#trouble)
+
+##<a name="intro"></a> Introduction
 This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows you to visualize and analyze your internet flows collected by the ipfix collector.
 
 The GUI also allows you to do perform querries on the flow data using the fdistdump and also to organize and manage export profiles of the ipfixcol.
 
-## Prerequisities:
-- rrdtool 1.6
+##<a name="pre"></a> Prerequisities:
+- [rrdtool 1.6](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
 - [ipfixcol](https://github.com/CESNET/ipfixcol/) with the following 3rd party plugins:
 	> profile_stats (intermediate)
 	> profiler (intermediate)
@@ -13,10 +19,9 @@ The GUI also allows you to do perform querries on the flow data using the fdistd
 - [fdistdump](https://github.com/CESNET/fdistdump)
 - webserver with php5 or higher
 - pkill
-- rrdtool **must** be in the $PATH of the apache user
 
-## Instalation
-**NOTE:** These installation notes works for the default configuration on CentOS 7. For custom configuration see [Advanced installation]().
+##<a name="install"></a> Instalation
+**NOTE:** These installation notes works for the default configuration on CentOS 7. For custom configuration see [Troubleshooting & Advanced installation](#trouble).
 
 After installing all prerequisities, clone the Git repo and copy all relevant data to the folders as written below:
 ```
@@ -52,7 +57,7 @@ su apache --shell "/bin/bash" -c "ipfixcol -c /data/startup.xml -v 2 -p /data/pi
 
 At this point, if your webserver is set up properly, the GUI should work.
 
-## Troubleshooting & advanced installation
+##<a name="trouble"></a> Troubleshooting & advanced installation
 For many reasons the default configuration might failed or you just want to put the data somewhere else. In that case, consult this guide.
 Most of your issues can be solved via editing the config.php which is located in the php folder of the GUI root.
 
@@ -67,13 +72,12 @@ In that case, create your flow data folder wherever you want, but don't forget t
 
 After you have that, open config.php and edit variables $IPFIXCOL_DATA (**do not** omit final slash) and $IPFIXCOL_CFG to reflect the new paths. If you want to have the ipfixcol pidfile somewhere else (it is neccessary for updating the profiles configuration on the fly), edit also the $PIDFILE variable.
 
-### I want to have multiple users access only certain profiles
-This feature is currently in development.
-
-### The graph is blank
-If you just opened the GUI or changed profile, then your currently selected profile has not its data accessible to the apache user. Either the permissions were misset or the config.php is pointing to the wrong directory (did you set the $IPFIXCOL_CFG and $IPFIXCOL_DATA properly? Did you added the final slash?).
+### The graph is blank / broken
+If you just opened the GUI or changed profile, then your currently selected profile has not its data accessible to the apache user. Either the permissions were misset or the config.php is pointing to the wrong directory (did you set the $IPFIXCOL_CFG and $IPFIXCOL_DATA properly? Did you add the final slash?).
 
 Alternatively, you have the GUI opened for a while, you've switched some tabs and returned to the graph and it's blank now. You've probably resized the browser window earlier. To fix this you can resize the window again or reload the page. This problem is due to the dygraphs library used to render the graph that requires to not hide the active graph which is precisely what I need to do when changing tabs.
+
+Even alternatively, your rrdtool is not in your $PATH or it is not in version which supports '-a JSONTIME' export format. If the former is true, edit the $RRDTOOL variable in config.php accordingly.
 
 ### fdistdump querry cannot be killed
 Most probably you did request a lot of data that were processed quickly by the fdistdump and send to PHP which is currently struggling to process it and send it to the GUI. Querries can only be killed if the job is still performed by the fdistdump, at the PHP level you just have to wait.
@@ -85,4 +89,14 @@ You've probably changed the $TMP_DIR to the place where apache does not have rea
 Do not be hasty when using the graph. Whatever you do, the request is send to the server, it gets the data and sends it back to you where it has to be processed. It takes some time and spamming these requests results in mixing them up and the graph will stop responding. Reload the page.
 
 ### I cannot delete the live profile
-Please, do read the disclaimer. The live profile cannot be deleted and you have to edit manually in the text editor. Deleting it will only result in deletion of its children.
+Please, do read the disclaimer before deleting the profile. The live profile cannot be deleted and you have to edit it manually in the text editor. Deleting it from the GUI will only result in deletion of its children.
+
+### I want to restrict selected profiles for selected users only
+This feature is currently in development.
+
+## Todolist
+Following features are expected to be implemented in the future:
+
+* shadow profiles
+* channel selection in fdistdump querries (currently the selection has no effect)
+* user control and profile restriction
