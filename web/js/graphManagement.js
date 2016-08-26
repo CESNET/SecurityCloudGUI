@@ -202,12 +202,12 @@ function computeRenderMode() {
 /* INITIALIZE GRAPH */
 /* ================ */
 function initializeGraph(none) {
-	for(var x = 0; x < graphData.length; x++) {
-		graphData[x][0] = new Date(parseInt(graphData[x][0]+"000"));
+	if (Utility.getCurrentTimestamp() - 300 == graphData[graphData.length - 1]) {
+		graphData.push(graphData[graphData.length - 1]);
 	}
 	
-	if (Utility.getCurrentTimestamp() - 600 == graphData[graphData.length - 1]) {
-		graphData.push(graphData[graphData.length - 1]);
+	for(var x = 0; x < graphData.length; x++) {
+		graphData[x][0] = new Date(parseInt(graphData[x][0]+"000"));
 	}
 	
 	Graph.init("dygraph", graphData, graphLegend, ARR_GRAPH_NAME[currentVar], computeRenderMode());
@@ -229,12 +229,12 @@ function initializeGraph(none) {
 /* UPDATE GRAPH */
 /* ============ */
 function updateGraph(overridePosition) {
-	for(var x = 0; x < graphData.length; x++) {
-		graphData[x][0] = new Date(parseInt(graphData[x][0]+"000"));
+	if (Utility.getCurrentTimestamp() - 300 == graphData[graphData.length - 1]) {
+		graphData.push(graphData[graphData.length - 1]);
 	}
 	
-	if (Utility.getCurrentTimestamp() - 600 == graphData[graphData.length - 1]) {
-		graphData.push(graphData[graphData.length - 1]);
+	for(var x = 0; x < graphData.length; x++) {
+		graphData[x][0] = new Date(parseInt(graphData[x][0]+"000"));
 	}
 	
 	Graph.update(graphData, ARR_GRAPH_NAME[currentVar], computeRenderMode());

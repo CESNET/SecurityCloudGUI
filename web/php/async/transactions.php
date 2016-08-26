@@ -1,6 +1,14 @@
 <?php
 	include "../misc/transactionsInclude.php";
-
+	
+/**
+ *  @brief Brief
+ *  
+ *  @param [in] $stamp Parameter_Description
+ *  @return Return_Description
+ *  
+ *  @details Details
+ */
 function initTransactions($stamp) {
 	include "../config.php";
 	
@@ -23,6 +31,14 @@ function initTransactions($stamp) {
 	fclose($file);
 }
 
+/**
+ *  @brief Brief
+ *  
+ *  @param [in] $stamp Parameter_Description
+ *  @return Return_Description
+ *  
+ *  @details Details
+ */
 function deinitTransactions($stamp) {
 	include "../config.php";
 	// Empty transactions first

@@ -55,7 +55,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		echo "$filter<br>";
 	}
 	
-	$cmdBackup = "$FDUMP -f $filter $opts";
+	$cmdBackup = "$FDUMP -f \"$filter\" $opts";
 	
 	//echo strlen($filter)." ".$filter."<br>";
 	if(strlen($filter) > 2) {

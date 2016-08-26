@@ -1,14 +1,16 @@
 <?php
 	/**
-	 *  @brief Brief
+	 *  @brief Finds and returns an XML subnode representing subprofile of /live
 	 *  
-	 *  @param [in] $root Parameter_Description
-	 *  @param [in] $prefix Parameter_Description
-	 *  @param [in] $search Parameter_Description
-	 *  @param [in] $result Parameter_Description
-	 *  @return Return_Description
+	 *  @param [in] $root The root XML node from which the search started
+	 *  @param [in] $prefix Auxiliary variable, use empty string "" when calling this function
+	 *  @param [in] $search Profile to search for in form /live/path/to/profile
+	 *  @param [in] $result Return value is stored in this variable
+	 *  @return XML subnode on match, otherwise $result will be unchanged
 	 *  
-	 *  @details Details
+	 *  @details Load the profiles.xml file to the simplexml object and then call
+	 *  this function to find your desired subprofile which is returned as a simplexml
+	 *  object you can further edit
 	 */
 	function findParentNode($root, $prefix, $search, &$result) {
 		$attr = $root->attributes();
@@ -232,6 +234,6 @@
 	?>
 <!-- Success msg back to GUI -->
 <div class="modal-body">
-	Success. Page will reload shortly... <?php echo $rtn."...".$pid; ?>
+	Success. Page will reload shortly...
 	<span style="display: none" id="AsyncQuerryResult">success</span>
 </div>

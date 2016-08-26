@@ -6,8 +6,8 @@ TODOLIST
 > [X] Put web into 'web' folder
 > [X] Put default configurations (startup.xml, profiles.xml) into separate folder
 > [X] Commit to devel
-> [ ] Clone and test clean install
-> [ ] Write down install notes
+> [X] Clone and test clean install
+> [X] Write down install notes
 > [ ] Merge devel to master
 
 *** STATS ***
@@ -38,7 +38,7 @@ TEST: [-] Deleting of *.lock files
 
 *** DOCUMENTATION ***
 [ ] profiles.js
-[ ] profileUpdateProcess.php
+[X] profileUpdateProcess.php
 [ ] transactions.php
 
 NOTES:
