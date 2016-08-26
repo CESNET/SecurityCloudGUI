@@ -10,6 +10,9 @@
 	// binary has to be provided
 	$FDUMP				= "/usr/lib64/mpich/bin/mpiexec -n 2 fdistdump";
 	
+	// RRD Tool
+	$RRDTOOL			= "rrdtool";
+	
 	// Length of the userstamp identifying the
 	// transactions. The userstamp is a combination
 	// of symbols respecting the regex: [a-zA-Z0-9]

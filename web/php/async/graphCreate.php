@@ -59,12 +59,24 @@
 	$var		= $_GET["var"];		// Which variable to display
 	$mode		= $_GET["mode"];	// 'thumb' OR 'json'
 	$profile	= $_GET["profile"];	// TODO: Verify profile via user control
-	//$profile	= str_replace("-", "/", $profile);
 	$sources	= $_GET["sources"];	// TODO: Load from $profile
 	$time		= $_GET["time"];
 	
 	$timeSplit	= explode(":", $time);
 	$srcSplit	= explode(":", $sources);
+	
+	if (!preg_match("/^[0-9]+\:[0-9]+$/", $time)) {
+		echo "$time is not a valid time argument. It should be two UNIX timestamps divided by a colon.";
+		exit(1);
+	}
+	else if (!preg_match("/^[a-zA-Z][a-zA-Z_]*$/", $var)) {
+		echo "$var is not a valid name string.";
+		exit(2);
+	}
+	else if (!preg_match("/^([a-zA-Z_][a-zA-Z0-9_]*)(\:([a-zA-Z_][a-zA-Z0-9_]*))*$/", $sources)) {
+		echo "$sources is not a valid channels string.";
+		exit(3);
+	}
 	
 	$def		= createDefinitions($srcSplit, $profile, $var);
 	$render		= createRenderRules($srcSplit);
@@ -81,7 +93,7 @@
 	$desc = array(0 => array ('pipe', 'r'), 1 => array ('pipe', 'w'), 2 => array ('pipe', 'w') );
 	
 	// Create the image
-	$p = proc_open("exec /opt/rrdtool16/bin/rrdtool graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render", $desc, $pipes, $IPFIXCOL_DATA."$profile/rrd/channels/");
+	$p = proc_open("exec $RRDTOOL graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render", $desc, $pipes, $IPFIXCOL_DATA."$profile/rrd/channels/");
 
 	//echo "exec rrdtool graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render"; exit;
 	
