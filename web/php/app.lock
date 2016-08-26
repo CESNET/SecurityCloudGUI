@@ -1,0 +1,4 @@
+DO NOT DELETE THIS FILE
+
+Without this file you will not be able to Add/Delete profiles from the GUI.
+See documentation of PHP flock() for more info.

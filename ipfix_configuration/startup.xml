@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ipfix xmlns="urn:ietf:params:xml:ns:yang:ietf-ipfix-psamp">
+
+	<collectingProcess>
+		<name>TCP collector</name>
+		<tcpCollector>
+			<name>Listening port 4739</name>
+			<localPort>4739</localPort>
+			<localIPAddress>127.0.0.1</localIPAddress>
+		</tcpCollector>
+		<exportingProcess>File writer TCP</exportingProcess>
+		
+		<profiles>/data/profiles.xml</profiles>
+	</collectingProcess>
+	
+	<exportingProcess>
+		<name>File writer TCP</name>
+		<destination>
+			<name>Storage</name>
+			<fileWriter>
+				<fileFormat>lnfstore</fileFormat>
+				<profiles>yes</profiles>
+				<storagePath>/var/www/html/secloud-web-v2/data/</storagePath>
+				<prefix>nfcapd.</prefix>
+				<suffixMask>%Y%m%d%H%M</suffixMask>
+				<identificatorField>ipfixcol</identificatorField>
+				<compress>yes</compress>
+				<dumpInterval>
+				    <timeWindow>300</timeWindow>
+				    <align>yes</align>
+				</dumpInterval>
+			</fileWriter>
+		</destination>
+		<!--## Only one plugin for all ODIDs -->
+		<singleManager>yes</singleManager>
+	</exportingProcess>
+
+	<!-- List of active Intermediate Plugins -->
+	<intermediatePlugins>
+		<profiler>
+		</profiler>
+		
+		<profilestats>
+		    <interval>300</interval>
+		</profilestats>
+	</intermediatePlugins>
+</ipfix>

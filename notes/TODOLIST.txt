@@ -1,0 +1,53 @@
+TODOLIST
+
+*** GENERAL ***
+[ ] Make master release
+> [X] Finish profiles
+> [X] Put web into 'web' folder
+> [X] Put default configurations (startup.xml, profiles.xml) into separate folder
+> [X] Commit to devel
+> [X] Clone and test clean install
+> [X] Write down install notes
+> [ ] Merge devel to master
+
+*** STATS ***
+[ ] Highlight most important data
+[ ] Total stats
+[ ] Shadow->RRD
+[ ] Channel
+
+*** DATABASE ***
+[ ] Source selection (ipfixcol fix)
+[ ] Shadow profile source selection (grab filter only of selected filters)
+
+*** PROFILES ***
+[ ] Proper function of shadow profiles (ipfixcol fix)
+[ ] Normal mouse cursor for disabled inputs
+[X] Read PIDFILE
+[X] Reload ipfixcol
+[X] reload page raději na index s live, jinak se to může rozbít
+[-] Naming conventions
+[ ] Filter checking
+[ ] Add channel is buggy
+
+*** SECURITY ***
+[ ] createGraph.php shell injection
+
+*** TRANSACTIONS ***
+TEST: [-] Deleting of *.lock files
+
+*** DOCUMENTATION ***
+[ ] profiles.js
+[X] profileUpdateProcess.php
+[ ] transactions.php
+
+NOTES:
+	escapeshellarg na každý jednotlivý argument shellu
+	pokud by pak byl problém s UTF8 oproti ASCII: <?php setlocale(LC_CTYPE, "en_US.UTF-8"); ?>
+	možná praktičtější by bylo zkusit escapeshellcmd, který se aplikuje na příkaz jako na celek
+	složky s daty potřebují oprávnění i pro zápis (json file) anebo bude potřeba to lifrovat zase do transakčního folderu
+
+--output-items=m --output-format=csv --output-volume-conv=metric-prefix
+
+	Statistiky z fdistdump se musí vzít v nativním CSV formátu a také v tom metric-prefix formátu
+	Musí se vzít pro každý prefix separátně a pak pro všechny naráz a všechno tohle info se nějak musí zpracovat v loopu a vypsat
