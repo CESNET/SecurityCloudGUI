@@ -4,6 +4,7 @@
 2. [Prerequisities](#pre)
 3. [Instalation](#install)
 4. [Troubleshooting](#trouble)
+5. [Todolist](#todo)
 
 ##<a name="intro"></a> Introduction
 This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows you to visualize and analyze your internet flows collected by the ipfix collector.
@@ -18,7 +19,6 @@ The GUI also allows you to do perform querries on the flow data using the fdistd
 	> lnfstore (storage)
 - [fdistdump](https://github.com/CESNET/fdistdump)
 - webserver with php5 or higher
-- pkill
 
 ##<a name="install"></a> Instalation
 **NOTE:** These installation notes works for the default configuration on CentOS 7. For custom configuration see [Troubleshooting & Advanced installation](#trouble).
@@ -94,7 +94,7 @@ Please, do read the disclaimer before deleting the profile. The live profile can
 ### I want to restrict selected profiles for selected users only
 This feature is currently in development.
 
-## Todolist
+##<a name="todo"></a> Todolist
 Following features are expected to be implemented in the future:
 
 * shadow profiles
