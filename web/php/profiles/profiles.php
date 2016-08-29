@@ -4,38 +4,35 @@
 	 *	valid URL links for changing the profiles.
 	 */
 	function printProfileTree2($object, $level) {
-		echo "<tr><td>";
+		echo '<tr><td>';
 		
 		/* Print offset */
 		for ($i = 0; $i < $level; $i++) {
-			echo "&nbsp;&nbsp;&nbsp;";
+			echo '&nbsp;&nbsp;&nbsp;';
 		}
 		
 		if ($level % 2 == 0) {
-			echo "&nbsp;&#9679;&nbsp;";
+			echo '&nbsp;&#9679;&nbsp;';
 		}
 		else {
-			echo "&nbsp;&#9900;&nbsp;";
+			echo '&nbsp;&#9900;&nbsp;';
 		}
 		
 		/* Print name */
-		$str = preg_replace("/^\/[a-zA-Z0-9_\/]+\//", "", $object->getName());
-		echo "<a href='index.php?profile=".$object->getName()."'>$str</a>";
-		
-		
+		$str = preg_replace('/^\/[a-zA-Z0-9_\/]+\//', "", $object->getName());
+		echo '<a href=\'index.php?profile=',$object->getName(),'\'>',$str,'</a>';
 		
 		/* Print sources */
-		echo "</td><td>";
+		echo '</td><td>';
 		foreach ($object->getChannels() as $src) {
-			echo "<span class='label label-default'>".$src->getName()."</span> ";
+			echo '<span class=\'label label-default\'>',$src->getName(),'</span> ';
 		}
 		
-		echo "</td><td align='right' style='width: 30%; min-width: 350px;'><div class='btn-group'>";
-		echo "<button class='btn btn-info' data-toggle='modal' data-target='#ProfilesModal' onclick=\"Profile.fillModal('view', '".$object->getName()."');\">View profile</button>";
-		echo "<button class='btn btn-".($object->getShadow() ? "default" : "success")."' data-toggle='modal' data-target='#ProfilesModal' onclick=\"Profile.fillModal('create', '".$object->getName()."');\"".($object->getShadow() ? "disabled" : "").">Add subprofile</button>";
-		echo "<button class='btn btn-danger' data-toggle='modal' data-target='#ProfilesModal' onclick=\"Profile.fillModal('delete', '".$object->getName()."');\">Delete profile</button>";
-		
-		echo "</div></td></tr>";
+		echo '</td><td align=\'right\' style=\'width: 30%; min-width: 350px;\'><div class=\'btn-group\'>';
+		echo '<button class=\'btn btn-info\' data-toggle=\'modal\' data-target=\'#ProfilesModal\' onclick=\"Profile.fillModal(\'view\', \'',$object->getName(),'\');\">View profile</button>';
+		echo '<button class=\'btn btn-',($object->getShadow() ? 'default' : 'success'),'\' data-toggle=\'modal\' data-target=\'#ProfilesModal\' onclick=\"Profile.fillModal(\'create\', \'',$object->getName(),'\');\"',($object->getShadow() ? 'disabled' : ""),'>Add subprofile</button>';
+		echo '<button class=\'btn btn-danger\' data-toggle=\'modal\' data-target=\'#ProfilesModal\' onclick=\"Profile.fillModal(\'delete\', \'',$object->getName(),'\');\">Delete profile</button>';
+		echo '</div></td></tr>';
 		
 		/* Do children */
 		foreach($object->getChildren() as $o) {

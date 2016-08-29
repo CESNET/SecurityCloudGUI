@@ -29,7 +29,7 @@
 			<li class="active"><a data-toggle="pill" href="#Tab_1">Tab 1</a></li>
 			<?php
 			for ($i = 2; $i <= $MAX_TABS; $i++) {
-				echo "<li style='display:none;'><a data-toggle='pill' href='#Tab_$i'>Tab $i</a></li>";
+				echo '<li style=\'display:none;\'><a data-toggle=\'pill\' href=\'#Tab_',$i,'\'>Tab ',$i,'</a></li>';
 			}
 			?>
 			<li><a href="#" onclick="Local_addTab();"><b>+</b></a></li>
@@ -40,13 +40,13 @@
 		<div class="tab-content">
 			<?php
 			for ($tab = 1; $tab <= $MAX_TABS; $tab++) {
-				echo "<div id='Tab_$tab' class='tab-pane fade in";
+				echo '<div id=\'Tab_',$tab,'\' class=\'tab-pane fade in';
 				if ($tab == 1) {
-					echo " active";
+					echo ' active';
 				}
-				echo "'>";
-					include "dbqryTabContent.php";
-				echo "</div>";
+				echo '\'>';
+					include 'dbqryTabContent.php';
+				echo '</div>';
 			}
 			?>
 		</div>

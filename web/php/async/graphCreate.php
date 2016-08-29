@@ -9,20 +9,22 @@
 	*/
 	function createDefinitions($sources, $profile, $var) {
 		$result = "";
-		$fooname = "foo";
-		if(preg_match("/traffic/",$var)) {
-			$fooname = "bar";
+		$fooname = 'foo';
+		if(preg_match('/traffic/',$var)) {
+			$fooname = 'bar';
 		}
 		
-		for ($i = 0; $i < sizeof($sources); $i++) {
-			$result .= "DEF:$fooname".strval($i+1)."=".$sources[$i].".rrd:$var:MAX ";
+		$size = sizeof($sources);
+		for ($i = 0; $i < $size; $i++) {
+			$result .= "DEF:$fooname".strval($i+1).'='.$sources[$i].".rrd:$var:MAX ";
 			//NOTE: $result .= "DEF:foo".strval($i+1)."=$FDUMP_FOLDER/$profile/$sources[$i].rrd:$var:MAX ";
 		}
 		
 		// Because traffic must be converted from bytes to bits
 		if($fooname == "bar") {
-			for ($i = 0; $i < sizeof($sources); $i++) {
-			$result .= "CDEF:foo".strval($i+1)."=bar".strval($i+1).",8,* ";
+			$size = sizeof($sources);
+			for ($i = 0; $i < $size; $i++) {
+			$result .= 'CDEF:foo'.strval($i+1).'=bar'.strval($i+1).',8,* ';
 			//NOTE: $result .= "CDEF:foo0=bar0,8,* "
 			}
 		}
@@ -46,47 +48,49 @@
 	*/
 	function createRenderRules($sources) {
 		$base = 224;
-		$ratio = 192 / sizeof($sources);
+		$size = sizeof($sources);
+		$ratio = 192 / $size;
 		
 		$c = dechex($base - $ratio);
 		$result	= "AREA:foo1#$c".$c."$c:\"$sources[0]\" ";
 			
-		for($i = 1; $i < sizeof($sources); $i++) {
+		for($i = 1; $i < $size; $i++) {
 			$c = dechex($base - ($i + 1) * $ratio);
-			$result .= "AREA:foo".strval($i+1)."#$c".$c."$c:\"$sources[$i]\":STACK ";
+			$result .= 'AREA:foo'.strval($i+1)."#$c".$c."$c:\"$sources[$i]\":STACK ";
 		}
 		
 		return $result;
 	}
 	
-	include "../config.php";
-	include "../misc/profileMethods.php";
+	include '../config.php';
+	include '../misc/profileMethods.php';
 	
-	$var		= $_GET["var"];		// Which variable to display
-	$mode		= $_GET["mode"];	// 'thumb' OR 'json'
-	$sources	= $_GET["sources"];	// Channels; bad naming in during early development
-	$time		= $_GET["time"];
+	$var		= $_GET['var'];		// Which variable to display
+	$mode		= $_GET['mode'];	// 'thumb' OR 'json'
+	$sources	= $_GET['sources'];	// Channels; bad naming in during early development
+	$time		= $_GET['time'];
 	
 	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
-	$ARR_AVAILS = getAvailableProfiles("me");
+	$ARR_AVAILS = getAvailableProfiles('me');
 	$profile = getCurrentProfile();
 	if (!verifySelectedProfile($profile, $ARR_AVAILS)) {
 		echo "You don't have the privileges to access the profile $profile<br>";
 		exit(1);
 	}
+	unset($ARR_AVAILS);
 	
-	$timeSplit	= explode(":", $time);
-	$srcSplit	= explode(":", $sources);
+	$timeSplit	= explode(':', $time);
+	$srcSplit	= explode(':', $sources);
 	
-	if (!preg_match("/^[0-9]+\:[0-9]+$/", $time)) {
+	if (!preg_match('/^[0-9]+\:[0-9]+$/', $time)) {
 		echo "$time is not a valid time argument. It should be two UNIX timestamps divided by a colon.";
 		exit(1);
 	}
-	else if (!preg_match("/^[a-zA-Z][a-zA-Z_]*$/", $var)) {
+	else if (!preg_match('/^[a-zA-Z][a-zA-Z_]*$/', $var)) {
 		echo "$var is not a valid name string.";
 		exit(2);
 	}
-	else if (!preg_match("/^([a-zA-Z_][a-zA-Z0-9_]*)(\:([a-zA-Z_][a-zA-Z0-9_]*))*$/", $sources)) {
+	else if (!preg_match('/^([a-zA-Z_][a-zA-Z0-9_]*)(\:([a-zA-Z_][a-zA-Z0-9_]*))*$/', $sources)) {
 		echo "$sources is not a valid channels string.";
 		exit(3);
 	}
@@ -94,12 +98,12 @@
 	$def		= createDefinitions($srcSplit, $profile, $var);
 	$render		= createRenderRules($srcSplit);
 	
-	$format		= "-a ";
-	if($mode == "thumb") {
-		$format .= "PNG --only-graph";
+	$format		= '-a ';
+	if($mode == 'thumb') {
+		$format .= 'PNG --only-graph';
 	}
 	else {
-		$format .= "JSONTIME";
+		$format .= 'JSONTIME';
 	}
 	
 	// Descriptor array for proc open. Do not change unless you know what you're doing

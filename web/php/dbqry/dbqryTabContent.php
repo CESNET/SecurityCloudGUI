@@ -7,8 +7,9 @@
 			<div class="panel-body">
 				<div id="Sources_Dbqry_<?php echo $tab; ?>">
 					<?php
-						for($i = 0; $i < sizeof($ARR_SOURCES); $i++) {
-							echo "<label><span>&nbsp;&nbsp;&nbsp;</span> <input type='checkbox' name='$ARR_SOURCES[$i]' checked> $ARR_SOURCES[$i]</label><br>\n";
+						$size = sizeof($ARR_SOURCES);
+						for($i = 0; $i < $size; $i++) {
+							echo '<label><span>&nbsp;&nbsp;&nbsp;</span> <input type=\'checkbox\' name=\'',$ARR_SOURCES[$i],'\' checked> ',$ARR_SOURCES[$i],'</label><br>\n';
 						}
 					?>
 				</div>
@@ -39,7 +40,7 @@
 			<div class="panel-body">
 				<div class="tab-content">
 					<div id="DbMainOpt1_<?php echo $tab; ?>" class="tab-pane fade in active">
-						<?php include "dbgryOptions.php"; ?>
+						<?php include 'dbgryOptions.php'; ?>
 					</div>
 					<div id="DbMainOpt2_<?php echo $tab; ?>" class="tab-pane fade">
 						<textarea class="form-control" rows="5" id="Options_CustomTextarea_<?php echo $tab; ?>"></textarea>

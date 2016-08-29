@@ -14,7 +14,7 @@
 	 */
 	function findParentNode($root, $prefix, $search, &$result) {
 		$attr = $root->attributes();
-		$match = $prefix."/".$attr[0];
+		$match = $prefix.'/'.$attr[0];
 		
 		if ($match == $search) {
 			$result = $root;
@@ -31,13 +31,13 @@
 		}
 	}
 
-	include "../config.php";
-	include "../misc/profileMethods.php";
+	include '../config.php';
+	include '../misc/profileMethods.php';
 	
-	$mode = $_GET["mode"];
-	$name = $_GET["name"];
+	$mode = $_GET['mode'];
+	$name = $_GET['name'];
 	
-	$lock = fopen("../app.lock", "r");
+	$lock = fopen('../app.lock', 'r');
 	if(!flock($lock, LOCK_EX)) {
 		?>
 		<div class="modal-header">
@@ -58,11 +58,11 @@
 	$xml = simplexml_load_file($IPFIXCOL_CFG);
 	
 	// Example: /live/path/to/profile
-	$prefix = preg_replace("/\/[a-zA-Z_][a-zA-Z0-9_]*$/", "", $name);		// Output: /live/path/to
-	$flname	= preg_replace("/^(\/[a-zA-Z_][a-zA-Z0-9_]*)*\//", "", $name);	// Output: profile
+	$prefix = preg_replace('/\/[a-zA-Z_][a-zA-Z0-9_]*$/', "", $name);		// Output: /live/path/to
+	$flname	= preg_replace('/^(\/[a-zA-Z_][a-zA-Z0-9_]*)*\//', "", $name);	// Output: profile
 	
 	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
-	$ARR_AVAILS = getAvailableProfiles("me");
+	$ARR_AVAILS = getAvailableProfiles('me');
 	$PROFILE = $prefix;
 	if (!verifySelectedProfile($PROFILE, $ARR_AVAILS)) {
 		?>
@@ -104,11 +104,11 @@
 	/* ========= */
 	/* MAIN CODE */
 	/* ========= */
-	if ($mode == "create") {
-		$type	= $_GET["type"];
-		$chnls	= $_GET["channels"];
+	if ($mode == 'create') {
+		$type	= $_GET['type'];
+		$chnls	= $_GET['channels'];
 		
-		if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $flname)) {			// ERROR handling (BADNAME)
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $flname)) {			// ERROR handling (BADNAME)
 			?>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -124,7 +124,7 @@
 			<?php
 			exit(2);
 		}
-		else if ($type != "normal" && $type != "shadow") {					// ERROR handling (BADTYPE)
+		else if ($type != 'normal' && $type != 'shadow') {					// ERROR handling (BADTYPE)
 			?>
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -142,24 +142,24 @@
 		}
 	
 		if (empty($parent->subprofileList)) {								//	If profile has no children [
-			$list = $parent->addChild("subprofileList");					//		add one
+			$list = $parent->addChild('subprofileList');					//		add one
 		}																	//	]
 		else {
 			$list = $parent->subprofileList;
 		}
 		
-		$profile = $list->addChild("profile");								// 	Add <profile> element
-		$profile->addAttribute("name", $flname);							// 	Modify <profile name="">
-		$profile->addChild("type", $type);									// 	Add <type> to <profile>
-		$profile->addChild("directory", $IPFIXCOL_DATA.$name);				// 	Add <directory> to <profile>
+		$profile = $list->addChild('profile');								// 	Add <profile> element
+		$profile->addAttribute('name', $flname);							// 	Modify <profile name="">
+		$profile->addChild('type', $type);									// 	Add <type> to <profile>
+		$profile->addChild('directory', $IPFIXCOL_DATA.$name);				// 	Add <directory> to <profile>
 		
-		$chlist = $profile->addChild("channelList");						// 	Add <channelList> to <profile>
-		$channels = explode(";", $chnls);									//	Break $chnls to list of channels
+		$chlist = $profile->addChild('channelList');						// 	Add <channelList> to <profile>
+		$channels = explode(';', $chnls);									//	Break $chnls to list of channels
 		
 		foreach ($channels as $c) {											//	For every channel [
-			$buf = explode (":", $c);										// 		break it to bits
+			$buf = explode (':', $c);										// 		break it to bits
 			
-			if (!preg_match("/^[a-zA-Z_][a-zA-Z0-9_]*$/", $buf[0])) {
+			if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $buf[0])) {
 				?>
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -179,20 +179,21 @@
 			// TODO: somehow test the filter (safely)
 			// Build a PROFILE_TREE and check agains source names?!
 			
-			$channel = $chlist->addChild("channel");						//		add <channel> to <channelList>
-			$channel->addAttribute("name", $buf[0]);						//		modify <channel name="">
+			$channel = $chlist->addChild('channel');						//		add <channel> to <channelList>
+			$channel->addAttribute('name', $buf[0]);						//		modify <channel name="">
 			
-			$srclist = $channel->addChild("sourceList");					//		add <sourceList> to <channel>
+			$srclist = $channel->addChild('sourceList');					//		add <sourceList> to <channel>
 			
-			for ($i = 2; $i < sizeof($buf); $i++) {							//		for every source of channel {
-				$srclist->addChild("source", $buf[$i]);						//			add <source> to <sourceList>
+			$size = sizeof($buf);
+			for ($i = 2; $i < $size; $i++) {							//		for every source of channel {
+				$srclist->addChild('source', $buf[$i]);						//			add <source> to <sourceList>
 			}																//		}
 			
-			$channel->addChild("filter", $buf[1]);							//		add <filter> to <channel>
+			$channel->addChild('filter', $buf[1]);							//		add <filter> to <channel>
 		}																	//	]
 	}																		// )
-	else if ($mode == "delete") {
-		if ($name != "/live") {
+	else if ($mode == 'delete') {
+		if ($name != '/live') {
 			if (sizeof($parent->subprofileList->children()) == 1) {
 				unset($parent->subprofileList);
 			}
