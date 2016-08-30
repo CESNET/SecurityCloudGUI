@@ -5,11 +5,10 @@
 *	instead.
 */
 function getCurrentProfile() {
-	$profile = "/live";
-	if(isset($_GET["profile"])) {
-		$profile = $_GET["profile"];
+	$profile = '/live';
+	if(isset($_GET['profile'])) {
+		$profile = $_GET['profile'];
 	}
-	
 	return $profile;
 }
 
@@ -26,30 +25,30 @@ function loadXmlFile($filename) {
 *	is stored in '$object'. '$prefix' is mandatory arg
 *	used in recursion. Always call this function with '/'.
 */
-function createProfileTreeFromXml ($xml, $prefix, &$object) {
+function _createProfileTreeFromXml ($xml, $prefix, &$object) {
 	$part = $xml->attributes();	// PHP5 compat workaround
 	$object->setName($prefix.$part[0]);
 	
-	$nprefix = $object->getName()."/";
+	$nprefix = $object->getName().'/';
 	
 	$shadow = false;
 	$filter = null;
 	
 	foreach ($xml->children() as $ch) {
-		if ($ch->getName() == "subprofileList") {
+		if ($ch->getName() == 'subprofileList') {
 			foreach ($ch->children() as $node) {
 				$result = $object->addChild();
 				
 				createProfileTreeFromXml ($node, $nprefix, $result);
 			}
 		}
-		else if ($ch->getName() == "channelList") {
+		else if ($ch->getName() == 'channelList') {
 			foreach ($ch->children() as $node) {
 				foreach ($node as $chProp) {
-					if ($chProp->getName() == "filter") {
+					if ($chProp->getName() == 'filter') {
 						$filter = $chProp;
 					}
-					else if ($chProp->getName() == "sourceList") {
+					else if ($chProp->getName() == 'sourceList') {
 						$sources = array();
 						foreach($chProp->children() as $src) {
 							$sources[] = $src;
@@ -62,13 +61,50 @@ function createProfileTreeFromXml ($xml, $prefix, &$object) {
 				$object->addChannel($part[0], $filter, $sources);
 			}
 		}
-		else if ($ch->getName() == "type") {
-			if($ch == "shadow") {
+		else if ($ch->getName() == 'type') {
+			if($ch == 'shadow') {
 				$shadow = true;
 				$object->setShadow($shadow);
 			}
 		}
 	}
+}
+
+function createProfileTreeFromXml ($xml, $prefix, &$object) {
+	$part = $xml->attributes();	// PHP5 compat workaround
+	$object->setName($prefix.$part[0]);
+	
+	$nprefix = $object->getName().'/';
+	
+	$object->setName($xml->type == 'shadow');	// If <type> contains shadow, this evaluates to true
+	$filter = null;
+	
+	$subprofiles = $xml->subprofileList->children();
+	$size = (int)sizeof($subprofiles);
+	for ($i = 0; $i < $size; $i++) {
+		$result = $object->addChild();
+		createProfileTreeFromXml($subprofiles[$i], $nprefix, $result);
+	}
+	unset($subprofiles);
+	
+	$channels = $xml->channelList->children();
+	$size = (int)sizeof($channels);
+	for($i = 0; $i < $size; $i++) {
+		$filter = $channels[$i]->filter;
+		
+		$sources = $channels[$]->sourceList->children();
+		$ssize = (int)sizeof($sources);
+		$srcs = array();
+		for ($p = 0; $p < $ssize; $p++) {
+			$srcs[] = $sources[$p];
+		}
+		
+		$part = $channels[$i]->attributes();
+		$object->addChannel($part[0], $filter, $srcs);
+		
+		unset($srcs);
+	}
+	unset($channels);
 }
 
 /**
@@ -82,8 +118,8 @@ function searchForProfile($root, $path, &$result) {
 	}
 	else {
 		foreach ($root->getChildren() as $c) {
-			$prefix = str_replace("/", "-", $c->getName());
-			$search = str_replace("/", "-", $path);
+			$prefix = str_replace('/', '-', $c->getName());
+			$search = str_replace('/', '-', $path);
 			
 			if (preg_match("/^$prefix/", $search)) {
 				searchForProfile($c, $path, $result);
@@ -100,8 +136,8 @@ function searchForProfile($root, $path, &$result) {
 */
 // NOTE: $avails = getAvailableProfiles("me");
 function getAvailableProfiles($user) {
-	$result = array("/live/emails", "/live/brute");
-	$result = array("/live");
+	$result = array('/live/emails', '/live/brute');
+	$result = array('/live');
 	
 	return $result;
 }
@@ -115,9 +151,10 @@ function getAvailableProfiles($user) {
 *	profile.
 */
 function verifySelectedProfile($selected, $avails) {
-	foreach ($avails as $a) {
-		$prefix = str_replace("/", "-", $a);
-		$search = str_replace("/", "-", $selected);
+	$size = (int)sizeof($avails);
+	for ($i = 0; $i < $size; $i++) {
+		$prefix = str_replace('/', '-', $avails[$i]);
+		$search = str_replace('/', '-', $selected);
 		
 		if (preg_match("/^$prefix/", $search)) {
 			return true;

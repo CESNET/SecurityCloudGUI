@@ -27,7 +27,7 @@ TODOLIST
 [X] Reload ipfixcol
 [X] reload page raději na index s live, jinak se to může rozbít
 [-] Naming conventions
-[ ] Filter checking --> return values
+[>] Filter checking --> return values
 [-] Add channel is buggy
 
 *** SECURITY ***
@@ -42,8 +42,8 @@ TEST: [-] Deleting of *.lock files
 [ ] transactions.php
 
 *** GRAPH ***
-[ ] Error reporting
-[ ] Verifikace profile
+[X] Error reporting
+[X] Verifikace profile
 
 *** OPTIMIZATION ***
 [X] profileModalFill.php
@@ -52,6 +52,10 @@ TEST: [-] Deleting of *.lock files
 [X] dbqry.php
 [X] graphCreate.php
 [X] profileUpdateProcess.php
+...
+
+*** FORMATS ***
+[ ] If the type of the profile in the profiles.xml has some whitespaces around, that could cause a problem
 
 NOTES:
 	escapeshellarg na každý jednotlivý argument shellu
