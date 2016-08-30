@@ -1,23 +1,49 @@
 var Profile = {
 	/**
-	 *  @brief Brief
+	 *  @brief Adds a channel into "Add subprofile" dialog
 	 *  
-	 *  @return Return_Description
+	 *  @return Nothing
 	 *  
-	 *  @details Details
+	 *  @details Dialog for the new channel is appended to the end of the list of the existing channels. Currently known bug: All previously defined channel settings will be reset.
 	 */
 	addChannel: function() {
+		var list = document.getElementById("ProfilesModalChannels").getElementsByClassName("channel");
+		var backup = new Array (list.length);
+		
+		/* Make a copy of every already defined field */
+		for (var i = 0; i < list.length; i++) {
+			var channel = list[i].getElementsByTagName("input");
+			backup[i] = new Array(channel.length + 1);
+			
+			backup[i][0] = channel[0].value;
+			backup[i][1] = list[i].getElementsByTagName("textarea")[0].value;
+			for (var p = 1;  p < channel.length; p++) {
+				backup[i][p+1] = channel[p].checked;
+			}
+		}
+		
+		/* Append a new channel (this will reset all defined fields) */
 		document.getElementById("ProfilesModalChannels").innerHTML += document.getElementById("ProfilesModalChannelsMacro").innerHTML;
+		
+		/* Restore values of fields from backup */
+		for (var i = 0; i < list.length; i++) {
+			var channel = list[i].getElementsByTagName("input");
+			
+			channel[0].value = backup[i][0];
+			list[i].getElementsByTagName("textarea")[0].value = backup[i][1];
+			for (var p = 1;  p < channel.length; p++) {
+				channel[p].checked = backup[i][p+1];
+			}
+		}
 	},
 	
-			/**
-		 *  @brief Brief
+		/**
+		 *  @brief Async call for profile view/create/delete modal content
 		 *  
-		 *  @param [in] mode Parameter_Description
-		 *  @param [in] profile Parameter_Description
-		 *  @return Return_Description
+		 *  @param [in] mode "create", "view" or "delete"
+		 *  @param [in] profile Profile in question in format /live/path/to/profile
 		 *  
-		 *  @details Details
+		 *  @return Nothing, output is inserted into "ProfileModalContent" element
 		 */
 	fillModal: function(mode, profile) {
 		var ajax = Utility.initAjax();
@@ -37,11 +63,9 @@ var Profile = {
 	},
 	
 	/**
-	 *  @brief Brief
+	 *  @brief Creates a string for url passing containing all defined channels
 	 *  
-	 *  @return Return_Description
-	 *  
-	 *  @details Details
+	 *  @return Formatted string in format channel_name:channel_filter:src1:...:srcN;channel2_name:....
 	 */
 	mergeChannels: function() {
 		var result = "";
@@ -67,11 +91,11 @@ var Profile = {
 	},
 
 	/**
-	 *  @brief Brief
+	 *  @brief Async call to create certain profile
 	 *  
-	 *  @return Return_Description
+	 *  @return On success, the page is reloaded with the currently selected profile.
 	 *  
-	 *  @details Details
+	 *  @details Called from "Add subprofile" dialog. Collects all data regarding the new profile, merges them and then calls the routing to add those into the ipfixcol profiles.xml, reloading the configuration via SUGUSR1 signal.
 	 */
 	creationProcess: function() {
 		var name = document.getElementById("ProfilesModalParent").value+"/"+document.getElementById("ProfilesModalName").value;
@@ -96,11 +120,11 @@ var Profile = {
 	},
 	
 	/**
-	 *  @brief Brief
+	 *  @brief Async call to delete certain profile
 	 *  
-	 *  @return Return_Description
+	 *  @return On success, whole page is reloaded with live profile, otherwise error is printed into the modal dialog
 	 *  
-	 *  @details Details
+	 *  @details On success, reloads the ipfixcol configuration.
 	 */
 	deletionProcess: function() {
 		var name = document.getElementById("ProfileDeleteName").innerHTML;

@@ -16,10 +16,11 @@
 	<div class="col-sm-4">
 		<select id="Option_LimitTo_<?php echo $tab; ?>" class="form-control">
 			<?php
-			for($i = 0; $i < sizeof($ARR_OPTIONS_CODE_LIMITTO); $i++) {
-				echo "<option value='$ARR_OPTIONS_CODE_LIMITTO[$i]'";
-				if($i == 0) echo " selected";
-				echo ">$ARR_OPTIONS_NAME_LIMITTO[$i]</option>\n";
+			$size = sizeof($ARR_OPTIONS_CODE_LIMITTO);
+			for($i = 0; $i < $size; $i++) {
+				echo '<option value=\'',$ARR_OPTIONS_CODE_LIMITTO[$i]'\'';
+				if($i == 0) echo ' selected';
+				echo '>',$ARR_OPTIONS_NAME_LIMITTO[$i],'</option>\n';
 			}
 			?>
 		</select>
@@ -41,8 +42,9 @@
 	<div class="col-sm-4">
 		<select onchange="Local_addItemToList(this, <?php echo $tab; ?>);" class="form-control">
 			<?php
-			for($i = 0; $i < sizeof($ARR_OPTIONS_NAME_FIELDS); $i++) {
-				echo "<option value='$ARR_OPTIONS_NAME_FIELDS[$i]' title='$ARR_OPTIONS_HINT_FIELDS[$i]'>$ARR_OPTIONS_NAME_FIELDS[$i]</option>\n";
+			$size = sizeof($ARR_OPTIONS_NAME_FIELDS);
+			for($i = 0; $i < $size; $i++) {
+				echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>\n';
 			}
 			?>
 		</select>
@@ -56,8 +58,9 @@
 		<select id="Option_OrderBy_<?php echo $tab; ?>" class="form-control">
 			<option value="none" selected>nothing</option>
 			<?php
-			for($i = 0; $i < sizeof($ARR_OPTIONS_NAME_FIELDS); $i++) {
-				echo "<option value='$ARR_OPTIONS_NAME_FIELDS[$i]' title='$ARR_OPTIONS_HINT_FIELDS[$i]'>$ARR_OPTIONS_NAME_FIELDS[$i]</option>\n";
+			$size = sizeof($ARR_OPTIONS_NAME_FIELDS);
+			for($i = 0; $i < $size; $i++) {
+				echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>\n';
 			}
 			?>
 		</select>

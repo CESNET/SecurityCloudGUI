@@ -1,13 +1,13 @@
 <?php
-	include "../config.php";
+	include '../config.php';
 
-	$stamp		= $_GET["userstamp"];
-	$tab		= $_GET["tab"];
-	$profile	= $_GET["profile"];
-	$mode		= $_GET["mode"];
-	$filename	= $stamp."_".$tab.".json";
+	$stamp		= $_GET['userstamp'];
+	$tab		= $_GET['tab'];
+	$profile	= $_GET['profile'];
+	$mode		= $_GET['mode'];
+	$filename	= $stamp.'_'.$tab.'.json';
 	
-	if ($mode == "read") {
+	if ($mode == 'read') {
 		// Read the file into array
 		$buffer = file($TMP_DIR.$stamp.".$tab.json", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		
@@ -15,7 +15,7 @@
 			echo $buffer[$i];
 		}
 	}
-	else if ($mode == "delete") {
+	else if ($mode == 'delete') {
 		unlink($TMP_DIR.$stamp.".$tab.json");
 	}
 ?>

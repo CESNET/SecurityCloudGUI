@@ -7,7 +7,7 @@
 	 *  this can come in handy when you are making queries on the shadow profiles.
 	 */
 	class ProfileChannel {
-		private $name		= "default";
+		private $name		= 'default';
 		private $filter		= "";
 		private $sources	= null;
 		
@@ -59,7 +59,7 @@
 	* 	also has an array of channels (see ProfileChannel above for more info).
 	*/
 	class Profile {
-		private $name		= "default";
+		private $name		= 'default';
 		private $children	= array();
 		private $childPtr	= -1;
 		private $channels	= array();
@@ -96,7 +96,7 @@
 			$child = new Profile();
 			$child->setParent($this);
 			array_push($this->children, $child);
-			$this->childPtr++;
+			$++this->childPtr;
 			
 			return $this->children[$this->childPtr];
 		}
@@ -111,7 +111,7 @@
 			$chnl->setSources($sources);
 			
 			array_push($this->channels, $chnl);
-			$this->chnlPtr++;
+			$++this->chnlPtr;
 		}
 		
 		/**

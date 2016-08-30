@@ -1,14 +1,14 @@
 TODOLIST
 
 *** GENERAL ***
-[ ] Make master release
+[X] Make master release
 > [X] Finish profiles
 > [X] Put web into 'web' folder
 > [X] Put default configurations (startup.xml, profiles.xml) into separate folder
 > [X] Commit to devel
 > [X] Clone and test clean install
 > [X] Write down install notes
-> [ ] Merge devel to master
+> [X] Merge devel to master
 
 *** STATS ***
 [ ] Highlight most important data
@@ -27,23 +27,35 @@ TODOLIST
 [X] Reload ipfixcol
 [X] reload page raději na index s live, jinak se to může rozbít
 [-] Naming conventions
-[ ] Filter checking
-[ ] Add channel is buggy
+[>] Filter checking --> return values
+[-] Add channel is buggy
 
 *** SECURITY ***
-[ ] createGraph.php shell injection
+[X] createGraph.php shell injection
 
 *** TRANSACTIONS ***
 TEST: [-] Deleting of *.lock files
 
 *** DOCUMENTATION ***
-[ ] profiles.js
+[X] profiles.js
 [X] profileUpdateProcess.php
 [ ] transactions.php
 
 *** GRAPH ***
-[ ] Error reporting
-[ ] Verifikace profile
+[X] Error reporting
+[X] Verifikace profile
+
+*** OPTIMIZATION ***
+[X] profileModalFill.php
+[X] profiles.php
+[X] index.php
+[X] dbqry.php
+[X] graphCreate.php
+[X] profileUpdateProcess.php
+...
+
+*** FORMATS ***
+[ ] If the type of the profile in the profiles.xml has some whitespaces around, that could cause a problem
 
 NOTES:
 	escapeshellarg na každý jednotlivý argument shellu

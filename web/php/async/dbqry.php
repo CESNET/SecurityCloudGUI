@@ -2,29 +2,30 @@
 /* MAIN EXECUTION CODE */
 function execDbRequest() {														// This gets called when this thread is started
 	// *** include ***
-	include "../config.php";													// Grab some constants from the config
-	include "../misc/transactionsInclude.php";									// And get some functions related to transactions
-	include "../misc/profileClass.php";
-	include "../misc/profileMethods.php";
+	include '../config.php';													// Grab some constants from the config
+	include '../misc/transactionsInclude.php';									// And get some functions related to transactions
+	include '../misc/profileClass.php';
+	include '../misc/profileMethods.php';
 	
 	// *** get url params ***
-	$opts	= $_GET["opts"];													// Grab the url params (
-	$filter = $_GET["filter"];													// 	...
-	$stamp	= $_GET["stamp"];													//	...
-	$tab	= $_GET["tab"];														//	...
-	$src	= $_GET["src"];														//  ...
+	$opts	= $_GET['opts'];													// Grab the url params (
+	$filter = $_GET['filter'];													// 	...
+	$stamp	= $_GET['stamp'];													//	...
+	$tab	= $_GET['tab'];														//	...
+	$src	= $_GET['src'];														//  ...
 	
 	/* CREATE A MASTER TREE FROM XML */
 	$TREE_PROFILE = new Profile();												// Full tree of profiles
-	createProfileTreeFromXml(loadXmlFile($IPFIXCOL_CFG), "/", $TREE_PROFILE);	// Fill it with ALL necessary data
+	createProfileTreeFromXml(loadXmlFile($IPFIXCOL_CFG), '/', $TREE_PROFILE);	// Fill it with ALL necessary data
 	
 	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
-	$ARR_AVAILS = getAvailableProfiles("me");
+	$ARR_AVAILS = getAvailableProfiles('me');
 	$profile = getCurrentProfile();
 	if (!verifySelectedProfile($profile, $ARR_AVAILS)) {
 		echo "You don't have the privileges to access the profile $profile<br>";
 		exit(1);
 	}
+	unset($ARR_AVAILS);
 	
 	/* SEARCH FOR SELECTED SUBPROFILE ROOT */
 	$aux = null;
@@ -40,15 +41,15 @@ function execDbRequest() {														// This gets called when this thread is 
 		$aaux = $aux->getParent();
 		foreach ($aaux->getChannels() as $c) {
 			$src = "";
-			$src .= $c->getName()."/ ";
+			$src .= $c->getName().'/ ';
 		}
 		
 		$f = "";
 		foreach($aux->getChannels() as $c) {
 			if (strlen($f) != 0) {
-				$f .= " or ";
+				$f .= ' or ';
 			}
-			$f .= "(".$c->getFilter().")";
+			$f .= '('.$c->getFilter().')';
 		}
 		$filter = "(($filter) and ($f))";
 		
@@ -73,21 +74,21 @@ function execDbRequest() {														// This gets called when this thread is 
 	);
 	$pipes = array();
 	
-	$lock = fopen($TMP_DIR.$stamp.".lock", "r");					// Apply mutex, so the transaction file can only be modified by this thread
+	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');					// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
-		echo "<div class='panel panel-danger'>";							// Print this *very* serious error
-		echo "<div class='panel-heading'>Error</div>";
-		echo "<div class='panel-body'>Error acquiring lock before adding transaction.</div>";
-		echo "</div>";
+		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
+		echo '<div class=\'panel-heading\'>Error</div>';
+		echo '<div class=\'panel-body\'>Error acquiring lock before adding transaction.</div>';
+		echo '</div>';
 		exit(2);															// And end this thread )
 	}																		// Else
 	
 	$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/");		// Execute the program command
 	if($p == false) {														// If execution failed (
-		echo "<div class='panel panel-danger'>";							// Print this *very* serious error
-		echo "<div class='panel-heading'>Error</div>";
-		echo "<div class='panel-body'>proc_exec() failed. Enable PHP error/warning logging to see what's the matter.</div>";
-		echo "</div>";
+		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
+		echo '<div class=\'panel-heading\'>Error</div>';
+		echo '<div class=\'panel-body\'>proc_exec() failed. Enable PHP error/warning logging to see what\'s the matter.</div>';
+		echo '</div>';
 		exit(1);															// And end this thread )
 	}																		// Else
 
@@ -117,12 +118,12 @@ function execDbRequest() {														// This gets called when this thread is 
 		}
 	}
 	
-	$lock = fopen($TMP_DIR.$stamp.".lock", "r");							// Apply mutex, so the transaction file can only be modified by this thread
+	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');							// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
-		echo "<div class='panel panel-danger'>";							// Print this *very* serious error
-		echo "<div class='panel-heading'>Error</div>";
-		echo "<div class='panel-body'>Error acquiring lock before removing transaction.</div>";
-		echo "</div>";
+		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
+		echo '<div class=\'panel-heading\'>Error</div>';
+		echo '<div class=\'panel-body\'>Error acquiring lock before removing transaction.</div>';
+		echo '</div>';
 		exit(2);															// And end this thread )
 	}																		// Else
 	
@@ -140,16 +141,17 @@ function execDbRequest() {														// This gets called when this thread is 
 	*/
 	
 	// BOOTSTRAP CODE:
-	echo "<div class='panel panel-info'>";									// Print info about used parameters
-	echo "<div class='panel-heading'>Querry parameters</div>";				// Heading will be light blue
-	echo "<div class='panel-body'><pre>$cmdBackup</pre></div>";				// Print commands
-	echo "</div>";
+	echo '<div class=\'panel panel-info\'>';								// Print info about used parameters
+	echo '<div class=\'panel-heading\'>Querry parameters</div>';			// Heading will be light blue
+	echo '<div class=\'panel-body\'><pre>',$cmdBackup,'</pre></div>';		// Print commands
+	echo '</div>';
 	if (strlen($buffer) > 0) {
-		echo "<div class='panel panel-success'>";							// Print stdout from fdistdump
-		echo "<div class='panel-heading'>Querry output</div>";				// Heading will be dark blue
-		echo "<div class='panel-body'><pre>";
+		echo '<div class=\'panel panel-success\'>';							// Print stdout from fdistdump
+		echo '<div class=\'panel-heading\'>Querry output</div>';			// Heading will be dark blue
+		echo '<div class=\'panel-body\'><pre>';
 		$auxbuf = "";
-		for ($i = 0; $i < strlen($buffer); $i++) {
+		$size = strlen($buffer);
+		for ($i = 0; $i < $size; $i++) {
 			if ($buffer[$i] == ' ' || $buffer[$i] == '\n' || $buffer[$i] == ',') {
 				if (strlen($auxbuf) == 0) {
 					echo $buffer[$i];
@@ -167,8 +169,7 @@ function execDbRequest() {														// This gets called when this thread is 
 				$auxbuf .= $buffer[$i];
 			}
 		}
-		echo "</pre></div>";												// Print stdout
-		echo "</div>";
+		echo '</pre></div></div>';											// Print stdout
 	}
 	if(strlen($errlog) > 0) {
 ?>
@@ -179,34 +180,33 @@ function execDbRequest() {														// This gets called when this thread is 
 <?php }
 }
 
-$mode	= $_GET["mode"];
+$mode	= $_GET['mode'];
 
-if($mode == "exec") {
+if($mode == 'exec') {
 	execDbRequest();
 }
-else if($mode == "kill") {
-	include "../config.php";													// Grab some constants from the config
-	include "../misc/transactionsInclude.php";									// And get some functions related to transactions
+else if($mode == 'kill') {
+	include '../config.php';													// Grab some constants from the config
+	include '../misc/transactionsInclude.php';									// And get some functions related to transactions
 	
-	$stamp	= $_GET["stamp"];
-	$tab	= $_GET["tab"];
+	$stamp	= $_GET['stamp'];
+	$tab	= $_GET['tab'];
 
 	// Acquire lock
-	$lock = fopen($TMP_DIR.$stamp.".lock", "r");
+	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');
 	if(flock($lock, LOCK_EX) == false) {
-		echo "Flock failed.\n";
+		echo 'Flock failed.\n';
 	}
 
 	if(($index = findTransaction($TMP_DIR.$stamp, $tab, $pid)) != -1) {
 		// Kill the process
-		echo "PID = ".$pid.", index = ".$index;
 		exec("kill -9 $pid");
 		
 		// Clear the transaction
 		removeTransaction($TMP_DIR.$stamp, $index);
 	}
 	else {
-		echo "Transaction does not exist";
+		echo 'Transaction does not exist';
 	}
 	
 	// Release the lock

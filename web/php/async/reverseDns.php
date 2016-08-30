@@ -1,5 +1,3 @@
 <?php
-	$ip = $_GET["ip"];
-	
-	echo gethostbyaddr($ip);
+	$ip = $_GET['ip']; echo gethostbyaddr($ip);
 ?>

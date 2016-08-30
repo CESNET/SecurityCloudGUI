@@ -1,21 +1,22 @@
 <?php
-	include "../config.php";
-	include "../misc/profileClass.php";
-	include "../misc/profileMethods.php";
+	include '../config.php';
+	include '../misc/profileClass.php';
+	include '../misc/profileMethods.php';
 	
-	$mode = $_GET["mode"];
+	$mode = $_GET['mode'];
 	
 	// CREATE A MASTER TREE FROM XML
 	$TREE_PROFILE = new Profile();												// Full tree of profiles
-	createProfileTreeFromXml(loadXmlFile($IPFIXCOL_CFG), "/", $TREE_PROFILE);	// Fill it with ALL necessary data
+	createProfileTreeFromXml(loadXmlFile($IPFIXCOL_CFG), '/', $TREE_PROFILE);	// Fill it with ALL necessary data
 	
 	// COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT
-	$ARR_AVAILS = getAvailableProfiles("me");
+	$ARR_AVAILS = getAvailableProfiles('me');
 	$profile = getCurrentProfile();
 	if (!verifySelectedProfile($profile, $ARR_AVAILS)) {
 		echo "You don't have the privileges to access the profile $profile<br>";
 		exit(1);
 	}
+	unset($ARR_AVAILS);		// Should not be needed anymore
 	
 	// SEARCH FOR SELECTED SUBPROFILE ROOT
 	$aux = null;
@@ -24,8 +25,9 @@
 		echo "The profile $aux does not exist<br>";
 		exit(2);
 	}
+	unset($TREE_PROFILE);	// Should not be needed anymore
 	
-	$flname	= preg_replace("/^(\/[a-zA-Z_][a-zA-Z0-9_]*)*\//", "", $aux->getName());
+	$flname	= preg_replace('/^(\/[a-zA-Z_][a-zA-Z0-9_]*)*\//', "", $aux->getName());
 ?>	
 <div id="ProfilesModalChannelsMacro" style="display: none;">
 	<div class="channel">
@@ -49,12 +51,18 @@
 				<div class="col-sm-10">
 					<div class="checkbox" id="ProfilesChannelSources">
 						<?php
-							foreach($aux->getChannels() as $c) {
-								echo "<label><input type='checkbox' name='".$c->getName()."' checked>".$c->getName()."</label> ";
+							// This should be more efficient than the commented code */
+							$arr = $aux->getChannels();
+							$size = (int)sizeof($arr);
+							for ($i = 0; $i < $size; $i++) {
+								echo '<label><input type=\'checkbox\' name=\'',$arr[$i]->getName(),'\' checked>',$arr[$i]->getName(),'</label> ';
 							}
+							unset($arr);
+							
+							/*foreach($aux->getChannels() as $c) {
+								echo "<label><input type='checkbox' name='".$c->getName()."' checked>".$c->getName()."</label> ";
+							}*/
 						?>
-						<!--label><input type="checkbox" checked> ch1</label> 
-						<label><input type="checkbox" checked> ch2</label--> 
 					</div>
 				</div>
 			</div>
@@ -81,7 +89,7 @@
 				<div class="form-group">
 					<label for="ProfilesModalType" class="col-sm-2 control-label">Type:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php if($aux->getShadow()){ echo "shadow"; } else {echo "normal";} ?>" id="ProfilesModalType" disabled class="form-control">
+						<input type="text" value="<?php if($aux->getShadow()){ echo 'shadow'; } else {echo 'normal';} ?>" id="ProfilesModalType" disabled class="form-control">
 					</div>
 				</div>
 				
@@ -107,7 +115,7 @@
 					<div class="form-group">
 						<label for="ProfilesChannelFilter" class="col-sm-2 control-label">Filter:</label>
 						<div class="col-sm-10">
-							<textarea rows="3" id="ProfileChannelFilter" class="form-control" disabled><?php $filter = preg_replace("/\t/", "", $c->getFilter()); echo $filter; ?></textarea>
+							<textarea rows="3" id="ProfileChannelFilter" class="form-control" disabled><?php $filter = preg_replace('/\t/', "", $c->getFilter()); echo $filter; ?></textarea>
 						</div>
 					</div>
 					
@@ -116,9 +124,12 @@
 						<div class="col-sm-10">
 							<div class="checkbox" id="ProfilesChannelSources">
 								<?php
-									foreach($c->getSources() as $s) {
-										echo "<span class='label label-default'>$s</span> ";
+									$arr = $c->getSources();
+									$size = (int)sizeof($arr);
+									for($i = 0; $i < $size; $i++) {
+										echo '<span class=\'label label-default\'>',$s,'</span> ';
 									}
+									unset($arr);
 								?>
 							</div>
 						</div>
