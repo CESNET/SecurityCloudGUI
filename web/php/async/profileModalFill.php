@@ -82,21 +82,21 @@
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Name:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php echo $flname; ?>" id="ProfilesModalName" disabled class="form-control">
+						<input type="text" value="<?php echo $flname; ?>" id="ProfilesModalName" readonly class="form-control">
 					</div>
 				</div>
 			
 				<div class="form-group">
 					<label for="ProfilesModalType" class="col-sm-2 control-label">Type:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php if($aux->getShadow()){ echo 'shadow'; } else {echo 'normal';} ?>" id="ProfilesModalType" disabled class="form-control">
+						<input type="text" value="<?php if($aux->getShadow()){ echo 'shadow'; } else {echo 'normal';} ?>" id="ProfilesModalType" readonly class="form-control">
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Parent:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php echo $aux->getParentName(); ?>" id="ProfilesModalParent" disabled class="form-control">
+						<input type="text" value="<?php echo $aux->getParentName(); ?>" id="ProfilesModalParent" readonly class="form-control">
 					</div>
 				</div>
 			</form>
@@ -108,14 +108,14 @@
 					<div class="form-group">
 						<label for="ProfilesChannelName" class="col-sm-2 control-label">Name:</label>
 						<div class="col-sm-10">
-							<input type="text" value="<?php echo $c->getName(); ?>" id="ProfilesChannelName" class="form-control" disabled>
+							<input type="text" value="<?php echo $c->getName(); ?>" id="ProfilesChannelName" class="form-control" readonly>
 						</div>
 					</div>
 				
 					<div class="form-group">
 						<label for="ProfilesChannelFilter" class="col-sm-2 control-label">Filter:</label>
 						<div class="col-sm-10">
-							<textarea rows="3" id="ProfileChannelFilter" class="form-control" disabled><?php $filter = preg_replace('/\t/', "", $c->getFilter()); echo $filter; ?></textarea>
+							<textarea rows="3" id="ProfileChannelFilter" class="form-control" readonly><?php $filter = preg_replace('/\t/', "", $c->getFilter()); echo $filter; ?></textarea>
 						</div>
 					</div>
 					
@@ -127,7 +127,7 @@
 									$arr = $c->getSources();
 									$size = (int)sizeof($arr);
 									for($i = 0; $i < $size; $i++) {
-										echo '<span class=\'label label-default\'>',$s,'</span> ';
+										echo '<span class=\'label label-default\'>',$arr[$i],'</span> ';
 									}
 									unset($arr);
 								?>
@@ -172,7 +172,7 @@
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Parent:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php echo $aux->getName(); ?>" id="ProfilesModalParent" disabled class="form-control">
+						<input type="text" value="<?php echo $aux->getName(); ?>" id="ProfilesModalParent" readonly class="form-control">
 					</div>
 				</div>
 			</form>

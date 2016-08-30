@@ -22,7 +22,7 @@ TODOLIST
 
 *** PROFILES ***
 [ ] Proper function of shadow profiles (ipfixcol fix)
-[ ] Normal mouse cursor for disabled inputs
+[X] Normal mouse cursor for disabled inputs --> they are readonly now
 [X] Read PIDFILE
 [X] Reload ipfixcol
 [X] reload page raději na index s live, jinak se to může rozbít
