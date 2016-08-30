@@ -70,7 +70,7 @@ function createProfileTreeFromXml ($xml, $prefix, &$object) {
 	}
 }
 
-function _createProfileTreeFromXml ($xml, $prefix, &$object) {
+/*function _createProfileTreeFromXml ($xml, $prefix, &$object) {
 	$part = $xml->attributes();	// PHP5 compat workaround
 	$object->setName($prefix.$part[0]);
 	
@@ -79,15 +79,13 @@ function _createProfileTreeFromXml ($xml, $prefix, &$object) {
 	$object->setName($xml->type == 'shadow');	// If <type> contains shadow, this evaluates to true
 	$filter = null;
 	
-	if (isset($xml->subprofileList->children())) {
-		$subprofiles = $xml->subprofileList->children();
-		$size = (int)sizeof($subprofiles);
-		for ($i = 0; $i < $size; $i++) {
-			$result = $object->addChild();
-			createProfileTreeFromXml($subprofiles[$i], $nprefix, $result);
-		}
-		unset($subprofiles);
+	$subprofiles = $xml->subprofileList->children();
+	$size = (int)sizeof($subprofiles);
+	for ($i = 0; $i < $size; $i++) {
+		$result = $object->addChild();
+		createProfileTreeFromXml($subprofiles[$i], $nprefix, $result);
 	}
+	unset($subprofiles);
 	
 	$channels = $xml->channelList->children();
 	$size = (int)sizeof($channels);
@@ -107,7 +105,7 @@ function _createProfileTreeFromXml ($xml, $prefix, &$object) {
 		unset($srcs);
 	}
 	unset($channels);
-}
+}*/
 
 /**
 *	In a '$root' Profile object search for subroot

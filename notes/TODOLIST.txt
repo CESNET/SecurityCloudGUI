@@ -13,7 +13,7 @@ TODOLIST
 *** STATS ***
 [ ] Highlight most important data
 [ ] Total stats
-[ ] Shadow->RRD
+[ ] Shadow->RRD->Stats
 [ ] Channel
 
 *** DATABASE ***
@@ -28,13 +28,14 @@ TODOLIST
 [X] reload page raději na index s live, jinak se to může rozbít
 [-] Naming conventions
 [>] Filter checking --> return values
-[-] Add channel is buggy
+[X] Add channel is buggy -- FIXED
+[ ] Return any errors as a dismissible alert box, success also as alert box
 
 *** SECURITY ***
 [X] createGraph.php shell injection
 
 *** TRANSACTIONS ***
-TEST: [-] Deleting of *.lock files
+[X] Deleting of *.lock files
 
 *** DOCUMENTATION ***
 [X] profiles.js
@@ -53,9 +54,10 @@ TEST: [-] Deleting of *.lock files
 [X] graphCreate.php
 [X] profileUpdateProcess.php
 ...
+[ ] createProfilesTreeFromXml(...) - currently deprecated because it is broken
 
 *** FORMATS ***
-[ ] If the type of the profile in the profiles.xml has some whitespaces around, that could cause a problem
+TEST: [ ] If the type of the profile in the profiles.xml has some whitespaces around, that could cause a problem
 
 NOTES:
 	escapeshellarg na každý jednotlivý argument shellu
