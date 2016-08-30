@@ -96,7 +96,7 @@
 			$child = new Profile();
 			$child->setParent($this);
 			array_push($this->children, $child);
-			$++this->childPtr;
+			++$this->childPtr;
 			
 			return $this->children[$this->childPtr];
 		}
@@ -111,7 +111,7 @@
 			$chnl->setSources($sources);
 			
 			array_push($this->channels, $chnl);
-			$++this->chnlPtr;
+			++$this->chnlPtr;
 		}
 		
 		/**

@@ -1,4 +1,10 @@
 <?php
+	header(`Expires: Mon, 26 Jul 1997 05:00:00 GMT`);
+	header(`Last-Modified: `.gmdate(`D, d M Y H:i:s`).` GMT`);
+	header(`Cache-Control: no-cache, must-revalidate`);
+	header(`Pragma: no-cache`);
+?>
+<?php
 	include '../config.php';
 	include '../misc/profileClass.php';
 	include '../misc/profileMethods.php';
@@ -22,7 +28,7 @@
 	$aux = null;
 	searchForProfile($TREE_PROFILE, $profile, $aux);
 	if ($aux == null) {
-		echo "The profile $aux does not exist<br>";
+		echo "The profile $aux does not exist. Please reload the page<br>";
 		exit(2);
 	}
 	unset($TREE_PROFILE);	// Should not be needed anymore
@@ -82,21 +88,21 @@
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Name:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php echo $flname; ?>" id="ProfilesModalName" disabled class="form-control">
+						<input type="text" value="<?php echo $flname; ?>" id="ProfilesModalName" readonly class="form-control">
 					</div>
 				</div>
 			
 				<div class="form-group">
 					<label for="ProfilesModalType" class="col-sm-2 control-label">Type:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php if($aux->getShadow()){ echo 'shadow'; } else {echo 'normal';} ?>" id="ProfilesModalType" disabled class="form-control">
+						<input type="text" value="<?php if($aux->getShadow()){ echo 'shadow'; } else {echo 'normal';} ?>" id="ProfilesModalType" readonly class="form-control">
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Parent:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php echo $aux->getParentName(); ?>" id="ProfilesModalParent" disabled class="form-control">
+						<input type="text" value="<?php echo $aux->getParentName(); ?>" id="ProfilesModalParent" readonly class="form-control">
 					</div>
 				</div>
 			</form>
@@ -108,14 +114,14 @@
 					<div class="form-group">
 						<label for="ProfilesChannelName" class="col-sm-2 control-label">Name:</label>
 						<div class="col-sm-10">
-							<input type="text" value="<?php echo $c->getName(); ?>" id="ProfilesChannelName" class="form-control" disabled>
+							<input type="text" value="<?php echo $c->getName(); ?>" id="ProfilesChannelName" class="form-control" readonly>
 						</div>
 					</div>
 				
 					<div class="form-group">
 						<label for="ProfilesChannelFilter" class="col-sm-2 control-label">Filter:</label>
 						<div class="col-sm-10">
-							<textarea rows="3" id="ProfileChannelFilter" class="form-control" disabled><?php $filter = preg_replace('/\t/', "", $c->getFilter()); echo $filter; ?></textarea>
+							<textarea rows="3" id="ProfileChannelFilter" class="form-control" readonly><?php $filter = preg_replace('/\t/', "", $c->getFilter()); echo $filter; ?></textarea>
 						</div>
 					</div>
 					
@@ -127,7 +133,7 @@
 									$arr = $c->getSources();
 									$size = (int)sizeof($arr);
 									for($i = 0; $i < $size; $i++) {
-										echo '<span class=\'label label-default\'>',$s,'</span> ';
+										echo '<span class=\'label label-default\'>',$arr[$i],'</span> ';
 									}
 									unset($arr);
 								?>
@@ -151,6 +157,7 @@
 			<h4>Add a subprofile</h4>
 		</div>
 		<div class="modal-body">
+			<div id="ProfilesModalResponse"></div>
 			<form class="form-horizontal">
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Name:</label>
@@ -172,7 +179,7 @@
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Parent:</label>
 					<div class="col-sm-10">
-						<input type="text" value="<?php echo $aux->getName(); ?>" id="ProfilesModalParent" disabled class="form-control">
+						<input type="text" value="<?php echo $aux->getName(); ?>" id="ProfilesModalParent" readonly class="form-control">
 					</div>
 				</div>
 			</form>
@@ -195,6 +202,7 @@
 			<h4>Delete a profile</h4>
 		</div>
 		<div class="modal-body">
+			<div id="ProfilesModalResponse"></div>
 			<h5>Do you really want to delete <span id="ProfileDeleteName"><?php echo $aux->getName(); ?></span>?</h5>
 			<p>
 				This action will <b>delete</b> your profile configuration (and of any of its children) from the ipfixcol configuration file. It will <b>not</b> delete the physical data from the disk. If you're trying to delete the live profile, only it's children will be removed.

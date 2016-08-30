@@ -1,4 +1,10 @@
 <?php
+	header(`Expires: Mon, 26 Jul 1997 05:00:00 GMT`);
+	header(`Last-Modified: `.gmdate(`D, d M Y H:i:s`).` GMT`);
+	header(`Cache-Control: no-cache, must-revalidate`);
+	header(`Pragma: no-cache`);
+?>
+<?php
 	/**
 	 *  @brief Finds and returns an XML subnode representing subprofile of /live
 	 *  
@@ -40,16 +46,10 @@
 	$lock = fopen('../app.lock', 'r');
 	if(!flock($lock, LOCK_EX)) {
 		?>
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4>Error</h4>
-		</div>
-		<div class="modal-body">
-			The GUI was not set up properly. You have to set up corrent privileges for the app.lock file. Consult the installation guide.
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		The GUI was not set up properly. You have to set up corrent privileges for the app.lock file. Consult the installation guide.
 			<span style="display: none" id="AsyncQuerryResult">fail</span>
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-default" data-dismiss="modal">Okay</button>
 		</div>
 		<?php
 		exit(1);
@@ -66,16 +66,10 @@
 	$PROFILE = $prefix;
 	if (!verifySelectedProfile($PROFILE, $ARR_AVAILS)) {
 		?>
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4>Error</h4>
-		</div>
-		<div class="modal-body">
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			You don't have the privileges to access the profile <?php echo $PROFILE; ?>
 			<span style="display: none" id="AsyncQuerryResult">fail</span>
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-default" data-dismiss="modal">Okay</button>
 		</div>
 		<?php
 		exit(1);
@@ -86,7 +80,12 @@
 	
 	if ($parent == null) {
 		?>
-		<div class="modal-header">
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			The path <?php echo $parent; ?> does not even exist in the profiles hierarchy.
+			<span style="display: none" id="AsyncQuerryResult">fail</span>
+		</div>
+		<!--div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal">&times;</button>
 			<h4>Error</h4>
 		</div>
@@ -96,7 +95,7 @@
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-default" data-dismiss="modal">Okay</button>
-		</div>
+		</div-->
 		<?php
 		exit(1);
 	}
@@ -110,32 +109,20 @@
 		
 		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $flname)) {			// ERROR handling (BADNAME)
 			?>
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Error</h4>
-			</div>
-			<div class="modal-body">
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				The profile name does not comply with the ipfixcol naming convention. First letter of the name must be a alphabetical letter, rest can be letters, numbers or underscores.
 				<span style="display: none" id="AsyncQuerryResult">fail</span>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Okay</button>
 			</div>
 			<?php
 			exit(2);
 		}
 		else if ($type != 'normal' && $type != 'shadow') {					// ERROR handling (BADTYPE)
 			?>
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Error</h4>
-			</div>
-			<div class="modal-body">
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				Please stop trying to hack this... Profile type can be 'normal' or 'shadow', nothing else.
 				<span style="display: none" id="AsyncQuerryResult">fail</span>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-default" data-dismiss="modal">Okay</button>
 			</div>
 			<?php
 			exit(3);
@@ -161,16 +148,10 @@
 			
 			if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $buf[0])) {
 				?>
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4>Error</h4>
-				</div>
-				<div class="modal-body">
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					The channel name does not comply with the ipfixcol naming convention. First letter of the name must be a alphabetical letter, rest can be letters, numbers or underscores.
 					<span style="display: none" id="AsyncQuerryResult">fail</span>
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-default" data-dismiss="modal">Okay</button>
 				</div>
 				<?php
 				exit(4);
@@ -185,7 +166,7 @@
 			$srclist = $channel->addChild('sourceList');					//		add <sourceList> to <channel>
 			
 			$size = sizeof($buf);
-			for ($i = 2; $i < $size; $i++) {							//		for every source of channel {
+			for ($i = 2; $i < $size; $i++) {								//		for every source of channel {
 				$srclist->addChild('source', $buf[$i]);						//			add <source> to <sourceList>
 			}																//		}
 			
@@ -234,7 +215,8 @@
 	
 	?>
 <!-- Success msg back to GUI -->
-<div class="modal-body">
+<div class="alert alert-success alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	Success. Page will reload shortly...
 	<span style="display: none" id="AsyncQuerryResult">success</span>
 </div>

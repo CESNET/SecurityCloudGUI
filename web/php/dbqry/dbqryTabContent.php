@@ -9,7 +9,7 @@
 					<?php
 						$size = sizeof($ARR_SOURCES);
 						for($i = 0; $i < $size; $i++) {
-							echo '<label><span>&nbsp;&nbsp;&nbsp;</span> <input type=\'checkbox\' name=\'',$ARR_SOURCES[$i],'\' checked> ',$ARR_SOURCES[$i],'</label><br>\n';
+							echo '<label><span>&nbsp;&nbsp;&nbsp;</span> <input type=\'checkbox\' name=\'',$ARR_SOURCES[$i],'\' checked> ',$ARR_SOURCES[$i],'</label><br>';
 						}
 					?>
 				</div>
@@ -56,7 +56,7 @@
 </div>
 
 <div class="progress">
-  <div id="Dbqry_ProgressBar_<?php echo $tab; ?>" class="progress-bar progress-bar-info progress-bar-stripped active" role="progressbar" style="min-width: 2em; width: 0%; display: none;">
+  <div id="Dbqry_ProgressBar_<?php echo $tab; ?>" class="progress-bar progress-bar-info progress-bar-stripped" role="progressbar" style="min-width: 2em; width: 0%; display: none;">
   0%
   </div>
 </div>

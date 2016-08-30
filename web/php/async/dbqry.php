@@ -1,4 +1,10 @@
 <?php
+	header(`Expires: Mon, 26 Jul 1997 05:00:00 GMT`);
+	header(`Last-Modified: `.gmdate(`D, d M Y H:i:s`).` GMT`);
+	header(`Cache-Control: no-cache, must-revalidate`);
+	header(`Pragma: no-cache`);
+?>
+<?php
 /* MAIN EXECUTION CODE */
 function execDbRequest() {														// This gets called when this thread is started
 	// *** include ***
