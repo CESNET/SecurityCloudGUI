@@ -18,9 +18,9 @@
 			<?php
 			$size = sizeof($ARR_OPTIONS_CODE_LIMITTO);
 			for($i = 0; $i < $size; $i++) {
-				echo '<option value=\'',$ARR_OPTIONS_CODE_LIMITTO[$i]'\'';
+				echo '<option value=\'',$ARR_OPTIONS_CODE_LIMITTO[$i],'\'';
 				if($i == 0) echo ' selected';
-				echo '>',$ARR_OPTIONS_NAME_LIMITTO[$i],'</option>\n';
+				echo '>',$ARR_OPTIONS_NAME_LIMITTO[$i],'</option>';
 			}
 			?>
 		</select>
@@ -44,7 +44,7 @@
 			<?php
 			$size = sizeof($ARR_OPTIONS_NAME_FIELDS);
 			for($i = 0; $i < $size; $i++) {
-				echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>\n';
+				echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>';
 			}
 			?>
 		</select>
@@ -60,7 +60,7 @@
 			<?php
 			$size = sizeof($ARR_OPTIONS_NAME_FIELDS);
 			for($i = 0; $i < $size; $i++) {
-				echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>\n';
+				echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>';
 			}
 			?>
 		</select>

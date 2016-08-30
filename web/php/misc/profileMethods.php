@@ -25,7 +25,7 @@ function loadXmlFile($filename) {
 *	is stored in '$object'. '$prefix' is mandatory arg
 *	used in recursion. Always call this function with '/'.
 */
-function _createProfileTreeFromXml ($xml, $prefix, &$object) {
+function createProfileTreeFromXml ($xml, $prefix, &$object) {
 	$part = $xml->attributes();	// PHP5 compat workaround
 	$object->setName($prefix.$part[0]);
 	
@@ -70,7 +70,7 @@ function _createProfileTreeFromXml ($xml, $prefix, &$object) {
 	}
 }
 
-function createProfileTreeFromXml ($xml, $prefix, &$object) {
+function _createProfileTreeFromXml ($xml, $prefix, &$object) {
 	$part = $xml->attributes();	// PHP5 compat workaround
 	$object->setName($prefix.$part[0]);
 	
@@ -79,13 +79,15 @@ function createProfileTreeFromXml ($xml, $prefix, &$object) {
 	$object->setName($xml->type == 'shadow');	// If <type> contains shadow, this evaluates to true
 	$filter = null;
 	
-	$subprofiles = $xml->subprofileList->children();
-	$size = (int)sizeof($subprofiles);
-	for ($i = 0; $i < $size; $i++) {
-		$result = $object->addChild();
-		createProfileTreeFromXml($subprofiles[$i], $nprefix, $result);
+	if (isset($xml->subprofileList->children())) {
+		$subprofiles = $xml->subprofileList->children();
+		$size = (int)sizeof($subprofiles);
+		for ($i = 0; $i < $size; $i++) {
+			$result = $object->addChild();
+			createProfileTreeFromXml($subprofiles[$i], $nprefix, $result);
+		}
+		unset($subprofiles);
 	}
-	unset($subprofiles);
 	
 	$channels = $xml->channelList->children();
 	$size = (int)sizeof($channels);
