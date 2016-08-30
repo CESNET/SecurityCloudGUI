@@ -92,9 +92,7 @@
 			</div>
 			<div id="MainPageStats">
 				<div class="row">
-					<div class="col-lg-12" id="StatsContent">
-					<?php include "php/stats/stats.php"; ?>
-					</div>
+					<div class="col-lg-12" id="StatsContent"></div>
 				</div>
 			</div>
 			<div id="MainPageDbqry">
