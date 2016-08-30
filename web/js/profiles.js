@@ -106,7 +106,7 @@ var Profile = {
 		
 		ajax.onreadystatechange = function() {
 			if (ajax.readyState == 4) {
-				document.getElementById("ProfilesModalContent").innerHTML = ajax.responseText;
+				document.getElementById("ProfilesModalResponse").innerHTML = ajax.responseText;
 				var result = document.getElementById("AsyncQuerryResult").innerHTML;
 				
 				if (result == "success") {
@@ -132,7 +132,7 @@ var Profile = {
 		
 		ajax.onreadystatechange = function() {
 			if (ajax.readyState == 4) {
-				document.getElementById("ProfilesModalContent").innerHTML = ajax.responseText;
+				document.getElementById("ProfilesModalResponse").innerHTML = ajax.responseText;
 				var result = document.getElementById("AsyncQuerryResult").innerHTML;
 				
 				if (result == "success") {

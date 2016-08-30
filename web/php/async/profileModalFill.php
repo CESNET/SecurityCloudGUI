@@ -1,4 +1,10 @@
 <?php
+	header(`Expires: Mon, 26 Jul 1997 05:00:00 GMT`);
+	header(`Last-Modified: `.gmdate(`D, d M Y H:i:s`).` GMT`);
+	header(`Cache-Control: no-cache, must-revalidate`);
+	header(`Pragma: no-cache`);
+?>
+<?php
 	include '../config.php';
 	include '../misc/profileClass.php';
 	include '../misc/profileMethods.php';
@@ -22,7 +28,7 @@
 	$aux = null;
 	searchForProfile($TREE_PROFILE, $profile, $aux);
 	if ($aux == null) {
-		echo "The profile $aux does not exist<br>";
+		echo "The profile $aux does not exist. Please reload the page<br>";
 		exit(2);
 	}
 	unset($TREE_PROFILE);	// Should not be needed anymore
@@ -151,6 +157,7 @@
 			<h4>Add a subprofile</h4>
 		</div>
 		<div class="modal-body">
+			<div id="ProfilesModalResponse"></div>
 			<form class="form-horizontal">
 				<div class="form-group">
 					<label for="ProfilesModalParent" class="col-sm-2 control-label">Name:</label>
@@ -195,6 +202,7 @@
 			<h4>Delete a profile</h4>
 		</div>
 		<div class="modal-body">
+			<div id="ProfilesModalResponse"></div>
 			<h5>Do you really want to delete <span id="ProfileDeleteName"><?php echo $aux->getName(); ?></span>?</h5>
 			<p>
 				This action will <b>delete</b> your profile configuration (and of any of its children) from the ipfixcol configuration file. It will <b>not</b> delete the physical data from the disk. If you're trying to delete the live profile, only it's children will be removed.

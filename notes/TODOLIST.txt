@@ -15,6 +15,7 @@ TODOLIST
 [ ] Total stats
 [ ] Shadow->RRD->Stats
 [ ] Channel
+[ ] Date settings
 
 *** DATABASE ***
 [ ] Source selection (ipfixcol fix)
