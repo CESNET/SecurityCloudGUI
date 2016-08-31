@@ -38,8 +38,20 @@ var Utility = {
 		return ajaxRequest;
 	},
 	
+	// This function is obsolete
+	// It was used for formatting the timestamps into
+	// at-time format before fdistdump started to
+	// accept unix timestamps
 	timestampToFdistdump: function(timestamp) {
 		var d = new Date(timestamp * 1000);
 		return ('0'+d.getDate()).slice(-2)+"."+('0'+d.getMonth()).slice(-2)+"."+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
+	},
+	
+	// Accepts UNIX timestamp
+	// Outputs time in DD Mon YYYY HH:MM format
+	timestampToNiceReadable: function(timestamp) {
+		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		var d = new Date(timestamp * 1000);
+		return ('0'+d.getDate()).slice(-2)+" "+month[d.getMonth()]+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
 	}
 }

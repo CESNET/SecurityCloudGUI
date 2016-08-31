@@ -18,4 +18,4 @@
 	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<title>SecureCloud - Prototype 2</title>
+<title>SecurityCloudGUI</title>

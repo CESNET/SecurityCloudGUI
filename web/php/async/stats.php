@@ -67,13 +67,13 @@ $ptime = explode('#', substr($time, 3));
 $stats = explode(',', $buffer);
 
 echo '<div class=\'panel panel-info\'>';
-echo '<div class=\'panel-heading\'>';
-echo 'Statistics for: ';
+echo '<div class=\'panel-heading\' id=\'StatsContentHeader\'></div></div>'; // content will be added by JS
+/*echo 'Statistics for: ';
 echo date('d M Y H:i',$ptime[0]);
 if (sizeof($ptime) > 1) {
 	echo ' - ',date('d M Y H:i',$ptime[1]);
 }
-echo '</div></div>';
+echo '</div></div>';*/
 
 echo '<div class=\'row\'>';
 for($i = 0; $i < 3; $i++) {
