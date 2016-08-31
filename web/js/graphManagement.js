@@ -138,8 +138,6 @@ function graphMoveStep(direction) {
 /* TIME WINDOW HANDLE */
 /* ================== */
 function timeWindowHandle() {
-	var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
 	var doc = document.getElementById("TimePickerDisplay");
 	doc.readonly = "false";
 	
