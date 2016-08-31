@@ -14,6 +14,12 @@ function collectStatistics() {
 	ajax.onreadystatechange = function () {
 		if (ajax.readyState == 4) {
 			document.getElementById("StatsContent").innerHTML = ajax.responseText;
+			
+			var txt = "Statistics for: " + Utility.timestampToNiceReadable(Graph.curTime1);
+			if(Graph.interval) {
+				txt += " - " + Utility.timestampToNiceReadable(Graph.curTime2);
+			}
+			document.getElementById("StatsContentHeader").innerHTML = txt;
 		}
 	}
 	

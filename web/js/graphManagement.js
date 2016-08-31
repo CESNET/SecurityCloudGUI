@@ -143,13 +143,11 @@ function timeWindowHandle() {
 	var doc = document.getElementById("TimePickerDisplay");
 	doc.readonly = "false";
 	
-	var d = new Date(Graph.curTime1 * 1000);
-	var str = ('0'+d.getDate()).slice(-2)+" "+month[d.getMonth()]+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
+	var str = Utility.timestampToNiceReadable(Graph.curTime1);
 	doc.value = str;
 	
 	if(Graph.interval) {
-		d = new Date(Graph.curTime2 * 1000);
-		str = ('0'+d.getDate()).slice(-2)+" "+month[d.getMonth()]+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
+		str = Utility.timestampToNiceReadable(Graph.curTime2);
 		doc.value += " - "+str;
 	}
 	else {

@@ -9,13 +9,15 @@ TODOLIST
 > [X] Clone and test clean install
 > [X] Write down install notes
 > [X] Merge devel to master
+[ ] minify js
+[ ] web title -> SecurityCloudGUI
 
 *** STATS ***
 [ ] Highlight most important data
 [ ] Total stats
 [ ] Shadow->RRD->Stats
 [ ] Channel
-[ ] Date settings
+[X] Date settings --> javascript
 
 *** DATABASE ***
 [ ] Source selection (ipfixcol fix)
@@ -27,10 +29,12 @@ TODOLIST
 [X] Read PIDFILE
 [X] Reload ipfixcol
 [X] reload page raději na index s live, jinak se to může rozbít
-[-] Naming conventions
+[X] Naming conventions
 [>] Filter checking --> return values
 [X] Add channel is buggy -- FIXED
-[ ] Return any errors as a dismissible alert box, success also as alert box
+[X] Return any errors as a dismissible alert box, success also as alert box
+[ ] Someone tries to create a subprofile of shadow, block this attempt
+[ ] profile name naming conventions
 
 *** SECURITY ***
 [X] createGraph.php shell injection
@@ -55,7 +59,7 @@ TODOLIST
 [X] graphCreate.php
 [X] profileUpdateProcess.php
 ...
-[ ] createProfilesTreeFromXml(...) - currently deprecated because it is broken
+[ ] createProfilesTreeFromXml(...) - currently deprecated because it is broken (using previous version)
 
 *** FORMATS ***
 TEST: [ ] If the type of the profile in the profiles.xml has some whitespaces around, that could cause a problem

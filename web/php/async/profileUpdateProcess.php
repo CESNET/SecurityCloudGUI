@@ -78,6 +78,17 @@
 	$parent = null;
 	findParentNode($xml, "", $prefix, $parent);
 	
+	if ($parent->type == "shadow") {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			You cannot create a subprofile of a shadow profile.
+			<span style="display: none" id="AsyncQuerryResult">fail</span>
+		</div>
+		<?php
+		exit(1);
+	}
+	
 	if ($parent == null) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert">
