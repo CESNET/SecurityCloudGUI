@@ -10,13 +10,13 @@ TODOLIST
 > [X] Write down install notes
 > [X] Merge devel to master
 [ ] minify js
-[ ] web title -> SecurityCloudGUI
+[X] web title -> SecurityCloudGUI
 
 *** STATS ***
-[ ] Highlight most important data
-[ ] Total stats
-[ ] Shadow->RRD->Stats
-[ ] Channel
+[X] Highlight most important data
+[X] Total stats
+[X] Shadow->RRD->Stats
+[X] Channel
 [X] Date settings --> javascript
 
 *** DATABASE ***
@@ -33,7 +33,7 @@ TODOLIST
 [>] Filter checking --> return values
 [X] Add channel is buggy -- FIXED
 [X] Return any errors as a dismissible alert box, success also as alert box
-[ ] Someone tries to create a subprofile of shadow, block this attempt
+[X] Someone tries to create a subprofile of shadow, block this attempt
 [ ] profile name naming conventions
 
 *** SECURITY ***

@@ -57,9 +57,15 @@ function execDbRequest() {														// This gets called when this thread is 
 			}
 			$f .= '('.$c->getFilter().')';
 		}
-		$filter = "(($filter) and ($f))";
 		
-		echo "$filter<br>";
+		if ($filter == "") {
+			$filter = "($f)";
+		}
+		else {
+			$filter = "(($filter) and ($f))";
+		}
+		
+		//echo "$filter<br>";
 	}
 	
 	$cmdBackup = "$FDUMP -f \"$filter\" $opts";

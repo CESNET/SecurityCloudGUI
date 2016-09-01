@@ -1,10 +1,14 @@
 function collectStatistics() {
-	var timeSpec = Dbqry_parseSelectedTime();
-	/*var srcs = ARR_SOURCES[0];
+	//var timeSpec = Dbqry_parseSelectedTime();
+	var timeSpec = Graph.curTime1;
+	if (Graph.interval) {
+		timeSpec += ":"+Graph.curTime2;
+	}
+	var srcs = ARR_SOURCES[0];
 	for (var i = 1; i < ARR_SOURCES.length; i++) {
 		srcs += ":"+ARR_SOURCES[i];
-	}*/
-	var srcs="./";
+	}
+	//var srcs="./";
 	
 	timeSpec = encodeURIComponent(timeSpec);
 	srcs = encodeURIComponent(srcs);
