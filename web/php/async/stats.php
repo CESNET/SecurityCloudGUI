@@ -34,7 +34,7 @@ function volume_conv_metric($rawNumber) {
 function printRow($rowName, $values, $bgn, $end, $suffix, $highlight) {
 	echo '<tr';
 	if ($highlight) {
-		echo ' class=\'danger\'';
+		echo ' class=\'info\'';
 	}
 	echo '>';
 	echo '<th>', $rowName, '</th>';
