@@ -143,14 +143,16 @@ for ($s = 0; $s < $srcsSize; $s++) {
 			$total[$v-1] += floatval($vars[$v]);
 		}
 		
-		$stats[$s][$v-1] /= $segmentsSize;
+		for ($i = 0;  $i < 15; $i++) {
+			$stats[$s][$i] /= $segmentsSize;
+		}
 	}
 	
 	$segm = $segmentsSize;	// Backup it for $total
 }
 
-for($v = 0; $v < 15; $v++) {
-	$total[$v] /= $segm;	// Compute $total properly
+for($i = 0; $i < 15; $i++) {
+	$total[$i] /= $segm;	// Compute $total properly
 }
 
 echo '<div class=\'panel panel-info\'>';
