@@ -149,7 +149,7 @@ function timeWindowHandle() {
 	if(Graph.interval) {
 		str = Utility.timestampToNiceReadable(Graph.curTime2);
 		doc.value += " - " + str;
-		displ.innerHTML += str;
+		displ.innerHTML += " - " + str;
 	}
 	else {
 		var windowSize = timestampEnd - timestampBgn;

@@ -52,6 +52,6 @@ var Utility = {
 	timestampToNiceReadable: function(timestamp) {
 		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		var d = new Date(timestamp * 1000);
-		return ('0'+d.getDate()).slice(-2)+" "+month[d.getMonth()]+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
+		return month[d.getMonth()]+" "+('0'+d.getDate()).slice(-2)+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
 	}
 }
