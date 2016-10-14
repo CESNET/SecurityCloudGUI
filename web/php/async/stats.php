@@ -100,6 +100,7 @@ $total = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 $names = array("Flows", "Packets", "Traffic");
 $srcs = explode(':', $src);
 $srcsSize = (int)sizeof($srcs);
+$segm;	// Backup constant for computing $total properly
 
 for ($s = 0; $s < $srcsSize; $s++) {
 	$cmd = "exec $RRDTOOL fetch $srcs[$s].rrd AVERAGE -r 300 $time -a | tail -n +3 | tr ' ' ',' | tr '\n' ';'";
@@ -141,7 +142,15 @@ for ($s = 0; $s < $srcsSize; $s++) {
 			$stats[$s][$v-1] += floatval($vars[$v]);
 			$total[$v-1] += floatval($vars[$v]);
 		}
+		
+		$stats[$s][$v-1] /= $segmentsSize;
 	}
+	
+	$segm = $segmentsSize;	// Backup it for $total
+}
+
+for($v = 0; $v < 15; $v++) {
+	$total[$v] /= $segm;	// Compute $total properly
 }
 
 echo '<div class=\'panel panel-info\'>';
