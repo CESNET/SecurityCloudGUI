@@ -64,21 +64,31 @@ function execDbRequest() {														// This gets called when this thread is 
 		else {
 			$filter = "(($filter) and ($f))";
 		}
-		
-		//echo "$filter<br>";
 	}
 	
-	$cmdBackup = "$FDUMP -f \"$filter\" $opts";
+	$cmdBackup = "";
+	if ($SINGLE_MACHINE) {
+		$cmdBackup = "$FDUMP -f \"$filter\" $opts";
+	}
+	else {
+		$cmdBackup = "$FDUMP_HA -f=\"$filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);
+	}
 	
-	//echo strlen($filter)." ".$filter."<br>";
 	if(strlen($filter) > 2) {
 		$filter = escapeshellarg($filter);
 		$filter = "-f $filter";
 	}
 	$opts = escapeshellcmd($opts);
 	
-	// *** proc_open params ***
-	$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json $src";	// <---------- $CMD --------------
+	$cmd = "";
+	if ($SINGLE_MACHINE) {
+		// *** proc_open params ***
+		$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);	// <---------- $CMD --------------
+	}
+	else {
+		$cmd = "$FDUMP_HA -f=\"$filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);
+	}
+	
 	$desc = array(
 		0 => array ('pipe', 'r'),
 		1 => array ('pipe', 'w'),
@@ -95,7 +105,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);															// And end this thread )
 	}																		// Else
 	
-	$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/");		// Execute the program command
+	$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/", $FDUMP_ENV);// Execute the program command
 	if($p == false) {														// If execution failed (
 		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
 		echo '<div class=\'panel-heading\'>Error</div>';
@@ -212,7 +222,7 @@ else if($mode == 'kill') {
 
 	if(($index = findTransaction($TMP_DIR.$stamp, $tab, $pid)) != -1) {
 		// Kill the process
-		exec("kill -9 $pid");
+		exec("kill -15 $pid");
 		
 		// Clear the transaction
 		removeTransaction($TMP_DIR.$stamp, $index);
