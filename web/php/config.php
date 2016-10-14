@@ -8,7 +8,10 @@
 	// This is the path to your MPI binary and launch
 	// configuration. Also the path to the fdistdump
 	// binary has to be provided
-	$FDUMP				= '/usr/lib64/mpich/bin/mpiexec -n 2 fdistdump';
+	$FDUMP				= 'mpiexec -n 2 fdistdump';
+	$FDUMP_HA			= 'fdistdump-ha';
+	$FDUMP_ENV			= '/usr/lib64/mpich/bin:/usr/local/bin:/bin:/usr/local/sbin:/usr/bin';
+	$SINGLE_MACHINE		= false;	// Change this to true if you're running the whole SecurityCloud on the single machine. ($FDUMP will be called instead of $FDUMP_HA)
 	
 	// RRD Tool
 	$RRDTOOL			= 'rrdtool';
