@@ -21,4 +21,9 @@
 			<a href="#" onclick="gotoPage('Usrctrl');">User Control</a>
 		</li>
 	</ul>
+	
+	<div style="position: relative; bottom: 0px" class="alert alert-info text-center" role="alert">
+		Selected profile: <?php echo $NAME; ?><br>
+		Selected time: <span id="SidebarSelectedTime"></span>
+	</div>
 </div>

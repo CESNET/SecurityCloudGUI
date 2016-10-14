@@ -139,14 +139,17 @@ function graphMoveStep(direction) {
 /* ================== */
 function timeWindowHandle() {
 	var doc = document.getElementById("TimePickerDisplay");
+	var displ = document.getElementById("SidebarSelectedTime");
 	doc.readonly = "false";
 	
 	var str = Utility.timestampToNiceReadable(Graph.curTime1);
 	doc.value = str;
+	displ.innerHTML = str;
 	
 	if(Graph.interval) {
 		str = Utility.timestampToNiceReadable(Graph.curTime2);
-		doc.value += " - "+str;
+		doc.value += " - " + str;
+		displ.innerHTML += str;
 	}
 	else {
 		var windowSize = timestampEnd - timestampBgn;

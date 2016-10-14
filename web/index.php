@@ -71,10 +71,10 @@
 	<!-- Page Content -->
 	<div id="page-content-wrapper">
 		<div class="container-fluid">
-			<div class="alert alert-info alert-dismissible text-center" role="alert">
+			<!--div class="alert alert-info alert-dismissible text-center" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				Currently selected profile: <?php echo $NAME; ?>
-			</div>
+				Currently selected profile: <?php //echo $NAME; ?>
+			</div-->
 		
 			<div id="MainPageGraphs">
 				<!-- ACTIVE GRAPH + SOURCES -->
