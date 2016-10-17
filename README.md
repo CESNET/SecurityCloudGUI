@@ -1,15 +1,30 @@
 # SecurityCloud GUI
 ## Table of Contents
 1. [Introduction](#intro)
-2. [Prerequisities](#pre)
-3. [Instalation](#install)
-4. [Troubleshooting](#trouble)
-5. [Todolist](#todo)
+2. [Screenshots] (#screen)
+3. [Prerequisities](#pre)
+4. [Instalation](#install)
+5. [Troubleshooting](#trouble)
+6. [Todolist](#todo)
 
 ##<a name="intro"></a> Introduction
 This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows you to visualize and analyze your internet flows collected by the ipfix collector.
 
 The GUI also allows you to perform querries on the flow data using the fdistdump and also to organize and manage export profiles of the ipfixcol.
+
+##<a name="screen"></a> Screenshots
+### Graphs tab
+![Graphs](/screens/graph.png)
+
+### Statistics tab
+![Statistics](/screens/stats.png)
+
+### Database querries tab
+![Graphs](/screens/dbqry.png)
+
+### Profile management tab
+![Graphs](/screens/profiles.png)
+
 
 ##<a name="pre"></a> Prerequisities:
 - [rrdtool 1.6](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
