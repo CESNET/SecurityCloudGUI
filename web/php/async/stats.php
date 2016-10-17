@@ -95,12 +95,14 @@ $desc = array(
 $pipes = array();
 
 // *** DATA ARRAYS ***
-$stats = array();
-$total = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+$statsRate = array();
+$statsSums = array();
+$totalRate = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+$totalSums = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 $names = array("Flows", "Packets", "Traffic");
 $srcs = explode(':', $src);
 $srcsSize = (int)sizeof($srcs);
-$segm;	// Backup constant for computing $total properly
+$segm;	// Backup constant for computing $totalRate properly
 
 for ($s = 0; $s < $srcsSize; $s++) {
 	$cmd = "exec $RRDTOOL fetch $srcs[$s].rrd AVERAGE -r 300 $time -a | tail -n +3 | tr ' ' ',' | tr '\n' ';'";
@@ -124,9 +126,9 @@ for ($s = 0; $s < $srcsSize; $s++) {
 	$segments = explode(';', $buffer);
 	$segmentsSize = (int)sizeof($segments) - 1;
 
-	$stats[$s] = array();
+	$statsRate[$s] = array();
 	for ($i = 0; $i < 15; $i++) {
-		$stats[$s][] = 0;
+		$statsRate[$s][] = 0;
 	}
 	for ($i = 0; $i < $segmentsSize; $i++) {
 		$vars = explode(',', $segments[$i]);
@@ -139,21 +141,26 @@ for ($s = 0; $s < $srcsSize; $s++) {
 		}
 		
 		for ($v = 1; $v <= 15; $v++) {
-			$stats[$s][$v-1] += floatval($vars[$v]);
-			$total[$v-1] += floatval($vars[$v]);
+			$aux = floatval($vars[$v]);
+			$statsRate[$s][$v-1] += $aux;
+			$statsSums[$s][$v-1] += $aux * 300;
+			$totalRate[$v-1] += $aux;
+			$totalSums[$v-1] += $aux * 300;
 		}
 		
 		for ($i = 0;  $i < 15; $i++) {
-			$stats[$s][$i] /= $segmentsSize;
+			$statsRate[$s][$i] /= $segmentsSize;
 		}
 	}
 	
-	$segm = $segmentsSize;	// Backup it for $total
+	$segm = $segmentsSize;	// Backup it for $totalRate
 }
 
 for($i = 0; $i < 15; $i++) {
-	$total[$i] /= $segm;	// Compute $total properly
+	$totalRate[$i] /= $segm;	// Compute $totalRate properly
 }
+
+$timeWindowSize = ($timeSplit[1] - $timeSplit[0]) / $segm;
 
 echo '<div class=\'panel panel-info\'>';
 echo '<div class=\'panel-heading\' id=\'StatsContentHeader\'></div></div>'; // content will be added by JS
@@ -162,7 +169,7 @@ echo '<div class=\'panel-heading\' id=\'StatsContentHeader\'></div></div>'; // c
 $maxima = array(0, 0, 0);
 for ($i = 0; $i < 3; $i++) {
 	for ($p = 0; $p < $srcsSize; $p++) {
-		if ($stats[$p][$i * 5] > $stats[$maxima[$i]][$i * 5]) $maxima[$i] = $p;
+		if ($statsRate[$p][$i * 5] > $statsRate[$maxima[$i]][$i * 5]) $maxima[$i] = $p;
 	}
 }
 
@@ -174,13 +181,35 @@ for($i = 0; $i < 3; $i++) {
 	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
 	echo '<div class=\'panel-body\'>';
 	echo '<table class=\'table table-striped table-condensed table-hover\'>';
+	echo '<caption>Sum</caption>';
 	echo '<thead><tr><th>Channel</th><th>All</th><th>TCP</th><th>UDP</th><th>ICMP</th><th>Other</th></thead>';
 	echo '<tbody>';
 	
 	for ($p = 0; $p < $srcsSize; $p++) {
-		printRow($srcs[$p], $stats[$p], $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', $p == $maxima[$i]);
+		printRow($srcs[$p], $statsRate[$p], $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', $p == $maxima[$i]);
 	}
-	printRow("Total", $total, $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', false);
+	printRow("Total", $totalRate, $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', false);
+	
+	echo '</tbody></table></div></div></div>';
+}
+echo '</div>';
+
+/* PRINT THE TABLES FOR FLOWS, PACKETS, TRAFFIC */
+echo '<div class=\'row\'>';
+for($i = 0; $i < 3; $i++) {
+	echo '<div class=\'col-md-4\'>';
+	echo '<div class=\'panel panel-info\'>';
+	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
+	echo '<div class=\'panel-body\'>';
+	echo '<table class=\'table table-striped table-condensed table-hover\'>';
+	echo '<caption>Sum</caption>';
+	echo '<thead><tr><th>Channel</th><th>All</th><th>TCP</th><th>UDP</th><th>ICMP</th><th>Other</th></thead>';
+	echo '<tbody>';
+	
+	for ($p = 0; $p < $srcsSize; $p++) {
+		printRow($srcs[$p], $statsSums[$p], $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', $p == $maxima[$i]);
+	}
+	printRow("Total", $totalSums, $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', false);
 	
 	echo '</tbody></table></div></div></div>';
 }
