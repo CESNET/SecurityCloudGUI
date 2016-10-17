@@ -144,12 +144,12 @@ function timeWindowHandle() {
 	
 	var str = Utility.timestampToNiceReadable(Graph.curTime1);
 	doc.value = str;
-	displ.innerHTML = str;
+	displ.innerHTML = (Graph.interval ? "<br>Begin: " : "") + str;
 	
 	if(Graph.interval) {
 		str = Utility.timestampToNiceReadable(Graph.curTime2);
 		doc.value += " - " + str;
-		displ.innerHTML += " - " + str;
+		displ.innerHTML += "<br>End: " + str;
 	}
 	else {
 		var windowSize = timestampEnd - timestampBgn;

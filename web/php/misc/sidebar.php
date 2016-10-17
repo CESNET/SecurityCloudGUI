@@ -22,8 +22,10 @@
 		</li>
 	</ul>
 	
-	<div style="position: relative; bottom: 0px" class="alert alert-info text-center" role="alert">
-		Selected profile: <?php echo $NAME; ?><br>
-		Selected time: <span id="SidebarSelectedTime"></span>
+	<div style="position: fixed; bottom: 0px; padding: 5px; width: 200px;">
+		<div class="well well-sm">
+			Selected profile: <span class="label label-default"><?php echo $NAME; ?></span><br>
+			Timeslot: <span id="SidebarSelectedTime"></span>
+		</div>
 	</div>
 </div>
