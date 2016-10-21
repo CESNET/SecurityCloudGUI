@@ -127,8 +127,10 @@ for ($s = 0; $s < $srcsSize; $s++) {
 	$segmentsSize = (int)sizeof($segments) - 1;
 
 	$statsRate[$s] = array();
+	$statsSums[$s] = array();
 	for ($i = 0; $i < 15; $i++) {
 		$statsRate[$s][] = 0;
+		$statsSums[$s][] = 0;
 	}
 	for ($i = 0; $i < $segmentsSize; $i++) {
 		$vars = explode(',', $segments[$i]);
@@ -159,8 +161,6 @@ for ($s = 0; $s < $srcsSize; $s++) {
 for($i = 0; $i < 15; $i++) {
 	$totalRate[$i] /= $segm;	// Compute $totalRate properly
 }
-
-$timeWindowSize = ($timeSplit[1] - $timeSplit[0]) / $segm;
 
 echo '<div class=\'panel panel-info\'>';
 echo '<div class=\'panel-heading\' id=\'StatsContentHeader\'></div></div>'; // content will be added by JS
@@ -207,9 +207,9 @@ for($i = 0; $i < 3; $i++) {
 	echo '<tbody>';
 	
 	for ($p = 0; $p < $srcsSize; $p++) {
-		printRow($srcs[$p], $statsSums[$p], $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', $p == $maxima[$i]);
+		printRow($srcs[$p], $statsSums[$p], $i * 5, ($i + 1) * 5, $i == 2 ? 'B' : ' ', $p == $maxima[$i]);
 	}
-	printRow("Total", $totalSums, $i * 5, ($i + 1) * 5, $i == 2 ? 'B/s' : '/s', false);
+	printRow("Total", $totalSums, $i * 5, ($i + 1) * 5, $i == 2 ? 'B' : ' ', false);
 	
 	echo '</tbody></table></div></div></div>';
 }
