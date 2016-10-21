@@ -109,7 +109,8 @@
 		$format .= 'PNG --only-graph';
 	}
 	else {
-		$format .= 'JSONTIME';
+		//$format .= 'JSONTIME';
+		$format .= 'JSON';
 	}
 	
 	// Descriptor array for proc open. Do not change unless you know what you're doing

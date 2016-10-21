@@ -152,13 +152,13 @@
 	/* DOCUMENT READY STUFF */
 	/* ==================== */
 	$(document).ready(function(){
-		$('#TimePickerDisplay').datetimepicker({								// Initialize datetimepicker
+		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
 			format: "DD MMM YYYY - HH:mm",
 			useCurrent: true,
 			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),
 			sideBySide: true
 		});
-		$('#TimePickerDisplay').on(												// Register onhide event callback for datetimepicker
+		$('#TimePicker').on(												// Register onhide event callback for datetimepicker
 			"dp.hide",
 			function (e) {
 				setGraphCenter(new Date(e.date).getTime() / 1000);

@@ -42,7 +42,15 @@
 				</div>
 			</div>
 			<div class="col-sm-6 text-center">
-				<input type='text' class="form-control text-center" id='TimePickerDisplay' style="cursor: pointer;" onclick="Graph.interval=false;">
+				<div class='input-group date' id='TimePicker'>
+					<input type='text' id="TimePickerDisplay" class="form-control text-center" />
+					
+					<span class="input-group-addon">
+						<span class="glyphicon glyphicon-calendar"></span>
+					</span>
+				</div>
+
+				<!--input type='text' class="form-control text-center" id='TimePickerDisplay' style="cursor: pointer;" onclick="Graph.interval=false;"-->
 				<!-- Setting up time via the picker will ALWAYS result in a single time point. The interval needs to be falsed, otherwise you'll quickly spot a bug. -->
 			</div>
 			<div class="col-sm-3 text-right">

@@ -83,7 +83,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$cmd = "";
 	if ($SINGLE_MACHINE) {
 		// *** proc_open params ***
-		$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);	// <---------- $CMD --------------
+		$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ".substr($profile, 1);	// <---------- $CMD --------------
 	}
 	else {
 		$cmd = "$FDUMP_HA -f=\"$filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);
@@ -95,6 +95,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		2 => array ('pipe', 'w')
 	);
 	$pipes = array();
+	$cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA : $IPFIXCOL_DATA."$profile/";
 	
 	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');					// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
@@ -105,7 +106,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);															// And end this thread )
 	}																		// Else
 	
-	$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/", $FDUMP_ENV);// Execute the program command
+	$p = proc_open($cmd, $desc, $pipes, $cwd, $FDUMP_ENV);// Execute the program command
 	if($p == false) {														// If execution failed (
 		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
 		echo '<div class=\'panel-heading\'>Error</div>';
