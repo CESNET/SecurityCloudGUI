@@ -110,7 +110,7 @@
 	}
 	else {
 		//$format .= 'JSONTIME';
-		$format .= 'JSON';
+		$format .= 'JSONTIME';
 	}
 	
 	// Descriptor array for proc open. Do not change unless you know what you're doing

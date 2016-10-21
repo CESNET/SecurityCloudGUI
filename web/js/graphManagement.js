@@ -194,25 +194,14 @@ function computeRenderMode() {
 /* ================ */
 /* INITIALIZE GRAPH */
 /* ================ */
-function timestampizeGraphData(data) {
-	var step = (timestampEnd - timestampBgn) / data.length;
-	var stamp;
-	
+function sanitizeGraphTimestamps(data) {
 	for (var i = 0; i < data.length; i++) {
-		stamp = new Date(parseInt((timestampBgn + i * step) + "000"));
-		data[i].unshift(stamp);
+		data[i][0] = new Date(parseInt(data[i][0] + "000"));
 	}
 }
 
 function initializeGraph(none) {
-	/*if (Utility.getCurrentTimestamp() - 300 == graphData[graphData.length - 1]) {
-		graphData.push(graphData[graphData.length - 1]);
-	}*/
-	
-	timestampizeGraphData(graphData);
-	/*for(var x = 0; x < graphData.length; x++) {
-		graphData[x][0] = new Date(parseInt(graphData[x][0]+"000"));
-	}*/
+	sanitizeGraphTimestamps(graphData);
 	
 	Graph.init("dygraph", graphData, graphLegend, ARR_GRAPH_NAME[currentVar], computeRenderMode());
 	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
@@ -233,14 +222,7 @@ function initializeGraph(none) {
 /* UPDATE GRAPH */
 /* ============ */
 function updateGraph(overridePosition) {
-	timestampizeGraphData(graphData);
-	/*if (Utility.getCurrentTimestamp() - 300 == graphData[graphData.length - 1]) {
-		graphData.push(graphData[graphData.length - 1]);
-	}
-	
-	for(var x = 0; x < graphData.length; x++) {
-		graphData[x][0] = new Date(parseInt(graphData[x][0]+"000"));
-	}*/
+	sanitizeGraphTimestamps(graphData);
 	
 	Graph.update(graphData, ARR_GRAPH_NAME[currentVar], computeRenderMode());
 	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
