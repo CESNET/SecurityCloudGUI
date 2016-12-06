@@ -152,7 +152,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	
 	$index = findTransaction($TMP_DIR.$stamp, $tab, $pid);	// Find our transaction (pid is not needed, but it is a mandatory argument for function call)
 	
-	if($index != -1) {														// If index was found (i.e. nobody stopped this querry)
+	if($index != -1) {														// If index was found (i.e. nobody stopped this query)
 		removeTransaction($TMP_DIR.$stamp, $index);			// Remove the transaction with success
 	}
 	
@@ -165,12 +165,12 @@ function execDbRequest() {														// This gets called when this thread is 
 	
 	// BOOTSTRAP CODE:
 	echo '<div class=\'panel panel-info\'>';								// Print info about used parameters
-	echo '<div class=\'panel-heading\'>Querry parameters</div>';			// Heading will be light blue
+	echo '<div class=\'panel-heading\'>Query parameters</div>';			// Heading will be light blue
 	echo '<div class=\'panel-body\'><pre>',$cmdBackup,'</pre></div>';		// Print commands
 	echo '</div>';
 	if (strlen($buffer) > 0) {
 		echo '<div class=\'panel panel-success\'>';							// Print stdout from fdistdump
-		echo '<div class=\'panel-heading\'>Querry output</div>';			// Heading will be dark blue
+		echo '<div class=\'panel-heading\'>Query output</div>';			// Heading will be dark blue
 		echo '<div class=\'panel-body\'><pre>';
 		$auxbuf = "";
 		$size = strlen($buffer);
