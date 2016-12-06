@@ -43,7 +43,7 @@ function createUserstamp($length) {
 function addTransaction($filename, $key, $value) {
 	// This is totally simple append code
 	$file = fopen($filename, 'a');
-	fwrite($file, $key.' '.$value.'\n');
+	fwrite($file, $key.' '.$value.' \n');
 	fclose($file);
 	
 	$out = exec('wc -l '.$filename.' | tr \' \' \'\\n\' | head -1');
