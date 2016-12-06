@@ -219,6 +219,7 @@ else if($mode == 'kill') {
 	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');
 	if(flock($lock, LOCK_EX) == false) {
 		echo 'Flock failed.\n';
+		exit(1);
 	}
 
 	if(($index = findTransaction($TMP_DIR.$stamp, $tab, $pid)) != -1) {
