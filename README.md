@@ -77,7 +77,7 @@ For many reasons the default configuration might failed or you just want to put 
 Most of your issues can be solved via editing the 'config.php' which is located in the 'php' folder of the GUI root.
 
 ### fdistdump querries do not start
-You either have a different mpi binary than the default configuration uses or fdistdump is not in your path. Open the 'config.php' and edit the value of $FDUMP variable. If you have a different mpi, replace the full path to the mpiexec from mpich with full path to your alternative to mpiexec. If you don't have fdistdump in your $PATH, enter the full path to its binary.
+You either have a different mpi binary than the default configuration uses or fdistdump is not in your path. Open the 'config.php' and edit the value of $FDUMP variable. If you have a different mpi, replace the full path to the mpiexec from mpich with full path to your alternative to mpiexec. If you don't have fdistdump in your $PATH, enter the full path to its binary. Also check the variable $SINGLE_MACHINE. If you intend to run fdistdump on a cluster using fdistdump-ha, it has to be set to false.
 
 ### My webserver does not use /var/www/html
 Copy the contents of the web wherever your webserver wants it to be. Then open the 'config.php' and edit the $BASE_DIR variable with the correct path. **Do not** omit the final slash.
