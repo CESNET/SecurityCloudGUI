@@ -82,6 +82,7 @@
 					<div class="col-md-4">
 						<div class="btn-group btn-group-justified">
 							<button type="button" class="btn btn-primary" onclick="Local_clearTab('<?php echo $tab; ?>');">Clear the results</button>
+							<button type="button" class="btn btn-primary" onclick="Local_closeTab('<?php echo $tab; ?>');">Close this tab</button>
 						</div>
 					</div>
 				</div><br>
