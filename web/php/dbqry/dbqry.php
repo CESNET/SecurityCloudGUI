@@ -78,12 +78,14 @@
 				echo '\'>';
 				?>
 				<div class="row">
-					<div class="col-md-10">&nbsp;</div>
-					<div class="col-md-1"><button type="button" class="btn btn-primary" onclick="Local_clearTab('<?php echo $tab; ?>');">Clear the results</button></div>
-					<div class="col-md-1"><button type="button" class="btn btn-primary" onclick="Local_closeTab('<?php echo $tab; ?>');">Close this tab</button></div>
+					<div class="col-md-8">&nbsp;</div>
+					<div class="col-md-4">
+						<div class="btn-group btn-group-justified">
+							<button type="button" class="btn btn-primary" onclick="Local_clearTab('<?php echo $tab; ?>');">Clear the results</button>
+						</div>
+					</div>
 				</div><br>
 				<?php
-					echo $tab,'<br><br>';
 					include 'dbqryTabContent.php';
 				echo '</div>';
 			}
