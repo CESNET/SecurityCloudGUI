@@ -75,7 +75,7 @@ function Dbqry_stopRequest(tab) {
 
 /**
 *	This is the function called automatically from the point when database
-*	querry is called till it ends. This function reads the progress file,
+*	query is called till it ends. This function reads the progress file,
 *	updates the progress bar and that's basically it.
 */
 var intervalHandle;
