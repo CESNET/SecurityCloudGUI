@@ -128,7 +128,7 @@
 		/* ================ */
 		var graphData, graphLegend;
 		var timestampBgn, timestampEnd;
-		var resolutionPtr=2;
+		var resolutionPtr;
 		var currentVar = 0;
 	</script>
 	
@@ -169,8 +169,21 @@
 		gotoPage('Graphs');														// Set the default viewpoint
 		
 		/* TIMESTAMP INIT */
-		timestampBgn=Utility.getCurrentTimestamp()-(24*3600);
-		timestampEnd=Utility.getCurrentTimestamp();
+		<?php if (isset($_GET['begin']) && isset($_GET['end'])) {
+			echo 'timestampBgn = ',$_GET['begin'],';';
+			echo 'timestampEnd = ',$_GET['end'],';';
+		}
+		else {
+			echo 'timestampBgn = Utility.getCurrentTimestamp()-(24*3600);';
+			echo 'timestampEnd = Utility.getCurrentTimestamp();';
+		} ?>
+		
+		<?php if (isset($_GET['res'])) {
+			echo 'resolutionPtr = ',$_GET['res'],';';
+		}
+		else {
+			echo 'resolutionPtr = 2;';
+		} ?>
 		
 		/* RESOLUTION INIT */
 		var list = document.getElementById("DisplayResolutionList").getElementsByTagName("a");
