@@ -162,8 +162,7 @@ var Profile = {
 		address += "&end=" + timestampEnd;
 		address += "&res=" + resolutionPtr;
 		
-		alert(address);
-		
+		// alert(address);
 		location.assign(address);
 	},
 }
