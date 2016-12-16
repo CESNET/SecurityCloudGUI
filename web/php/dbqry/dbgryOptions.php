@@ -72,7 +72,7 @@
 		<select id="Option_OrderDirection_<?php echo $tab; ?>" class="form-control">
 			<option value="" selected>Default</option>
 			<option value="#asc">Ascending</option>
-			<option value="#dsc">Descending</option>
+			<option value="#desc">Descending</option>
 		</select>
 	</div>
 </div>
