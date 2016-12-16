@@ -201,6 +201,8 @@
 		e.preventDefault();
 		$("#wrapper").toggleClass("toggled");
 	});
+	
+	$('[rel=tooltip]').tooltip();
 	</script>
 </body>
 
