@@ -79,10 +79,10 @@
 				?>
 				<div class="row">
 					<div class="col-md-8">&nbsp;</div>
-					<div class="col-md-4">
-						<div class="btn-group btn-group-justified">
+					<div class="col-lg-4 text-right">
+						<div class="btn-group">
 							<button type="button" class="btn btn-primary" onclick="Local_clearTab('<?php echo $tab; ?>');">Clear the results</button>
-							<button type="button" class="btn btn-primary" onclick="Local_closeTab('<?php echo $tab; ?>');">Close this tab</button>
+							<button type="button" class="btn btn-danger" onclick="Local_closeTab('<?php echo $tab; ?>');">Close this tab</button>
 						</div>
 					</div>
 				</div><br>
