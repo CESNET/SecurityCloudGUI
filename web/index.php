@@ -158,7 +158,8 @@
 			format: "YYYY-MM-DD HH:mm",
 			useCurrent: true,
 			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),
-			sideBySide: true
+			sideBySide: true,
+			ignoreReadonly: true,
 		});
 		$('#TimePicker').on(												// Register onhide event callback for datetimepicker
 			"dp.hide",

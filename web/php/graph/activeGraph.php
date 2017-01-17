@@ -44,11 +44,11 @@
 			</div>
 			<div class="col-sm-6 text-center">
 				<div class='input-group date' id='TimePicker'>
-					<input type='text' id="TimePickerDisplay" class="form-control text-center" />
-					
 					<span class="input-group-addon">
-						<span class="glyphicon glyphicon-calendar"></span>
+						Move to:
 					</span>
+				
+					<input type='text' id="TimePickerDisplay" class="form-control text-center" readonly />
 				</div>
 
 				<!--input type='text' class="form-control text-center" id='TimePickerDisplay' style="cursor: pointer;" onclick="Graph.interval=false;"-->
