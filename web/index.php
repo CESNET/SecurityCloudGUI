@@ -156,7 +156,8 @@
 	/* ==================== */
 	$(document).ready(function(){
 		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
-			format: "DD MMM YYYY - HH:mm",
+			//format: "DD MMM YYYY HH:mm",
+			format: "YYYY-MM-DD HH:mm",
 			useCurrent: true,
 			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),
 			sideBySide: true

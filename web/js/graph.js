@@ -102,7 +102,9 @@ var Graph = {
 			axes : {
 				y : { axisLabelWidth : 70,/* drawAxis: false, drawGrid: false */},
 				x : { /*axisLabelWidth : 0, drawAxis: false, drawGrid: false,*/ 
-						return 
+					valueFormatter: function(d) {
+						return Utility.JStimestampToNiceReadable(d);
+					},
 				},
 			},
 			stackedGraph: render["type"],

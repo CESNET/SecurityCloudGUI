@@ -48,10 +48,34 @@ var Utility = {
 	},
 	
 	// Accepts UNIX timestamp
+	// Outputs time str in ISO fmt YYYY-MM-DD HH:MM
+	timestampToNiceReadable: function (timestamp) {
+		var d = new Date(timestamp * 1000);
+		return d.getFullYear() + "-" + ('0'+(d.getMonth()+1)).slice(-2) + "-" + ('0'+d.getDate()).slice(-2) + " " +('0'+d.getHours()).slice(-2) + ":" + ('0'+d.getMinutes()).slice(-2);
+	},
+	
+	// Accepts Javascript timestamp
+	// Outputs time str in ISO fmt YYYY-MM-DD HH:MM
+	JStimestampToNiceReadable: function (timestamp) {
+		var d = new Date(timestamp);
+		return d.getFullYear() + "-" + ('0'+(d.getMonth()+1)).slice(-2) + "-" + ('0'+d.getDate()).slice(-2) + " " +('0'+d.getHours()).slice(-2) + ":" + ('0'+d.getMinutes()).slice(-2);
+	},
+	
+	// Accepts UNIX timestamp
 	// Outputs time in DD Mon YYYY HH:MM format
-	timestampToNiceReadable: function(timestamp) {
+	// Deprecated because ISO stadard was requested
+	_timestampToNiceReadable: function(timestamp) {
 		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		var d = new Date(timestamp * 1000);
 		return month[d.getMonth()]+" "+('0'+d.getDate()).slice(-2)+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
-	}
+	},
+	
+	// Accepts Javascript timestamp
+	// Outputs time in DD Mon YYYY HH:MM format
+	// Deprecated because ISO stadard was requested
+	_JStimestampToNiceReadable: function(timestamp) {
+		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		var d = new Date(timestamp);
+		return month[d.getMonth()]+" "+('0'+d.getDate()).slice(-2)+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
+	},
 }
