@@ -37,7 +37,13 @@ function Dbqry_parseQuerryParameter(tab) {
 	
 		/* Output */
 		var outputSel = document.getElementById("Option_OutputFormat_"+tab);
-		var output = "--output-format="+outputSel.options[outputSel.selectedIndex].value;// "pretty"/"csv"
+		var output;
+		if (outputSel.options[outputSel.selectedIndex].value == "long") { // See https://github.com/CESNET/SecurityCloudGUI/issues/10
+			output = "--output-format=pretty --output-volume-conv=none";
+		}
+		else {
+			output = "--output-format="+outputSel.options[outputSel.selectedIndex].value;// "pretty"/"csv"
+		}
 	
 		if (document.getElementById("Option_OutputNoSummary_"+tab).checked) {
 			output += " --output-items=r";

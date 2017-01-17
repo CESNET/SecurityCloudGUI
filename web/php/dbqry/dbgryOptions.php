@@ -84,6 +84,7 @@
 		<select id="Option_OutputFormat_<?php echo $tab; ?>" class="form-control">
 			<option value="pretty" selected>pretty</option>
 			<option value="csv">csv</option>
+			<option value="long">long</option>
 		</select>
 	</div>
 	<div class="col-sm-2">
