@@ -83,7 +83,7 @@
 						<?php include 'php/graph/activeGraph.php'; ?>
 					</div>
 					<div class="col-lg-2">
-						<?php include 'php/graph/sourcesSelection.php'; ?>
+						<?php include 'php/graph/channelSelection.php'; ?>
 					</div>
 				</div>
 				

@@ -2,7 +2,7 @@
 	<div class="col-md-2">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Sources
+				Channels
 			</div>
 			<div class="panel-body">
 				<div id="Sources_Dbqry_<?php echo $tab; ?>">

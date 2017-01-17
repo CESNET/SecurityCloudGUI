@@ -1,9 +1,9 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		Sources
+		Channels
 	</div>
 	<div class="panel-body">
-		<div id="Sources" onclick="Graph.updateSourcesVisibility('Sources');">
+		<div id="Channels" onclick="Graph.updateSourcesVisibility('Channels');">
 			<?php
 				$size = sizeof($ARR_SOURCES);
 				for($i = 0; $i < $size; $i++) {
