@@ -106,6 +106,7 @@ var Graph = {
 			stackedGraph: render["type"],
 			fillGraph: render["style"],
 			labelsKMG2: true,		// Kilo, Mega, Giga notations
+			labelsUTC: true,	// Hopefully, it'll fix the off-by-one hour
 			highlightCircleSize: 5,
 			panEdgeFraction: 0.1,
 			interactionModel: {}
