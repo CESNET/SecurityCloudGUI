@@ -62,6 +62,8 @@
 	<!-- MODALS -->
 	<!-- Modal window with render settings for the active graph -->
 	<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
+	<!-- Modal with fdistdump manpage -->
+	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php'; ?>
 	<!-- Modal window with profile view/add/delete dialogs -->
 	<?php include 'php/profiles/profilesModifyModal.php' ?>
 	
