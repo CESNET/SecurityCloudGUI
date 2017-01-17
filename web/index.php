@@ -61,7 +61,7 @@
 
 	<!-- MODALS -->
 	<!-- Modal window with render settings for the active graph -->
-	<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
+	<!--?php include 'php/graph/activeGraphRenderSettings.php'; ?>
 	<!-- Modal with fdistdump manpage -->
 	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php'; ?>
 	<!-- Modal window with profile view/add/delete dialogs -->
@@ -72,12 +72,7 @@
 	
 	<!-- Page Content -->
 	<div id="page-content-wrapper">
-		<div class="container-fluid">
-			<!--div class="alert alert-info alert-dismissible text-center" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				Currently selected profile: <?php //echo $NAME; ?>
-			</div-->
-		
+		<div class="container-fluid">		
 			<div id="MainPageGraphs">
 				<!-- ACTIVE GRAPH + SOURCES -->
 				<div class="row">
@@ -86,6 +81,9 @@
 					</div>
 					<div class="col-lg-2">
 						<?php include 'php/graph/channelSelection.php'; ?>
+						
+						<!-- TODO -->
+						<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
 					</div>
 				</div>
 				
