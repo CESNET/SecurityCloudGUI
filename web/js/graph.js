@@ -100,13 +100,15 @@ var Graph = {
 			legend: 'always',
 			ylabel: gTitle,
 			axes : {
-				y : { axisLabelWidth : 70/*, drawAxis: false, drawGrid: false },
-				x : { axisLabelWidth : 0, drawAxis: false, drawGrid: false*/ }
+				y : { axisLabelWidth : 70,/* drawAxis: false, drawGrid: false */},
+				x : { /*axisLabelWidth : 0, drawAxis: false, drawGrid: false,*/ 
+						return 
+				},
 			},
 			stackedGraph: render["type"],
 			fillGraph: render["style"],
 			labelsKMG2: true,		// Kilo, Mega, Giga notations
-			labelsUTC: true,	// Hopefully, it'll fix the off-by-one hour
+			labelsUTC: !USE_LOCAL_TIME,		// Hopefully, it'll fix the off-by-one hour
 			highlightCircleSize: 5,
 			panEdgeFraction: 0.1,
 			interactionModel: {}

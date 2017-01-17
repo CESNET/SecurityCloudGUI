@@ -51,6 +51,10 @@ function Dbqry_parseQuerryParameter(tab) {
 		else {
 			output += " --output-items=r,p";
 		}
+		
+		if (USE_LOCAL_TIME) {
+			output += " --output-ts-localtime";
+		}
 	
 		var str = timeSpec+" "+limitTo+" "+aggreg+" "+orderBy+" "+output;
 	}

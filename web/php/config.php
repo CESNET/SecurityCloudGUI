@@ -13,6 +13,9 @@
 	$FDUMP_ENV			= array('PATH' => '/usr/lib64/mpich/bin:/usr/local/bin:/bin:/usr/local/sbin:/usr/bin:/usr/sbin');
 	$SINGLE_MACHINE		= true;	// Change this to true if you're running the whole SecurityCloud on the single machine. ($FDUMP will be called instead of $FDUMP_HA)
 	
+	// Time settings
+	$USE_LOCAL_TIME		= true; // Will use UTC if set to false
+	
 	// RRD Tool
 	$RRDTOOL			= 'rrdtool';
 	
