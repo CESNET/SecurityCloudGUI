@@ -145,6 +145,8 @@ var Graph = {
 		this.cursor1.style.width	 = "2px";
 		this.cursor1.style.background = "black";
 		
+		this.interval = false;
+		
 		// Rest
 		this.cursor2.style.position = "absolute";
 		this.cursor2.style.height = this.area.h+"px";
