@@ -1,4 +1,4 @@
-/* COPY PASTE THESE ELEMENTS: */
+﻿/* COPY PASTE THESE ELEMENTS: */
 /*
 	<div id="genericGraphWrapper" style="left: 0px; position:relative; width: 100%; height: 500px;">
 		<div id="GraphArea" style="position: absolute; width: 1000px; height: 500px;">
@@ -59,17 +59,6 @@ var Graph = {
 		return colours;
 	},
 	
-	/**
-	*	Private function for positioning the cursor.
-	*
-	*	\pre initCursor() was called
-	*/
-	placeCursor: function(cursor, row) {
-		cursor.style.left = (this.area.x + row * this.ppr)+"px";
-		
-		rowToTime(cursor, row);
-	},
-	
 	rowToTime: function(cursor, row) {
 		if(cursor == this.cursor1) {
 			this.curTime1 = this.beginTime + this.stepTime * row;
@@ -79,10 +68,27 @@ var Graph = {
 		}
 	},
 	
+	/**
+	*	Private function for positioning the cursor.
+	*
+	*	\pre initCursor() was called
+	*/
+	placeCursor: function(cursor, row) {
+		cursor.style.left = (this.area.x + row * this.ppr)+"px";
+		
+		Graph.rowToTime(cursor, row);
+	},
+	
 	timeToRow: function (cursor, time) {
 		var row = Math.floor ((time - this.beginTime) / this.stepTime);
 		
-		placeCursor(cursor, row);
+		Graph.placeCursor(cursor, row);
+	},
+	
+	initAreaValues: function () {
+		this.area	= this.dygraph.getArea();
+		this.rows	= this.dygraph.numRows();
+		this.ppr	= this.area.w / (this.rows-1);
 	},
 	/* ============== */
 	/* END OF PRIVATE */
@@ -127,6 +133,8 @@ var Graph = {
 		};
 		
 		this.dygraph = new Dygraph(document.getElementById(canvasDomId), gData, options);
+		
+		Graph.initAreaValues();
 	},
 	
 	/**
@@ -139,13 +147,9 @@ var Graph = {
 			Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
 		});
 	*
-	*	\pre createGraph() was called
+	*	\pre initTime() was called
 	*/
 	initCursor: function(arr_cursorDomIds) {
-		this.area	= this.dygraph.getArea();
-		this.rows	= this.dygraph.numRows();
-		this.ppr	= this.area.w / (this.rows-1);
-		
 		this.cursor1 = document.getElementById(arr_cursorDomIds[0]);	
 		this.cursor2 = document.getElementById(arr_cursorDomIds[1]);	
 		this.curspan = document.getElementById(arr_cursorDomIds[2]);	
@@ -169,6 +173,8 @@ var Graph = {
 		this.curspan.style.background = "#00FF00";
 		this.curspan.style.opacity = "0.2";
 		this.curspan.style.display = "none";
+		
+		this.placeCursor(this.cursor1, this.rows/2);
 	},
 	
 	/**
@@ -180,16 +186,9 @@ var Graph = {
 	*
 	*	\pre Cursors are initialized
 	*/
-	initTime: function (begin, end, overridePosition) {
+	initTime: function (begin, end, centerize) {
 		this.beginTime = begin;
 		this.stepTime = (end-begin) / (this.rows-1);
-		
-		/* if (overridePosition == null || overridePosition == undefined) {
-			this.placeCursor(this.cursor1, this.rows/2);
-		}
-		else {
-			this.placeCursor(this.cursor1, (overridePosition - this.beginTime) / this.stepTime);
-		} */
 	},
 	
 	/**
@@ -208,12 +207,23 @@ var Graph = {
 	/* =========== */
 	update: function(newData, newTitle, render) {
 		this.dygraph.updateOptions( {file: newData, ylabel: newTitle, stackedGraph: render["type"], fillGraph: render["style"]} );
+		
+		Graph.initAreaValues();
 	},
 	
-	updateCursor: function (newTimeA, newTimeB) {
+	/**
+	 *  Set all cursors to their correct positions based on time
+	 *  computed by the GUI.
+	 *  Generally when something is moved, it's position within the
+	 *  relative graph area should remain the same, but if any
+	 *  correction happened, this would allow that correction to happen.
+	 */
+	updateCursor: function (newTimeA, newTimeB, interval) {
 		Graph.timeToRow(this.cursor1, newTimeA);
+		this.interval = interval;
 		
 		if (this.interval) {
+			Graph.timeToRow(this.curspan, newTimeA);
 			Graph.timeToRow(this.cursor2, newTimeB);
 		}
 	},

@@ -141,6 +141,7 @@
 	
 	<script src="js/utility.js"></script>									<!-- Utility class -->
 	<script src="js/graph.js"></script>											<!-- Graph class -->
+	<script src="js/graphControls/graphMoveToolbar.js"></script>
 	<script src="js/graphManagement.js"></script>
 	<script src="js/dbqry.js"></script>
 	<script src="js/transactions.js"></script>
@@ -164,7 +165,7 @@
 			"dp.hide",
 			function (e) {
 				setGraphCenter(new Date(e.date).getTime() / 1000);
-				acquireGraphData(updateGraph);
+				acquireGraphData(updateGraph, true);
 			}
 		);
 		
@@ -194,6 +195,7 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
+			Graph.initAreaValues();
 			Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
 			Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
 		});
@@ -204,7 +206,7 @@
 		$("#wrapper").toggleClass("toggled");
 	});
 	
-	$('[rel=tooltip]').tooltip();
+	//$('[rel=tooltip]').tooltip();
 	</script>
 </body>
 

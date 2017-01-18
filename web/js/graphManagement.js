@@ -1,3 +1,5 @@
+var SECONDS_PER_HOUR = 3600;
+
 /* ================== */
 /* ACQUIRE GRAPH DATA */
 /* ================== */
@@ -38,23 +40,24 @@ function acquireGraphData(callback) {
 *	resolution with newCenter in the center of this window. If right boundary
 *	should be in the future, window is adjusted so the right border is at 'now'
 */
-function setGraphCenter(newCenter) {
-	var aux = timestampEnd;
-	timestampBgn = newCenter - ARR_RESOLUTION[resolutionPtr] * 1800;
-	timestampEnd = newCenter + ARR_RESOLUTION[resolutionPtr] * 1800;
+function adjustGraphCenter(tmp) {
+	var END = Utility.getCurrentTimestamp();
 	
-	if (timestampEnd > Utility.getCurrentTimestamp()) {
-		timestampEnd = Utility.getCurrentTimestamp();
-		timestampBgn = timestampEnd - ARR_RESOLUTION[resolutionPtr] * 3600;
-	
-		if(aux == Utility.getCurrentTimestamp()) {
-			return -1;
-		}
-		
-		return 0;
+	if (timestampEnd > END) {
+		timestampEnd = END;
+		timestampBgn = timestampEnd - ARR_RESOLUTION[resolutionPtr] * SECONDS_PER_HOUR;
 	}
 	
-	return 1;
+	if (tmp == END) return false;
+
+	return true;
+}
+
+function setGraphCenter(newCenter) {
+	var tmp = timestampEnd;
+	timestampBgn = newCenter - ARR_RESOLUTION[resolutionPtr] * SECONDS_PER_HOUR / 2;
+	timestampEnd = newCenter + ARR_RESOLUTION[resolutionPtr] * SECONDS_PER_HOUR / 2;
+	return adjustGraphCenter(tmp);
 }
 
 /* ================ */
@@ -89,16 +92,21 @@ function updateThumbs() {
 /* ============== */
 /* SET RESOLUTION */
 /* ============== */
+function unselectResolution(list) {
+	for (var i = 0; i < list.length; i++) {
+		if (list[i].className == "list-group-item active") {
+			list[i].className = "";
+			return i;
+		}
+	}
+	
+	return -1;
+}
+
 function setResolution (type, value) {
 	var list = document.getElementById("DisplayResolutionList").getElementsByTagName("a");
 	
-	var i;
-	for(i = 0; i < list.length; i++) {						// Loop resolution list
-		if(list[i].className == "list-group-item active") {	// Find the previously selected resolution
-			list[i].className = "";							// Unselect it
-			break;											// Remember it's index
-		}
-	}
+	var i = unselectResolution(list);
 	
 	if(type == "relative") {								// Relative is an offset from the last selection
 		resolutionPtr = i + value;							// So add the offset to the previously selected res
@@ -114,25 +122,7 @@ function setResolution (type, value) {
 	document.getElementById("DisplaySizePrint").innerHTML = list[resolutionPtr].innerHTML;
 	
 	setGraphCenter(Graph.curTime1);							// Reset time window
-	
-	acquireGraphData(updateGraph, null);					// Update stuff
-}
-
-/* =============== */
-/* GRAPH MOVE STEP */
-/* =============== */
-function graphMoveStep(direction) {
-	if(direction < 0) {
-		setGraphCenter(Graph.curTime1 - ARR_RESOLUTION[resolutionPtr] * 1800);
-	}
-	else if (direction == 0) {
-		setGraphCenter(Utility.getCurrentTimestamp());
-	}
-	else {
-		setGraphCenter(Graph.curTime1 + ARR_RESOLUTION[resolutionPtr] * 1800);
-	}
-	
-	acquireGraphData(updateGraph, null);
+	acquireGraphData(updateGraph, true);					// Update stuff
 }
 
 /* ================== */
@@ -148,22 +138,16 @@ function timeWindowHandle() {
 		str = Utility.timestampToNiceReadable(Graph.curTime2);
 		displ.innerHTML += "<br>End: " + str;
 	}
-	else {
-		var windowSize = timestampEnd - timestampBgn;
-		var windowPos  = Graph.curTime1 - timestampBgn;
-		var percentage = windowPos / windowSize * 100;
+	else {														// Compute whether the cursor is not too close to a border
+		var windowSize = timestampEnd - timestampBgn;			// Width of the graph window
+		var windowPos  = Graph.curTime1 - timestampBgn;			// Position of the cursor within window
+		var percentage = windowPos / windowSize * 100;			// What portion of the window is the distance between left border and the cursor
 		
-		if (percentage < 5 || 95 < percentage) {
+		if (percentage < 5 || 95 < percentage) {				// If it is in the 5% space to any border
 			var rtn = setGraphCenter(Graph.curTime1);
-			
-			if(rtn == 1) {
-				acquireGraphData(updateGraph, null);
+			if (setGraphCenter(Graph.curTime1)) {				// If the check returns true, we have to reload data
+				acquireGraphData(updateGraph, true);			// And reset position of the cursor to the center
 			}
-			else if (rtn == 0) {
-				acquireGraphData(updateGraph, Graph.curTime1);
-			}
-			
-			// else rtn = -1: do nothing
 		}
 	}
 }
@@ -204,18 +188,18 @@ function initializeGraph(none) {
 	sanitizeGraphTimestamps(graphData);
 	
 	Graph.init("dygraph", graphData, graphLegend, ARR_GRAPH_NAME[currentVar], computeRenderMode());
+	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000, true);
 	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
 	
 	document.getElementById("dygraph").onmousedown = Graph.moveCursor;
 	Graph.registerCallback(timeWindowHandle);
 	
-	colorizeSources("Sources");
+	colorizeSources("Channels");
 	timeWindowHandle();
 	
 	updateThumbs();
 	
-	Graph.updateSourcesVisibility("Sources");
+	Graph.updateSourcesVisibility("Channels");
 }
 
 /* ============ */
@@ -225,14 +209,14 @@ function updateGraph(overridePosition) {
 	sanitizeGraphTimestamps(graphData);
 	
 	Graph.update(graphData, ARR_GRAPH_NAME[currentVar], computeRenderMode());
-	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000, overridePosition);
+	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+
+	if (overridePosition)	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
+	else 					Graph.updateCursor(backupCursor1, backupCursor2, backupInterval);
 	
 	timeWindowHandle();
-	
 	updateThumbs();
-	
-	Graph.updateSourcesVisibility("Sources");
+	Graph.updateSourcesVisibility("Channels");
 }
 
 function changeVariable(varPtr) {
@@ -241,5 +225,6 @@ function changeVariable(varPtr) {
 	//  Change title, update graph
 	document.getElementById("ActiveGraphLabel").innerHTML = ARR_GRAPH_NAME[currentVar];
 	
-	acquireGraphData(updateGraph, null);
+	backupCursors();
+	acquireGraphData(updateGraph, false);
 }
