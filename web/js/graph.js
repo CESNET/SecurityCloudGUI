@@ -67,12 +67,22 @@ var Graph = {
 	placeCursor: function(cursor, row) {
 		cursor.style.left = (this.area.x + row * this.ppr)+"px";
 		
+		rowToTime(cursor, row);
+	},
+	
+	rowToTime: function(cursor, row) {
 		if(cursor == this.cursor1) {
 			this.curTime1 = this.beginTime + this.stepTime * row;
 		}
 		else if (cursor == this.cursor2) {
 			this.curTime2 = this.beginTime + this.stepTime * row;
 		}
+	},
+	
+	timeToRow: function (cursor, time) {
+		var row = Math.floor ((time - this.beginTime) / this.stepTime);
+		
+		placeCursor(cursor, row);
 	},
 	/* ============== */
 	/* END OF PRIVATE */
@@ -174,12 +184,12 @@ var Graph = {
 		this.beginTime = begin;
 		this.stepTime = (end-begin) / (this.rows-1);
 		
-		if (overridePosition == null || overridePosition == undefined) {
+		/* if (overridePosition == null || overridePosition == undefined) {
 			this.placeCursor(this.cursor1, this.rows/2);
 		}
 		else {
 			this.placeCursor(this.cursor1, (overridePosition - this.beginTime) / this.stepTime);
-		}
+		} */
 	},
 	
 	/**
@@ -198,6 +208,14 @@ var Graph = {
 	/* =========== */
 	update: function(newData, newTitle, render) {
 		this.dygraph.updateOptions( {file: newData, ylabel: newTitle, stackedGraph: render["type"], fillGraph: render["style"]} );
+	},
+	
+	updateCursor: function (newTimeA, newTimeB) {
+		Graph.timeToRow(this.cursor1, newTimeA);
+		
+		if (this.interval) {
+			Graph.timeToRow(this.cursor2, newTimeB);
+		}
 	},
 	
 	/**
