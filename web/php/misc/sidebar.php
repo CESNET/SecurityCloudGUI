@@ -17,9 +17,9 @@
 		<li>
 			<a href="#" onclick="gotoPage('Profiles');">Profiles</a>
 		</li>
-		<li>
+		<!--li>
 			<a href="#" onclick="gotoPage('Usrctrl');">User Control</a>
-		</li>
+		</li-->
 	</ul>
 	<ul class="sidebar-nav" id="SidebarIsSmall">
 		<li class="sidebar-brand">
@@ -39,9 +39,9 @@
 		<li>
 			<a href="#" onclick="gotoPage('Profiles');" rel="tooltip" data-original-title="Profiles"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
 		</li>
-		<li>
+		<!--li>
 			<a href="#" onclick="gotoPage('Usrctrl');" rel="tooltip" data-original-title="User Control"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
-		</li>
+		</li-->
 	</ul>
 	
 	<div style="position: fixed; bottom: 0px; padding: 5px; width: 200px;">
