@@ -1,8 +1,17 @@
+// nfcapd files are always 1 hour behind rrdgraphs.
+// i.e.: if you're pointing at 14:00 hours, fdistdump
+// will query file ending with 1300. This is ok when
+// ipfixcol generates the data, but when using
+// replay, those two times are aligned. Computing
+// additional offset solves that issue by artificially
+// adjusting the timestamp.
+
 function Dbqry_parseSelectedTime() {
-	var timeSpec = Graph.curTime1;
+	var offset = HISTORIC_DATA ? SECONDS_PER_HOUR : 0;
+	var timeSpec = Graph.curTime1 + offset;
 
 	if (Graph.interval) {
-		timeSpec = "-T "+timeSpec+"#"+Graph.curTime2;
+		timeSpec = "-T "+timeSpec+"#"+(Graph.curTime2 + offset);
 	}
 	else {
 		timeSpec = "-t "+timeSpec;
@@ -37,13 +46,23 @@ function Dbqry_parseQuerryParameter(tab) {
 	
 		/* Output */
 		var outputSel = document.getElementById("Option_OutputFormat_"+tab);
-		var output = "--output-format="+outputSel.options[outputSel.selectedIndex].value;// "pretty"/"csv"
+		var output;
+		if (outputSel.options[outputSel.selectedIndex].value == "long") { // See https://github.com/CESNET/SecurityCloudGUI/issues/10
+			output = "--output-format=pretty --output-volume-conv=none";
+		}
+		else {
+			output = "--output-format="+outputSel.options[outputSel.selectedIndex].value;// "pretty"/"csv"
+		}
 	
 		if (document.getElementById("Option_OutputNoSummary_"+tab).checked) {
 			output += " --output-items=r";
 		}
 		else {
 			output += " --output-items=r,p";
+		}
+		
+		if (USE_LOCAL_TIME) {
+			output += " --output-ts-localtime";
 		}
 	
 		var str = timeSpec+" "+limitTo+" "+aggreg+" "+orderBy+" "+output;
@@ -75,7 +94,7 @@ function Dbqry_stopRequest(tab) {
 
 /**
 *	This is the function called automatically from the point when database
-*	querry is called till it ends. This function reads the progress file,
+*	query is called till it ends. This function reads the progress file,
 *	updates the progress bar and that's basically it.
 */
 var intervalHandle;

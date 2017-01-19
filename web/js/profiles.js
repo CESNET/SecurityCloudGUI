@@ -143,5 +143,26 @@ var Profile = {
 		
 		ajax.open("GET", "php/async/profileUpdateProcess.php?mode=delete&name="+name, true);
 		ajax.send(null);
-	}
+	},
+	
+	/**
+	 *  @brief Switches the profiles while keeping the resolution and time window
+	 *  
+	 *  @return nothing
+	 *  
+	 *  @details On success, this reloads the whole page, loading the data for another profile
+	 *  but keeping the time window and zoom. (Currently not keeping the visualisation settings).
+	 */
+	changeLocation: function(name) {
+		// We have name (path) to profile
+		// Now we have to create a link to change location to
+		// At this point we only need the timestamps (and the resolution)
+		var address = "index.php?profile=" + name;
+		address += "&begin=" + timestampBgn;
+		address += "&end=" + timestampEnd;
+		address += "&res=" + resolutionPtr;
+		
+		// alert(address);
+		location.assign(address);
+	},
 }

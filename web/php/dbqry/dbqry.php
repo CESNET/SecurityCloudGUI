@@ -3,7 +3,10 @@
 	function Local_addTab() {
 		var list = document.getElementById("Tabs").getElementsByTagName("li");
 		
-		list[tabCount].style.display = "";
+		var i = 0;		
+		while (list[i].style.display != "none" && i < tabLimit) i++;
+		
+		list[i].style.display = "";
 		
 		tabCount++;
 		
@@ -20,6 +23,34 @@
 		var txtArea = document.getElementById("Options_CustomTextarea_"+tab);
 		
 		txtArea.value = Dbqry_parseQuerryParameter(tab);
+	}
+	
+	function Local_clearTab(tab) {
+		document.getElementById("Dbqry_Output_" + tab).innerHTML = "";
+	}
+	
+	function Local_closeTab(tab) {
+		if (tabCount == 1) {
+			alert("Cannot close last and only tab.");
+			return;
+		}
+		
+		tabCount--;							// Reduce number of tabs
+		Local_clearTab(tab);				// Clear contents of closed tab
+		var list = document.getElementById("Tabs").getElementsByTagName("li");
+		
+		// *** Change focus ***
+		var i = tab;		
+		while (list[i].style.display == "none") {	// Find suitable open tab
+			if (i + 1 >= tabLimit)	i = 0;			// If no tab is open on the right side, search from the leftmost
+			else 					i++;			// from left to right
+		}
+		i++;
+		
+		var addr = "#Tabs a[href='#Tab_" + i + "']";// Identifier of the destination tab
+		$(addr).tab('show');						// Change view
+		
+		list[tab-1].style.display = "none"; 		// Hide the to-be-removed tab
 	}
 </script>
 
@@ -45,6 +76,17 @@
 					echo ' active';
 				}
 				echo '\'>';
+				?>
+				<div class="row">
+					<div class="col-md-8">&nbsp;</div>
+					<div class="col-lg-4 text-right">
+						<div class="btn-group">
+							<button type="button" class="btn btn-primary" onclick="Local_clearTab('<?php echo $tab; ?>');">Clear the results</button>
+							<button type="button" class="btn btn-danger" onclick="Local_closeTab('<?php echo $tab; ?>');">Close this tab</button>
+						</div>
+					</div>
+				</div><br>
+				<?php
 					include 'dbqryTabContent.php';
 				echo '</div>';
 			}

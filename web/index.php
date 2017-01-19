@@ -1,8 +1,8 @@
 <?php
-	header(`Expires: Mon, 26 Jul 1997 05:00:00 GMT`);
-	header(`Last-Modified: `.gmdate(`D, d M Y H:i:s`).` GMT`);
-	header(`Cache-Control: no-cache, must-revalidate`);
-	header(`Pragma: no-cache`);
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	header("Last-Modified: ".gmdate('D, d M Y H:i:s')." GMT");
+	header("Cache-Control: no-cache, must-revalidate");
+	header("Pragma: no-cache");
 ?>
 <!DOCTYPE html>
 
@@ -61,7 +61,9 @@
 
 	<!-- MODALS -->
 	<!-- Modal window with render settings for the active graph -->
-	<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
+	<!--?php include 'php/graph/activeGraphRenderSettings.php'; ?>
+	<!-- Modal with fdistdump manpage -->
+	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php'; ?>
 	<!-- Modal window with profile view/add/delete dialogs -->
 	<?php include 'php/profiles/profilesModifyModal.php' ?>
 	
@@ -70,12 +72,7 @@
 	
 	<!-- Page Content -->
 	<div id="page-content-wrapper">
-		<div class="container-fluid">
-			<div class="alert alert-info alert-dismissible text-center" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				Currently selected profile: <?php echo $NAME; ?>
-			</div>
-		
+		<div class="container-fluid">		
 			<div id="MainPageGraphs">
 				<!-- ACTIVE GRAPH + SOURCES -->
 				<div class="row">
@@ -83,7 +80,10 @@
 						<?php include 'php/graph/activeGraph.php'; ?>
 					</div>
 					<div class="col-lg-2">
-						<?php include 'php/graph/sourcesSelection.php'; ?>
+						<?php include 'php/graph/channelSelection.php'; ?>
+						
+						<!-- TODO -->
+						<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
 					</div>
 				</div>
 				
@@ -122,13 +122,15 @@
 		var ARR_SOURCES	= [<?php $size = sizeof($ARR_SOURCES); for($i = 0; $i < $size; $i++) echo "\"$ARR_SOURCES[$i]\", "; ?>];
 		var ARR_GRAPH_VARS = [<?php $size = sizeof($ARR_GRAPH_VARS); for($i = 0; $i < $size; $i++) echo "\"$ARR_GRAPH_VARS[$i]\", "; ?>];
 		var ARR_GRAPH_NAME = [<?php $size = sizeof($ARR_GRAPH_NAME); for($i = 0; $i < $size; $i++) echo "\"$ARR_GRAPH_NAME[$i]\", "; ?>];
+		var USE_LOCAL_TIME = <?php if ($USE_LOCAL_TIME) echo "true"; else echo "false"; ?>;
+		var HISTORIC_DATA =  <?php if ($HISTORIC_DATA) echo "true"; else echo "false"; ?>;
 	
 		/* ================ */
 		/* GLOBAL VARIABLES */
 		/* ================ */
 		var graphData, graphLegend;
 		var timestampBgn, timestampEnd;
-		var resolutionPtr=2;
+		var resolutionPtr;
 		var currentVar = 0;
 	</script>
 	
@@ -140,7 +142,10 @@
 	
 	<script src="js/utility.js"></script>									<!-- Utility class -->
 	<script src="js/graph.js"></script>											<!-- Graph class -->
-	<script src="js/graphManagement.js"></script>
+	<script src="js/graphControls/setGraphCenter.js"></script>
+	<script src="js/graphControls/setResolution.js"></script>
+	<script src="js/graphControls/graphMoveStep.js"></script>
+	<script src="js/graphControls.js"></script>
 	<script src="js/dbqry.js"></script>
 	<script src="js/transactions.js"></script>
 	<script src="js/misc.js"></script>											<!-- gotoPage() -->
@@ -152,25 +157,39 @@
 	/* DOCUMENT READY STUFF */
 	/* ==================== */
 	$(document).ready(function(){
-		$('#TimePickerDisplay').datetimepicker({								// Initialize datetimepicker
-			format: "DD MMM YYYY - HH:mm",
+		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
+			format: "YYYY-MM-DD HH:mm",
 			useCurrent: true,
 			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),
-			sideBySide: true
+			sideBySide: true,
+			ignoreReadonly: true,
 		});
-		$('#TimePickerDisplay').on(												// Register onhide event callback for datetimepicker
+		$('#TimePicker').on(											// Register onhide event callback for datetimepicker
 			"dp.hide",
 			function (e) {
 				setGraphCenter(new Date(e.date).getTime() / 1000);
-				acquireGraphData(updateGraph);
+				acquireGraphData(updateGraph, true);
 			}
 		);
 		
-		gotoPage('Graphs');														// Set the default viewpoint
+		gotoPage('Graphs');												// Set the default viewpoint
 		
 		/* TIMESTAMP INIT */
-		timestampBgn=Utility.getCurrentTimestamp()-(24*3600);
-		timestampEnd=Utility.getCurrentTimestamp();
+		<?php if (isset($_GET['begin']) && isset($_GET['end'])) {
+			echo 'timestampBgn = ',$_GET['begin'],';';
+			echo 'timestampEnd = ',$_GET['end'],';';
+		}
+		else {
+			echo 'timestampBgn = Utility.getCurrentTimestamp()-(24*3600);';
+			echo 'timestampEnd = Utility.getCurrentTimestamp();';
+		} ?>
+		
+		<?php if (isset($_GET['res'])) {
+			echo 'resolutionPtr = ',$_GET['res'],';';
+		}
+		else {
+			echo 'resolutionPtr = 2;';
+		} ?>
 		
 		/* RESOLUTION INIT */
 		var list = document.getElementById("DisplayResolutionList").getElementsByTagName("a");
@@ -179,6 +198,7 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
+			Graph.initAreaValues();
 			Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
 			Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
 		});

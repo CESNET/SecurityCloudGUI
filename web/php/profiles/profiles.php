@@ -20,7 +20,9 @@
 		
 		/* Print name */
 		$str = preg_replace('/^\/[a-zA-Z0-9_\/]+\//', "", $object->getName());
-		echo '<a href=\'index.php?profile=',$object->getName(),'\'>',$str,'</a>';
+		// NOTE: The old way is: echo '<a href=\'index.php?profile=',$object->getName(),'\'>',$str,'</a>';
+		// NOTE: The new way is as follows
+		echo '<a href=\'#\' onclick=\'Profile.changeLocation("',$object->getName(),'");\'>',$str,'</a>';
 		
 		/* Print sources */
 		echo '</td><td>';

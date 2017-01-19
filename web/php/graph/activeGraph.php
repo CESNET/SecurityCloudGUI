@@ -1,12 +1,13 @@
 <div class="panel panel-primary">
 	<div class="panel-heading clearfix">
 		<div class="row" style="vertical-align: middle;">
-			<div class="col-sm-11" id="ActiveGraphLabel">Flows Any</div>
+			<div id="ActiveGraphLabel">Flows Any</div>
+			<!--<div class="col-sm-11" id="ActiveGraphLabel">Flows Any</div>
 			<div class="col-sm-1 text-right">
 				<a href="#" style="color: white;" data-toggle="modal" data-target="#ActiveGraphRenderSettings">
 					<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 				</a>
-			</div>
+			</div>-->
 		</div>
 	</div>
 	<div class="panel-body">
@@ -42,7 +43,15 @@
 				</div>
 			</div>
 			<div class="col-sm-6 text-center">
-				<input type='text' class="form-control text-center" id='TimePickerDisplay' style="cursor: pointer;" onclick="Graph.interval=false;">
+				<div class='input-group date' id='TimePicker'>
+					<span class="input-group-addon">
+						Move to:
+					</span>
+				
+					<input type='text' id="TimePickerDisplay" class="form-control text-center" readonly />
+				</div>
+
+				<!--input type='text' class="form-control text-center" id='TimePickerDisplay' style="cursor: pointer;" onclick="Graph.interval=false;"-->
 				<!-- Setting up time via the picker will ALWAYS result in a single time point. The interval needs to be falsed, otherwise you'll quickly spot a bug. -->
 			</div>
 			<div class="col-sm-3 text-right">

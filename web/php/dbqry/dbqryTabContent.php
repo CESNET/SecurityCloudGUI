@@ -2,7 +2,7 @@
 	<div class="col-md-2">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
-				Sources
+				Channels
 			</div>
 			<div class="panel-body">
 				<div id="Sources_Dbqry_<?php echo $tab; ?>">
@@ -43,6 +43,7 @@
 						<?php include 'dbgryOptions.php'; ?>
 					</div>
 					<div id="DbMainOpt2_<?php echo $tab; ?>" class="tab-pane fade">
+						<a href="#" data-toggle="modal" data-target="#DbqryFdistdumpHelpModal">fdistdump options overview</a><br>
 						<textarea class="form-control" rows="5" id="Options_CustomTextarea_<?php echo $tab; ?>"></textarea>
 					</div>
 				</div>
