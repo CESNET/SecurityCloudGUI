@@ -31,7 +31,8 @@ bool checkArgumets(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-	if (!checkArgumets(argc, argv)) return 1;
+	(void)argc;
+	//if (!checkArgumets(argc, argv)) return 1;
 	
 	string rrdfile	(argv[1]);
 	string nfcapd	(argv[2]);
