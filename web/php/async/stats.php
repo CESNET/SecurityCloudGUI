@@ -162,7 +162,7 @@ for($i = 0; $i < 15; $i++) {
 	$totalRate[$i] /= $segm;	// Compute $totalRate properly
 }
 
-echo '<div class=\'panel panel-info\'>';
+echo '<div class=\'panel panel-primary\'>';
 echo '<div class=\'panel-heading\' id=\'StatsContentHeader\'></div></div>'; // content will be added by JS
 
 /* COMPUTE WHICH ROWS OF EACH SET (Flows, Packets, Traffic) has the most significant sum of values (All protos) */
@@ -177,7 +177,7 @@ for ($i = 0; $i < 3; $i++) {
 echo '<div class=\'row\'>';
 for($i = 0; $i < 3; $i++) {
 	echo '<div class=\'col-md-4\'>';
-	echo '<div class=\'panel panel-info\'>';
+	echo '<div class=\'panel panel-primary\'>';
 	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
 	echo '<div class=\'panel-body\'>';
 	echo '<table class=\'table table-striped table-condensed table-hover\'>';
@@ -198,7 +198,7 @@ echo '</div>';
 echo '<div class=\'row\'>';
 for($i = 0; $i < 3; $i++) {
 	echo '<div class=\'col-md-4\'>';
-	echo '<div class=\'panel panel-info\'>';
+	echo '<div class=\'panel panel-primary\'>';
 	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
 	echo '<div class=\'panel-body\'>';
 	echo '<table class=\'table table-striped table-condensed table-hover\'>';
