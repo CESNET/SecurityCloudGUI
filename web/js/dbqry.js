@@ -1,8 +1,17 @@
+// nfcapd files are always 1 hour behind rrdgraphs.
+// i.e.: if you're pointing at 14:00 hours, fdistdump
+// will query file ending with 1300. This is ok when
+// ipfixcol generates the data, but when using
+// replay, those two times are aligned. Computing
+// additional offset solves that issue by artificially
+// adjusting the timestamp.
+
 function Dbqry_parseSelectedTime() {
-	var timeSpec = Graph.curTime1;
+	var offset = HISTORIC_DATA ? SECONDS_PER_HOUR : 0;
+	var timeSpec = Graph.curTime1 + offset;
 
 	if (Graph.interval) {
-		timeSpec = "-T "+timeSpec+"#"+Graph.curTime2;
+		timeSpec = "-T "+timeSpec+"#"+(Graph.curTime2 + offset);
 	}
 	else {
 		timeSpec = "-t "+timeSpec;
