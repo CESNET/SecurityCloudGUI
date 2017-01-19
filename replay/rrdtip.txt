@@ -1,1 +1,0 @@
-rrdtool create --start $START --step 300s --template existing.rrd
