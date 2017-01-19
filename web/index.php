@@ -141,8 +141,10 @@
 	
 	<script src="js/utility.js"></script>									<!-- Utility class -->
 	<script src="js/graph.js"></script>											<!-- Graph class -->
-	<script src="js/graphControls/graphMoveToolbar.js"></script>
-	<script src="js/graphManagement.js"></script>
+	<script src="js/graphControls/setGraphCenter.js"></script>
+	<script src="js/graphControls/setResolution.js"></script>
+	<script src="js/graphControls/graphMoveStep.js"></script>
+	<script src="js/graphControls.js"></script>
 	<script src="js/dbqry.js"></script>
 	<script src="js/transactions.js"></script>
 	<script src="js/misc.js"></script>											<!-- gotoPage() -->
@@ -161,7 +163,7 @@
 			sideBySide: true,
 			ignoreReadonly: true,
 		});
-		$('#TimePicker').on(												// Register onhide event callback for datetimepicker
+		$('#TimePicker').on(											// Register onhide event callback for datetimepicker
 			"dp.hide",
 			function (e) {
 				setGraphCenter(new Date(e.date).getTime() / 1000);
@@ -169,7 +171,7 @@
 			}
 		);
 		
-		gotoPage('Graphs');														// Set the default viewpoint
+		gotoPage('Graphs');												// Set the default viewpoint
 		
 		/* TIMESTAMP INIT */
 		<?php if (isset($_GET['begin']) && isset($_GET['end'])) {
@@ -205,8 +207,6 @@
 		e.preventDefault();
 		$("#wrapper").toggleClass("toggled");
 	});
-	
-	//$('[rel=tooltip]').tooltip();
 	</script>
 </body>
 
