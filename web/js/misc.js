@@ -31,19 +31,37 @@ function collectStatistics() {
 	ajax.send(null);
 }
 
+/**
+ *  This function is responsible for (apparently) changing pages.
+ *  Note that dygraph library used for rendering graphs is not
+ *  happy when it's hidden with display:none attribute. For that
+ *  reason, the Graphs page is only moved outside of visible plane.
+ *  This thing may break lots of stuff...
+ */
 function gotoPage(page) {
-	document.getElementById("MainPageGraphs").style.display = "none";
+	//document.getElementById("MainPageGraphs").style.display = "none";
+	var gpage = document.getElementById("MainPageGraphs");
+	gpage.style.position = "absolute";
+	gpage.style.top = -gpage.scrollHeight+"px";	// Moves outside of visible area
+	
 	document.getElementById("MainPageStats").style.display = "none";
 	document.getElementById("MainPageDbqry").style.display = "none";
 	document.getElementById("MainPageProfiles").style.display = "none";
 	
-	document.getElementById("MainPage"+page).style.display = "";
+	if (page == "Graphs") {
+		gpage.style.position = "static";	// return back to page
+	}
+	else document.getElementById("MainPage"+page).style.display = "";
 	
 	if (page == "Stats") {
 		collectStatistics();
 	}
 }
 
+/**
+ *  This function defines the list of items which will be displayed
+ *  to user when he requests the whois info.
+ */
 function isAcceptableWhoisInfo(infoName) {
 	var items = [ "inetnum", "netname", "descr", "admin-c", "mnt-by", "role", "address", "phone", "fax-no", "abuse-mailbox" ];
 	
