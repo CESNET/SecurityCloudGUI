@@ -39,7 +39,7 @@ function collectStatistics() {
  *  This thing may break lots of stuff...
  */
 function gotoPage(page) {
-	//document.getElementById("MainPageGraphs").style.display = "none";
+	/*//document.getElementById("MainPageGraphs").style.display = "none";
 	var gpage = document.getElementById("MainPageGraphs");
 	gpage.style.position = "absolute";
 	gpage.style.top = -gpage.scrollHeight+"px";	// Moves outside of visible area
@@ -55,7 +55,27 @@ function gotoPage(page) {
 	
 	if (page == "Stats") {
 		collectStatistics();
+	}*/
+	
+	document.getElementById("MainPageGraphs").style.display = "none";
+	document.getElementById("MainPageStats").style.display = "none";
+	document.getElementById("MainPageDbqry").style.display = "none";
+	document.getElementById("MainPageProfiles").style.display = "none";
+	
+	document.getElementById("MainPage"+page).style.display = "";
+	
+	if (page == "Graphs" && PENDING_RESIZE_EVENT) {
+		Graph.dygraph.resize();
+		Graph.initAreaValues();
+		Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
+		Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+		PENDING_RESIZE_EVENT = false;
 	}
+	else if (page == "Stats") {
+		collectStatistics();
+	}
+	
+	SELECTED_PAGE = page;
 }
 
 /**

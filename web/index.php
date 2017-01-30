@@ -124,6 +124,8 @@
 		var ARR_GRAPH_NAME = [<?php $size = sizeof($ARR_GRAPH_NAME); for($i = 0; $i < $size; $i++) echo "\"$ARR_GRAPH_NAME[$i]\", "; ?>];
 		var USE_LOCAL_TIME = <?php if ($USE_LOCAL_TIME) echo "true"; else echo "false"; ?>;
 		var HISTORIC_DATA =  <?php if ($HISTORIC_DATA) echo "true"; else echo "false"; ?>;
+		var PENDING_RESIZE_EVENT = false;
+		var SELECTED_PAGE = "Graphs";
 	
 		/* ================ */
 		/* GLOBAL VARIABLES */
@@ -198,9 +200,15 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
-			Graph.initAreaValues();
-			Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-			Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+			if (SELECTED_PAGE != "Graphs") {
+				PENDING_RESIZE_EVENT = true;
+			}
+			else {
+				Graph.dygraph.resize();
+				Graph.initAreaValues();
+				Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
+				Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+			}
 		});
 	});
 	
