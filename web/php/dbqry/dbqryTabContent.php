@@ -5,7 +5,7 @@
 				Channels
 			</div>
 			<div class="panel-body">
-				<div id="Sources_Dbqry_<?php echo $tab; ?>">
+				<div id="Channels_Dbqry_<?php echo $tab; ?>">
 					<?php
 						$size = sizeof($ARR_SOURCES);
 						for($i = 0; $i < $size; $i++) {
@@ -56,6 +56,7 @@
 	</div>
 </div>
 
+<!-- PROGRESS BAR -->
 <div class="progress">
   <div id="Dbqry_ProgressBar_<?php echo $tab; ?>" class="progress-bar progress-bar-info progress-bar-stripped" role="progressbar" style="min-width: 2em; width: 0%; display: none;">
   0%

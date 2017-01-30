@@ -18,7 +18,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$filter = $_GET['filter'];													// 	...
 	$stamp	= $_GET['stamp'];													//	...
 	$tab	= $_GET['tab'];														//	...
-	$src	= $_GET['src'];														//  ...
+	$src	= $_GET['src'];														// TODO: Parse chnl1:chnl2:..:chnlN fmt
 	
 	/* CREATE A MASTER TREE FROM XML */
 	$TREE_PROFILE = new Profile();												// Full tree of profiles
@@ -32,6 +32,17 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(1);
 	}
 	unset($ARR_AVAILS);
+	
+	/* GET CHANNELS TO PROPER FORMAT */
+	// TODO: Uncomment
+	// NOTE: deal with shadow profiles
+	/*
+	$srcArr = explode(':', $src);
+	$src = "";
+	for ($i = 0; $i < sizeof($srcArr); $++) {
+		$src .= $srcArr[$i].' ';
+	}
+	*/
 	
 	/* SEARCH FOR SELECTED SUBPROFILE ROOT */
 	$aux = null;
@@ -97,7 +108,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$pipes = array();
 	$cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA : $IPFIXCOL_DATA."$profile/";
 	
-	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');					// Apply mutex, so the transaction file can only be modified by this thread
+	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');							// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
 		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
 		echo '<div class=\'panel-heading\'>Error</div>';
@@ -106,7 +117,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);															// And end this thread )
 	}																		// Else
 	
-	$p = proc_open($cmd, $desc, $pipes, $cwd, $FDUMP_ENV);// Execute the program command
+	$p = proc_open($cmd, $desc, $pipes, $cwd, $FDUMP_ENV);					// Execute the program command
 	if($p == false) {														// If execution failed (
 		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
 		echo '<div class=\'panel-heading\'>Error</div>';
@@ -153,7 +164,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$index = findTransaction($TMP_DIR.$stamp, $tab, $pid);	// Find our transaction (pid is not needed, but it is a mandatory argument for function call)
 	
 	if($index != -1) {														// If index was found (i.e. nobody stopped this query)
-		removeTransaction($TMP_DIR.$stamp, $index);			// Remove the transaction with success
+		removeTransaction($TMP_DIR.$stamp, $index);							// Remove the transaction with success
 	}
 	
 	flock($lock, LOCK_UN);													// Release the lock
@@ -197,7 +208,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	if(strlen($errlog) > 0) {
 ?>
 <div class='panel panel-danger'>
-	<div class='panel-heading'>Querry errors</div>
+	<div class='panel-heading'>Query errors</div>
 	<div class='panel-body'><pre><?php echo $errlog; ?></pre></div>
 </div>
 <?php }

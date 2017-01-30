@@ -109,7 +109,6 @@
 		$format .= 'PNG --only-graph';
 	}
 	else {
-		//$format .= 'JSONTIME';
 		$format .= 'JSONTIME';
 	}
 	
