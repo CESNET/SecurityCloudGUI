@@ -74,6 +74,22 @@ function Dbqry_parseQuerryParameter(tab) {
 	return str;
 }
 
+function Dbqry_selectedChannelsToString(tab) {
+	var channels = document.getElementById("Channels_Dbqry_" + tab).getElementsByTagName("input");
+	
+	var str = "#";
+	for (var i = 0; i < channels.length; i++) {
+		if (channels[i].checked) {
+			if (str == "#")	str = channels[i].name;
+			else			str += ":" + channels[i].name;
+		}
+	}
+	
+	if (str == "#") str = "";
+	
+	return str;
+}
+
 /**
 *	Asynchronous call to 'db-manage.php' which attempts to
 *	kill process actually running in given tab.
@@ -139,9 +155,9 @@ function Dbqry_processRequest(tab){
 	// *** Read the options ***
 	var opts = Dbqry_parseQuerryParameter(tab);
 	
-	// TODO: ipfixcol in a current version does not support multiple folders for channels
-	// TODO: Load available channels
 	var srcs = "./";
+	// TODO: Load available channels
+	// var srcs = Dbqry_selectedChannelsToString(tab);
 	
 	// *** Encode everything into URL friendly format ***
 	var profile = encodeURIComponent(PROFILE);
