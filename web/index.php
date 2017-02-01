@@ -221,7 +221,7 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
-			if (SELECTED_PAGE != "Graphs")	PENDING_RESIZE_EVENT = true;
+			if (!isToggled("Graph"))		PENDING_RESIZE_EVENT = true;
 			else							resizeGraph();
 		});
 		

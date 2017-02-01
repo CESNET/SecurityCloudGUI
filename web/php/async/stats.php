@@ -183,7 +183,7 @@ for($i = 0; $i < 3; $i++) {
 	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
 	echo '<div class=\'panel-body\'>';
 	echo '<table class=\'table table-striped table-condensed table-hover\'>';
-	echo '<caption>Sum</caption>';
+	echo '<caption>Rate</caption>';
 	echo '<thead><tr><th>Channel</th><th>All</th><th>TCP</th><th>UDP</th><th>ICMP</th><th>Other</th></thead>';
 	echo '<tbody>';
 	

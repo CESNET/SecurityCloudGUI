@@ -41,7 +41,6 @@ function resizeGraph() {
 	Graph.initAreaValues();
 	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
 	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
-	PENDING_RESIZE_EVENT = false;
 }
 
 function toggleTab(page) {

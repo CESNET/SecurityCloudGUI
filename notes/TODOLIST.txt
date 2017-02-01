@@ -1,9 +1,16 @@
 TODOLIST:
+general:
+[ ] nemea hook
+[ ] nerd call
+
 devel:
 [ ] Repair nemea hook in devel branch
+[ ] Copy zero division solution of stats
+[ ] Copy Rate/Sum labels of stats
 
 no_sidebar:
 [ ] Create a replacement for SidebarSelectedTime box
-[ ] Deal with zero division bug in Statistics
-[ ] Make statistics update automatically when are shown
+[X] Deal with zero division bug in Statistics
+[X] Make statistics update automatically when are shown
 [ ] New readme images
+[X] Repair graph resizing
