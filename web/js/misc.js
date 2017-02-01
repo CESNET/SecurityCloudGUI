@@ -1,5 +1,11 @@
+/**
+ *  @brief Async function for grabbing graph statistics
+ *  
+ *  @return None, but "StatsContent" object will be updated with result output
+ *  
+ *  @details Selects all available channels and collects a rrd based stats for selected time.
+ */
 function collectStatistics() {
-	//var timeSpec = Dbqry_parseSelectedTime();
 	var timeSpec = Graph.curTime1;
 	if (Graph.interval) {
 		timeSpec += ":"+Graph.curTime2;
@@ -8,7 +14,6 @@ function collectStatistics() {
 	for (var i = 1; i < ARR_SOURCES.length; i++) {
 		srcs += ":"+ARR_SOURCES[i];
 	}
-	//var srcs="./";
 	
 	timeSpec = encodeURIComponent(timeSpec);
 	srcs = encodeURIComponent(srcs);
@@ -33,29 +38,17 @@ function collectStatistics() {
 
 /**
  *  This function is responsible for (apparently) changing pages.
- *  Note that dygraph library used for rendering graphs is not
- *  happy when it's hidden with display:none attribute. For that
- *  reason, the Graphs page is only moved outside of visible plane.
- *  This thing may break lots of stuff...
+ *  Because the dygraphs library and the cursor object don't work
+ *  well with resizing, new variable had to be introduced to check
+ *  for any resize event happening when the Graphs tab is not
+ *  selected and perform resize update immediately as it becomes
+ *  selected.
  */
 function gotoPage(page) {
-	/*//document.getElementById("MainPageGraphs").style.display = "none";
-	var gpage = document.getElementById("MainPageGraphs");
-	gpage.style.position = "absolute";
-	gpage.style.top = -gpage.scrollHeight+"px";	// Moves outside of visible area
-	
-	document.getElementById("MainPageStats").style.display = "none";
-	document.getElementById("MainPageDbqry").style.display = "none";
-	document.getElementById("MainPageProfiles").style.display = "none";
-	
-	if (page == "Graphs") {
-		gpage.style.position = "static";	// return back to page
-	}
-	else document.getElementById("MainPage"+page).style.display = "";
-	
-	if (page == "Stats") {
-		collectStatistics();
-	}*/
+	// Old way:
+	//gpage.style.position = "absolute";
+	//gpage.style.top = -gpage.scrollHeight+"px";	// Moves outside of visible area
+	//gpage.style.position = "static";	// return back to page
 	
 	document.getElementById("MainPageGraphs").style.display = "none";
 	document.getElementById("MainPageStats").style.display = "none";
@@ -92,6 +85,10 @@ function isAcceptableWhoisInfo(infoName) {
 	return false;
 }
 
+/**
+ *  Async grab whois information for selected IP address.
+ *  Whois is mostly grabbed from ripe.net
+ */
 function lookupGrabWhois(ipaddr) {
 	var ajax = Utility.initAjax();
 	

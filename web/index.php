@@ -160,11 +160,11 @@
 	/* ==================== */
 	$(document).ready(function(){
 		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
-			format: "YYYY-MM-DD HH:mm",
+			format: "YYYY-MM-DD HH:mm",									// ISO time format
 			useCurrent: true,
-			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),
-			sideBySide: true,
-			ignoreReadonly: true,
+			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),	// Can't select time in the future
+			sideBySide: true,											// For seeing days and daytime side by side
+			ignoreReadonly: true,										// Because the input field is readonly
 		});
 		$('#TimePicker').on(											// Register onhide event callback for datetimepicker
 			"dp.hide",
@@ -200,12 +200,12 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
-			if (SELECTED_PAGE != "Graphs") {
-				PENDING_RESIZE_EVENT = true;
+			if (SELECTED_PAGE != "Graphs") {									// If the graphs are not shown
+				PENDING_RESIZE_EVENT = true;									// Set a pending flag to update the viewports as soon as possible
 			}
 			else {
-				Graph.dygraph.resize();
-				Graph.initAreaValues();
+				Graph.dygraph.resize();											// This line is done automatically, but I need to prevent rest of the updates to happen before this finishes
+				Graph.initAreaValues();											// And update cursor stuff
 				Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
 				Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
 			}
