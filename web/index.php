@@ -212,11 +212,11 @@
 		});
 		
 		/* TODO: After all initial setup, check whether this is a call from Nemea and deal with it */
-		if (isset($_GET['source']) && $_GET['source'] == "nemea") {
+		<?php if (isset($_GET['source']) && $_GET['source'] == "nemea") { ?>
 			// Collect stuff from url
 			// Deal with it
 			gotoPage('Dbqry');	// Teleport to proper tab
-		}
+		<?php } ?>
 	});
 	
 	$("#menu-toggle").click(function(e) {										// Sidebar toggling

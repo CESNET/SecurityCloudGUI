@@ -151,7 +151,8 @@ for ($s = 0; $s < $srcsSize; $s++) {
 		}
 		
 		for ($i = 0;  $i < 15; $i++) {
-			$statsRate[$s][$i] /= $segmentsSize;
+			if ($segmentsSize != 0)	$statsRate[$s][$i] /= $segmentsSize;
+			else					$statsRate[$s][$i] = 0;
 		}
 	}
 	
@@ -159,7 +160,8 @@ for ($s = 0; $s < $srcsSize; $s++) {
 }
 
 for($i = 0; $i < 15; $i++) {
-	$totalRate[$i] /= $segm;	// Compute $totalRate properly
+	if ($segm != 0)	$totalRate[$i] /= $segm;	// Compute $totalRate properly
+	else			$totalRate[$i] = 0;
 }
 
 echo '<div class=\'panel panel-primary\'>';
@@ -181,7 +183,7 @@ for($i = 0; $i < 3; $i++) {
 	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
 	echo '<div class=\'panel-body\'>';
 	echo '<table class=\'table table-striped table-condensed table-hover\'>';
-	echo '<caption>Sum</caption>';
+	echo '<caption>Rate</caption>';
 	echo '<thead><tr><th>Channel</th><th>All</th><th>TCP</th><th>UDP</th><th>ICMP</th><th>Other</th></thead>';
 	echo '<tbody>';
 	
