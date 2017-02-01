@@ -88,14 +88,15 @@ function updateThumbs() {
 /* TIME WINDOW HANDLE */
 /* ================== */
 function timeWindowHandle() {
-	var displ = document.getElementById("SidebarSelectedTime");
+	// TODO: New selected time display
+	//var displ = document.getElementById("SidebarSelectedTime");
 	
 	var str = Utility.timestampToNiceReadable(Graph.curTime1);
-	displ.innerHTML = (Graph.interval ? "<br>Begin: " : "") + str;
+	//displ.innerHTML = (Graph.interval ? "<br>Begin: " : "") + str;
 	
 	if(Graph.interval) {
 		str = Utility.timestampToNiceReadable(Graph.curTime2);
-		displ.innerHTML += "<br>End: " + str;
+		//displ.innerHTML += "<br>End: " + str;
 	}
 	else {														// Compute whether the cursor is not too close to a border
 		var windowSize = timestampEnd - timestampBgn;			// Width of the graph window
@@ -109,6 +110,8 @@ function timeWindowHandle() {
 			}
 		}
 	}
+	
+	if (isToggled("Statistics")) collectStatistics();
 }
 
 /* =================== */

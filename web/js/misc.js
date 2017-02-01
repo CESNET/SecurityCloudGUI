@@ -36,39 +36,40 @@ function collectStatistics() {
 	ajax.send(null);
 }
 
-/**
- *  This function is responsible for (apparently) changing pages.
- *  Because the dygraphs library and the cursor object don't work
- *  well with resizing, new variable had to be introduced to check
- *  for any resize event happening when the Graphs tab is not
- *  selected and perform resize update immediately as it becomes
- *  selected.
- */
-function gotoPage(page) {
-	// Old way:
-	//gpage.style.position = "absolute";
-	//gpage.style.top = -gpage.scrollHeight+"px";	// Moves outside of visible area
-	//gpage.style.position = "static";	// return back to page
+function resizeGraph() {
+	Graph.dygraph.resize();
+	Graph.initAreaValues();
+	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
+	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+	PENDING_RESIZE_EVENT = false;
+}
+
+function toggleTab(page) {
+	var elem = document.getElementById("MainPage" + page);
+	var panel = document.getElementById("Toggler" + page);
 	
-	document.getElementById("MainPageGraphs").style.display = "none";
-	document.getElementById("MainPageStats").style.display = "none";
-	document.getElementById("MainPageDbqry").style.display = "none";
-	document.getElementById("MainPageProfiles").style.display = "none";
+	if (elem.style.display == "none") {
+		elem.style.display = "";
+		panel.className = "glyphicon glyphicon-chevron-up";
+		location.href = "#";
+		location.href = "#TogglerAnchor" + page;
+	}
+	else {
+		elem.style.display = "none";
+		panel.className = "glyphicon glyphicon-chevron-down";
+	}
 	
-	document.getElementById("MainPage"+page).style.display = "";
-	
-	if (page == "Graphs" && PENDING_RESIZE_EVENT) {
-		Graph.dygraph.resize();
-		Graph.initAreaValues();
-		Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-		Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+	if (page == "Graph" && PENDING_RESIZE_EVENT) {
+		resizeGraph();
 		PENDING_RESIZE_EVENT = false;
 	}
-	else if (page == "Stats") {
-		collectStatistics();
-	}
+	else if (page == "Statistics" && isToggled("Statistics")) collectStatistics();
 	
 	SELECTED_PAGE = page;
+}
+
+function isToggled(page) {
+	return document.getElementById("MainPage" + page).style.display != "none";
 }
 
 /**

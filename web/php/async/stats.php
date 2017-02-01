@@ -151,7 +151,8 @@ for ($s = 0; $s < $srcsSize; $s++) {
 		}
 		
 		for ($i = 0;  $i < 15; $i++) {
-			$statsRate[$s][$i] /= $segmentsSize;
+			if ($segmentsSize != 0)	$statsRate[$s][$i] /= $segmentsSize;
+			else					$statsRate[$s][$i] = 0;
 		}
 	}
 	
@@ -159,7 +160,8 @@ for ($s = 0; $s < $srcsSize; $s++) {
 }
 
 for($i = 0; $i < 15; $i++) {
-	$totalRate[$i] /= $segm;	// Compute $totalRate properly
+	if ($segm != 0)	$totalRate[$i] /= $segm;	// Compute $totalRate properly
+	else			$totalRate[$i] = 0;
 }
 
 echo '<div class=\'panel panel-primary\'>';

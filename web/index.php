@@ -54,47 +54,62 @@
 </head>
 
 <body onload="Transactions.init();" onbeforeunload="Transactions.deinit();">
-    <div id="wrapper">
-
-	<!-- Sidebar -->
-	<?php include 'php/misc/sidebar.php'; ?>
+	<br>
 
 	<!-- MODALS -->
-	<!-- Modal window with render settings for the active graph -->
-	<!--?php include 'php/graph/activeGraphRenderSettings.php'; ?>
 	<!-- Modal with fdistdump manpage -->
 	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php'; ?>
 	<!-- Modal window with profile view/add/delete dialogs -->
 	<?php include 'php/profiles/profilesModifyModal.php' ?>
 	
 	<?php include 'php/misc/lookup.php'; ?>
-	<!--a class="btn btn-default" id="menu-toggle" href="#menu-toggle">Toggle Menu</a-->
 	
 	<!-- Page Content -->
 	<div id="page-content-wrapper">
-		<div class="container-fluid">		
-			<div id="MainPageGraphs">
-				<!-- ACTIVE GRAPH + SOURCES -->
+		<div class="container-fluid">
+			<!-- GRAPH TOGGLER -->
+			<?php
+				$label = "Graph";
+				include 'php/misc/toggler.php';
+			?>
+			<div id="MainPageGraph">
+				<!-- ACTIVE GRAPH + CHANNELS -->
 				<div class="row">
 					<div class="col-lg-10">
 						<?php include 'php/graph/activeGraph.php'; ?>
 					</div>
 					<div class="col-lg-2">
 						<?php include 'php/graph/channelSelection.php'; ?>
-						
-						<!-- TODO -->
 						<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
 					</div>
 				</div>
+			</div>
 				
-				<!-- THUMBNAILS -->
+			<!-- THUMB TOGGLER -->
+			<?php
+				$label = "Thumbnails";
+				include 'php/misc/toggler.php';
+			?>
+			<div id="MainPageThumbnails">
 				<?php include 'php/graph/thumbGraphs.php'; ?>		
 			</div>
-			<div id="MainPageStats">
+			
+			<!-- STATS TOGGLER -->
+			<?php
+				$label = "Statistics";
+				include 'php/misc/toggler.php';
+			?>
+			<div id="MainPageStatistics">
 				<div class="row">
 					<div class="col-lg-12" id="StatsContent"></div>
 				</div>
 			</div>
+			
+			<!-- DBQRY TOGGLER -->
+			<?php
+				$label = "Dbqry";
+				include 'php/misc/toggler.php';
+			?>
 			<div id="MainPageDbqry">
 				<div class="row">
 					<div class="col-lg-12">
@@ -102,15 +117,18 @@
 					</div>
 				</div>
 			</div>
+			
+			<!-- PROFILES TOGGLER -->
+			<?php
+				$label = "Profiles";
+				include 'php/misc/toggler.php';
+			?>
 			<div id="MainPageProfiles">
 				<?php include 'php/profiles/profiles.php'; ?>
 			</div>
 		</div>
 	</div>
 	<!-- /#page-content-wrapper -->
-
-	</div>
-	<!-- /#wrapper -->
 
 	<script>
 		/* ========= */
@@ -125,7 +143,7 @@
 		var USE_LOCAL_TIME = <?php if ($USE_LOCAL_TIME) echo "true"; else echo "false"; ?>;
 		var HISTORIC_DATA =  <?php if ($HISTORIC_DATA) echo "true"; else echo "false"; ?>;
 		var PENDING_RESIZE_EVENT = false;
-		var SELECTED_PAGE = "Graphs";
+		var SELECTED_PAGE = "Graph";
 	
 		/* ================ */
 		/* GLOBAL VARIABLES */
@@ -174,7 +192,10 @@
 			}
 		);
 		
-		gotoPage('Graphs');												// Set the default viewpoint
+		toggleTab("Thumbnails");
+		toggleTab("Statistics");
+		toggleTab("Dbqry");
+		toggleTab("Profiles");
 		
 		/* TIMESTAMP INIT */
 		<?php if (isset($_GET['begin']) && isset($_GET['end'])) {
@@ -200,28 +221,16 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
-			if (SELECTED_PAGE != "Graphs") {									// If the graphs are not shown
-				PENDING_RESIZE_EVENT = true;									// Set a pending flag to update the viewports as soon as possible
-			}
-			else {
-				Graph.dygraph.resize();											// This line is done automatically, but I need to prevent rest of the updates to happen before this finishes
-				Graph.initAreaValues();											// And update cursor stuff
-				Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-				Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
-			}
+			if (SELECTED_PAGE != "Graphs")	PENDING_RESIZE_EVENT = true;
+			else							resizeGraph();
 		});
 		
 		/* TODO: After all initial setup, check whether this is a call from Nemea and deal with it */
-		if (isset($_GET['source']) && $_GET['source'] == "nemea") {
+		<?php if (isset($_GET['source']) && $_GET['source'] == "nemea") { ?>
 			// Collect stuff from url
 			// Deal with it
-			gotoPage('Dbqry');	// Teleport to proper tab
-		}
-	});
-	
-	$("#menu-toggle").click(function(e) {										// Sidebar toggling
-		e.preventDefault();
-		$("#wrapper").toggleClass("toggled");
+			toggleTab('Dbqry');	// Teleport to proper tab
+		<?php } ?>
 	});
 	</script>
 </body>
