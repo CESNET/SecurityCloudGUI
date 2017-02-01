@@ -210,6 +210,13 @@
 				Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
 			}
 		});
+		
+		/* TODO: After all initial setup, check whether this is a call from Nemea and deal with it */
+		if (isset($_GET['source']) && $_GET['source'] == "nemea") {
+			// Collect stuff from url
+			// Deal with it
+			gotoPage('Dbqry');	// Teleport to proper tab
+		}
 	});
 	
 	$("#menu-toggle").click(function(e) {										// Sidebar toggling
