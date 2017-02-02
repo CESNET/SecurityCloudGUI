@@ -192,8 +192,8 @@ function execDbRequest() {														// This gets called when this thread is 
 				}
 				else {//http://rest.db.ripe.net/search.json?query-string=194.228.92.50&flags=no-filtering
 					if (@inet_pton($auxbuf)) {								// Convert string into binary ip. If the function returned valid string, $auxbuf is an ip
-						//$auxbuf = "<a href='#' onclick=\"lookupGrab('$auxbuf');\" data-toggle='modal' data-target='#lookupModal'>$auxbuf</a>";
-						$auxbuf = "<a target=\"_blank\" href=\"https://nerd.cesnet.cz/nerd/ip/$auxbuf\">$auxbuf</a>";
+						$auxbuf = "<a href='#' onclick=\"lookupGrab('$auxbuf');\" data-toggle='modal' data-target='#lookupModal'>$auxbuf</a>";
+						//$auxbuf = "<a target=\"_blank\" href=\"https://nerd.cesnet.cz/nerd/ip/$auxbuf\">$auxbuf</a>";
 					}
 				
 					echo $auxbuf.$buffer[$i];
