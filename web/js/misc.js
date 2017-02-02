@@ -179,4 +179,6 @@ function lookupGrab(ipaddr) {
 	lookupGrabRvdns(ipaddr);
 	lookupGrabWhois(ipaddr);
 	lookupGrabGeolc(ipaddr);
+	
+	document.getElementById("LookupToNERD").href = "https://nerd.cesnet.cz/nerd/ip/" + ipaddr;
 }

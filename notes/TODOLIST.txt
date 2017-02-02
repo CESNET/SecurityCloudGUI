@@ -19,3 +19,5 @@ no_sidebar:
 [X] Clickable panels
 [ ] ??? Hierarchy vs Profile dropdown
 [X] Manage profiles in dedicated window
+[X] Keep original lookup and make only link to NERD
+[ ] Graph miniature
