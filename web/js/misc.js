@@ -43,32 +43,46 @@ function resizeGraph() {
 	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
 }
 
-function toggleTab(page) {
-	var elem = document.getElementById("MainPage" + page);
-	var panel = document.getElementById("Toggler" + page);
+function gotoWindow(id) {
+	document.getElementById("WindowWorkbench").style.display = "none";
+	document.getElementById("TopbarLinkWorkbench").className = "";
+	document.getElementById("WindowProfileManager").style.display = "none";
+	document.getElementById("TopbarLinkProfileManager").className = "";
+	
+	document.getElementById("Window" + id).style.display = "";
+	document.getElementById("TopbarLink" + id).className = "active";
+	
+	SELECTED_WINDOW = id;
+	if (id == "Workbench" && PENDING_RESIZE_EVENT) {
+		resizeGraph();
+		PENDING_RESIZE_EVENT = false;
+	}
+}
+
+function toggleTab(tab) {
+	var elem = document.getElementById("Workbench" + tab);
+	var panel = document.getElementById("Toggler" + tab);
 	
 	if (elem.style.display == "none") {
 		elem.style.display = "";
 		panel.className = "glyphicon glyphicon-chevron-up";
 		location.href = "#";
-		location.href = "#TogglerAnchor" + page;
+		location.href = "#TogglerAnchor" + tab;
 	}
 	else {
 		elem.style.display = "none";
 		panel.className = "glyphicon glyphicon-chevron-down";
 	}
 	
-	if (page == "Graph" && PENDING_RESIZE_EVENT) {
+	if (tab == "Graph" && PENDING_RESIZE_EVENT) {
 		resizeGraph();
 		PENDING_RESIZE_EVENT = false;
 	}
-	else if (page == "Statistics" && isToggled("Statistics")) collectStatistics();
-	
-	SELECTED_PAGE = page;
+	else if (tab == "Statistics" && isToggled("Statistics")) collectStatistics();
 }
 
-function isToggled(page) {
-	return document.getElementById("MainPage" + page).style.display != "none";
+function isToggled(tab) {
+	return document.getElementById("Workbench" + tab).style.display != "none";
 }
 
 /**

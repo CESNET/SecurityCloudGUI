@@ -54,6 +54,8 @@
 </head>
 
 <body onload="Transactions.init();" onbeforeunload="Transactions.deinit();">
+	<?php include 'php/misc/topbar.php'; ?>
+
 	<br>
 
 	<!-- MODALS -->
@@ -67,64 +69,68 @@
 	<!-- Page Content -->
 	<div id="page-content-wrapper">
 		<div class="container-fluid">
-			<!-- GRAPH TOGGLER -->
-			<?php
-				$label = "Graph";
-				include 'php/misc/toggler.php';
-			?>
-			<div id="MainPageGraph">
-				<!-- ACTIVE GRAPH + CHANNELS -->
-				<div class="row">
-					<div class="col-lg-10">
-						<?php include 'php/graph/activeGraph.php'; ?>
-					</div>
-					<div class="col-lg-2">
-						<?php include 'php/graph/channelSelection.php'; ?>
-						<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
+			<div id="WindowWorkbench">
+				<!-- GRAPH TOGGLER -->
+				<?php
+					$label = "Graph";
+					include 'php/misc/toggler.php';
+				?>
+				<div id="WorkbenchGraph">
+					<!-- ACTIVE GRAPH + CHANNELS -->
+					<div class="row">
+						<div class="col-lg-10">
+							<?php include 'php/graph/activeGraph.php'; ?>
+						</div>
+						<div class="col-lg-2">
+							<?php include 'php/graph/channelSelection.php'; ?>
+							<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
+						</div>
 					</div>
 				</div>
-			</div>
+					
+				<!-- THUMB TOGGLER -->
+				<?php
+					$label = "Thumbnails";
+					include 'php/misc/toggler.php';
+				?>
+				<div id="WorkbenchThumbnails">
+					<?php include 'php/graph/thumbGraphs.php'; ?>		
+				</div>
 				
-			<!-- THUMB TOGGLER -->
-			<?php
-				$label = "Thumbnails";
-				include 'php/misc/toggler.php';
-			?>
-			<div id="MainPageThumbnails">
-				<?php include 'php/graph/thumbGraphs.php'; ?>		
-			</div>
-			
-			<!-- STATS TOGGLER -->
-			<?php
-				$label = "Statistics";
-				include 'php/misc/toggler.php';
-			?>
-			<div id="MainPageStatistics">
-				<div class="row">
-					<div class="col-lg-12" id="StatsContent"></div>
+				<!-- STATS TOGGLER -->
+				<?php
+					$label = "Statistics";
+					include 'php/misc/toggler.php';
+				?>
+				<div id="WorkbenchStatistics">
+					<div class="row">
+						<div class="col-lg-12" id="StatsContent"></div>
+					</div>
 				</div>
-			</div>
-			
-			<!-- DBQRY TOGGLER -->
-			<?php
-				$label = "Dbqry";
-				include 'php/misc/toggler.php';
-			?>
-			<div id="MainPageDbqry">
-				<div class="row">
-					<div class="col-lg-12">
-						<?php include 'php/dbqry/dbqry.php'; ?>
+				
+				<!-- DBQRY TOGGLER -->
+				<?php
+					$label = "Dbqry";
+					include 'php/misc/toggler.php';
+				?>
+				<div id="WorkbenchDbqry">
+					<div class="row">
+						<div class="col-lg-12">
+							<?php include 'php/dbqry/dbqry.php'; ?>
+						</div>
 					</div>
 				</div>
 			</div>
 			
-			<!-- PROFILES TOGGLER -->
-			<?php
-				$label = "Profiles";
-				include 'php/misc/toggler.php';
-			?>
-			<div id="MainPageProfiles">
-				<?php include 'php/profiles/profiles.php'; ?>
+			<div id="WindowProfileManager">
+				<!-- PROFILES TOGGLER -->
+				<?php
+					//$label = "Profiles";
+					//include 'php/misc/toggler.php';
+				?>
+				<!--div id="MainPageProfiles"-->
+					<?php include 'php/profiles/profiles.php'; ?>
+				<!--/div-->
 			</div>
 		</div>
 	</div>
@@ -143,7 +149,7 @@
 		var USE_LOCAL_TIME = <?php if ($USE_LOCAL_TIME) echo "true"; else echo "false"; ?>;
 		var HISTORIC_DATA =  <?php if ($HISTORIC_DATA) echo "true"; else echo "false"; ?>;
 		var PENDING_RESIZE_EVENT = false;
-		var SELECTED_PAGE = "Graph";
+		var SELECTED_WINDOW = "Graph";
 	
 		/* ================ */
 		/* GLOBAL VARIABLES */
@@ -192,10 +198,10 @@
 			}
 		);
 		
+		gotoWindow("Workbench");
 		toggleTab("Thumbnails");
 		toggleTab("Statistics");
 		toggleTab("Dbqry");
-		toggleTab("Profiles");
 		
 		/* TIMESTAMP INIT */
 		<?php if (isset($_GET['begin']) && isset($_GET['end'])) {
@@ -221,7 +227,7 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
-			if (!isToggled("Graph"))		PENDING_RESIZE_EVENT = true;
+			if (!isToggled("Graph") || SELECTED_WINDOW != "Workbench")		PENDING_RESIZE_EVENT = true;
 			else							resizeGraph();
 		});
 		

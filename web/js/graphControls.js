@@ -88,15 +88,14 @@ function updateThumbs() {
 /* TIME WINDOW HANDLE */
 /* ================== */
 function timeWindowHandle() {
-	// TODO: New selected time display
-	//var displ = document.getElementById("SidebarSelectedTime");
+	var displ = document.getElementById("SelectedTimeBox");
 	
 	var str = Utility.timestampToNiceReadable(Graph.curTime1);
-	//displ.innerHTML = (Graph.interval ? "<br>Begin: " : "") + str;
+	displ.innerHTML = (Graph.interval ? " from " : " at ") + str;
 	
 	if(Graph.interval) {
 		str = Utility.timestampToNiceReadable(Graph.curTime2);
-		//displ.innerHTML += "<br>End: " + str;
+		displ.innerHTML += " to " + str;
 	}
 	else {														// Compute whether the cursor is not too close to a border
 		var windowSize = timestampEnd - timestampBgn;			// Width of the graph window
