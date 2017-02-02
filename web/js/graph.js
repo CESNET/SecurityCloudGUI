@@ -27,6 +27,7 @@ var Graph = {
 	cursor2: null,
 	curspan: null,
 	dygraph: null,
+	miniature: null,
 	
 	interval: false,
 	curTime1: 0,
@@ -129,12 +130,26 @@ var Graph = {
 			labelsUTC: !USE_LOCAL_TIME,		// Hopefully, it'll fix the off-by-one hour
 			highlightCircleSize: 5,
 			panEdgeFraction: 0.1,
-			interactionModel: {}
+			interactionModel: {},
 		};
-		
 		this.dygraph = new Dygraph(document.getElementById(canvasDomId), gData, options);
 		
 		Graph.initAreaValues();
+		
+		var options2 = {
+			colors: this.generateColours(gLegend.length - 1),
+			labels: gLegend,
+			legend: 'never',
+			axes : {
+				y : { drawAxis: false, drawGrid: true,},
+				x : { drawAxis: false, drawGrid: true,},
+			},
+			stackedGraph: true,
+			fillGraph: true,
+			panEdgeFraction: 0.1,
+			interactionModel: {},
+		};
+		this.miniature = new Dygraph(document.getElementById("miniDygraph"), gData, options2);
 	},
 	
 	/**
@@ -207,6 +222,7 @@ var Graph = {
 	/* =========== */
 	update: function(newData, newTitle, render) {
 		this.dygraph.updateOptions( {file: newData, ylabel: newTitle, stackedGraph: render["type"], fillGraph: render["style"]} );
+		//this.miniature.updateOptions( {file: newData,} );
 		
 		Graph.initAreaValues();
 	},

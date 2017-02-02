@@ -13,4 +13,9 @@
 			</div>
 		</div>
 	</div>
+	<?php if ($label == "Graph") { ?>
+	<div class="panel-body" id="GraphMiniArea" style="display: none;">
+		<div id="miniDygraph" style="width: 100%; height: 100px;"></div>
+	</div>
+	<?php } ?>
 </div>

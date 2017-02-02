@@ -1,8 +1,9 @@
 <?php
 	function printProfileDropdown($object, $level) {
-		// NOTE: Process level?
 		$str = preg_replace('/^\/[a-zA-Z0-9_\/]+\//', "", $object->getName());
-		echo '<li><a href=\'#\' onclick=\'Profile.changeLocation("',$object->getName(),'");\'>',$str,'</a></li>';
+		echo '<li><a href=\'#\' onclick=\'Profile.changeLocation("',$object->getName(),'");\'>';
+		for ($i = 0; $i < $level; $i++) echo '-';
+		echo ' ',$str,'</a></li>';
 		
 		foreach($object->getChildren() as $o) {
 			printProfileDropdown($o, $level + 1);

@@ -17,7 +17,11 @@ no_sidebar:
 [X] Topbar
 [ ] Topbar scroll
 [X] Clickable panels
-[ ] ??? Hierarchy vs Profile dropdown
+[ ] Hierarchy vs Profile dropdown with -
 [X] Manage profiles in dedicated window
 [X] Keep original lookup and make only link to NERD
-[ ] Graph miniature
+[X] Graph miniature
+[ ] Graph miniature cursor
+[X] Move thumbnails
+[X] Thumbnails reorder
+[ ] Cannot create a subprofile of a subprofile

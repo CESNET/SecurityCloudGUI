@@ -74,9 +74,18 @@ function toggleTab(tab) {
 		panel.className = "glyphicon glyphicon-chevron-down";
 	}
 	
-	if (tab == "Graph" && PENDING_RESIZE_EVENT) {
-		resizeGraph();
-		PENDING_RESIZE_EVENT = false;
+	if (tab == "Graph") {
+		if (elem.style.display == "none") {
+			document.getElementById("GraphMiniArea").style.display = "";
+			Graph.miniature.updateOptions({file: graphData,});
+			Graph.miniature.resize();
+		}
+		else document.getElementById("GraphMiniArea").style.display = "none";
+		
+		if (PENDING_RESIZE_EVENT) {
+			resizeGraph();
+			PENDING_RESIZE_EVENT = false;
+		}
 	}
 	else if (tab == "Statistics" && isToggled("Statistics")) collectStatistics();
 }

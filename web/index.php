@@ -56,8 +56,6 @@
 <body onload="Transactions.init();" onbeforeunload="Transactions.deinit();">
 	<?php include 'php/misc/topbar.php'; ?>
 
-	<br>
-
 	<!-- MODALS -->
 	<!-- Modal with fdistdump manpage -->
 	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php'; ?>
@@ -86,15 +84,15 @@
 							<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
 						</div>
 					</div>
-				</div>
 					
-				<!-- THUMB TOGGLER -->
-				<?php
-					$label = "Thumbnails";
-					include 'php/misc/toggler.php';
-				?>
-				<div id="WorkbenchThumbnails">
-					<?php include 'php/graph/thumbGraphs.php'; ?>		
+					<!-- THUMB TOGGLER -->
+					<?php
+						$label = "Thumbnails";
+						include 'php/misc/toggler.php';
+					?>
+					<div id="WorkbenchThumbnails">
+						<?php include 'php/graph/thumbGraphs.php'; ?>		
+					</div>
 				</div>
 				
 				<!-- STATS TOGGLER -->
@@ -123,14 +121,7 @@
 			</div>
 			
 			<div id="WindowProfileManager">
-				<!-- PROFILES TOGGLER -->
-				<?php
-					//$label = "Profiles";
-					//include 'php/misc/toggler.php';
-				?>
-				<!--div id="MainPageProfiles"-->
-					<?php include 'php/profiles/profiles.php'; ?>
-				<!--/div-->
+				<?php include 'php/profiles/profiles.php'; ?>
 			</div>
 		</div>
 	</div>
@@ -227,7 +218,10 @@
 		acquireGraphData(initializeGraph, null);								// Create graph
 		
 		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
-			if (!isToggled("Graph") || SELECTED_WINDOW != "Workbench")		PENDING_RESIZE_EVENT = true;
+			if (!isToggled("Graph") || SELECTED_WINDOW != "Workbench") {
+				PENDING_RESIZE_EVENT = true;
+				Graph.miniature.resize();
+			}
 			else							resizeGraph();
 		});
 		
