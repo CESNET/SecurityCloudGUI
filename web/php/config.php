@@ -4,7 +4,7 @@
 	/* =========== */
 	$USE_LOCAL_TIME		= true; // Will use UTC if set to false
 	$SINGLE_MACHINE		= true;	// Change this to true if you're running the whole SecurityCloud on the single machine. ($FDUMP will be called instead of $FDUMP_HA)
-	$HISTORIC_DATA		= true; // Change this to true if this instance of GUI is supposed to analyze historical data
+	$HISTORIC_DATA		= false; // Change this to true if this instance of GUI is supposed to analyze historical data
 	$MAX_TABS 			= 8;	// Maximum of tabs for parallel fdistdump querries
 	$USERSTAMP_LENGTH	= 16;	// Length of the userstamp identifying the transactions. The userstamp is a combination of symbols respecting the regex: [a-zA-Z0-9]
 
@@ -14,7 +14,7 @@
 	$FDUMP				= 'mpiexec -n 2 fdistdump'; // This is the path to your MPI binary and launch configuration. Also the path to the fdistdump binary has to be provided
 	$FDUMP_HA			= 'fdistdump-ha';
 	$FDUMP_ENV			= array('PATH' => '/usr/lib64/mpich/bin:/usr/local/bin:/bin:/usr/local/sbin:/usr/bin:/usr/sbin');
-	$RRDTOOL			= '/opt/rrdtool/bin/rrdtool';	// Path to rrdtool
+	$RRDTOOL			= 'rrdtool';	// Path to rrdtool
 	
 	/* =========== */
 	/* DIRECTORIES */
