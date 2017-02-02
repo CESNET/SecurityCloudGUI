@@ -1,7 +1,7 @@
 <div class="row">
 	<?php
 	for($i = 0; $i < sizeof($ARR_GRAPH_VARS); $i++) {
-		echo "<div class='col-md-3'>\n";
+		echo "<div class='col-md-4'>\n";
 		echo "\t<div class='panel panel-primary'>\n";
 		echo "\t\t<div class='panel-heading'>\n";
 		echo "\t\t\t$ARR_GRAPH_NAME[$i]\n";
