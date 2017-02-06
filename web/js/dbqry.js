@@ -155,9 +155,7 @@ function Dbqry_processRequest(tab){
 	// *** Read the options ***
 	var opts = Dbqry_parseQuerryParameter(tab);
 	
-	var srcs = "./";
-	// TODO: Load available channels
-	// var srcs = Dbqry_selectedChannelsToString(tab);
+	var srcs = Dbqry_selectedChannelsToString(tab);
 	
 	// *** Encode everything into URL friendly format ***
 	var profile = encodeURIComponent(PROFILE);
