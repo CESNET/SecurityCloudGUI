@@ -174,6 +174,7 @@
 	/* DOCUMENT READY STUFF */
 	/* ==================== */
 	$(document).ready(function(){
+		/* CALLBACKS */
 		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
 			format: "YYYY-MM-DD HH:mm",									// ISO time format
 			useCurrent: true,
@@ -188,36 +189,7 @@
 				acquireGraphData(updateGraph, true);
 			}
 		);
-		
-		gotoWindow("Workbench");
-		toggleTab("Thumbnails");
-		toggleTab("Statistics");
-		toggleTab("Dbqry");
-		
-		/* TIMESTAMP INIT */
-		<?php if (isset($_GET['begin']) && isset($_GET['end'])) {
-			echo 'timestampBgn = ',$_GET['begin'],';';
-			echo 'timestampEnd = ',$_GET['end'],';';
-		}
-		else {
-			echo 'timestampBgn = Utility.getCurrentTimestamp()-(24*3600);';
-			echo 'timestampEnd = Utility.getCurrentTimestamp();';
-		} ?>
-		
-		<?php if (isset($_GET['res'])) {
-			echo 'resolutionPtr = ',$_GET['res'],';';
-		}
-		else {
-			echo 'resolutionPtr = 2;';
-		} ?>
-		
-		/* RESOLUTION INIT */
-		var list = document.getElementById("DisplayResolutionList").getElementsByTagName("a");
-		document.getElementById("DisplaySizePrint").innerHTML = list[resolutionPtr].innerHTML;
-		
-		acquireGraphData(initializeGraph, null);								// Create graph
-		
-		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
+		$(window).resize(function(){									// Register callback (reset cursor position if window was resized)
 			if (!isToggled("Graph") || SELECTED_WINDOW != "Workbench") {
 				PENDING_RESIZE_EVENT = true;
 				Graph.miniature.resize();
@@ -225,12 +197,54 @@
 			else							resizeGraph();
 		});
 		
-		/* TODO: After all initial setup, check whether this is a call from Nemea and deal with it */
+		gotoWindow("Workbench");
+		
+		/* NEMEA HOOK */
 		<?php if (isset($_GET['source']) && $_GET['source'] == "nemea") { ?>
-			// Collect stuff from url
-			// Deal with it
-			toggleTab('Dbqry');	// Teleport to proper tab
+			// Grab time selection
+			var selBgn = <?php echo $_GET['sel_bgn']; ?>;
+			var selEnd = <?php echo (isset($_GET['sel_end']) ? $_GET['sel_end'] : 'cursorLeft'); ?>;
+			var selCtr = (selBgn + selEnd) / 2;
+			
+			// Find correct resolution
+			var dist = (selEnd - selBgn) / 3600; // Size of the window in hours
+			for (resolutionPtr = 0; resolutionPtr < ARR_RESOLUTION.length; resolutionPtr++) {
+				if (ARR_RESOLUTION[resolutionPtr] > dist) break;
+			}
+			
+			// Select proper border timestamps
+			
+			// Toggle tabs
+			toggleTab("Graph");
+			toggleTab("Thumbnails");
+			toggleTab("Statistics");
+		<?php } else { ?> /* NORMAL START */
+			<?php if (isset($_GET['begin']) && isset($_GET['end'])) {	// Custom time window
+				echo 'timestampBgn = ',$_GET['begin'],';';
+				echo 'timestampEnd = ',$_GET['end'],';';
+			}
+			else {
+				echo 'timestampBgn = Utility.getCurrentTimestamp()-(24*3600);';
+				echo 'timestampEnd = Utility.getCurrentTimestamp();';
+			} ?>
+			
+			<?php if (isset($_GET['res'])) {							// Custom resolution
+				echo 'resolutionPtr = ',$_GET['res'],';';
+			}
+			else {
+				echo 'resolutionPtr = 2;';
+			} ?>		
+		
+			toggleTab("Thumbnails");
+			toggleTab("Statistics");
+			toggleTab("Dbqry");
 		<?php } ?>
+		
+		/* RESOLUTION INIT */
+		initResolution(resolutionPtr);
+		
+		/* INIT GRAPH */
+		acquireGraphData(initializeGraph, null);
 	});
 	</script>
 </body>

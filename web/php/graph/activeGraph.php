@@ -29,7 +29,7 @@
 					<ul class="dropdown-menu" id="DisplayResolutionList">
 						<li><a href="#" onclick="setResolution('absolute', 0);">6 Hours</a></li>
 						<li><a href="#" onclick="setResolution('absolute', 1);">12 Hours</a></li>
-						<li><a href="#" class="list-group-item active" onclick="setResolution('absolute', 2);">1 Day</a></li>
+						<li><a href="#" onclick="setResolution('absolute', 2);">1 Day</a></li>
 						<li><a href="#" onclick="setResolution('absolute', 3);">2 Day</a></li>
 						<li><a href="#" onclick="setResolution('absolute', 4);">4 Day</a></li>
 						<li><a href="#" onclick="setResolution('absolute', 5);">1 Week</a></li>

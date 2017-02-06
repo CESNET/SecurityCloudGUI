@@ -2,10 +2,13 @@ var Utility = {
 	/* ===================== */
 	/* GET CURRENT TIMESTAMP */
 	/* ===================== */
+	/* This timestamp is rounded to full five minutes interval and moved five minutes
+	to the past simply because current interval is not finished and thus it should not
+	be accessible for any querying. */
 	getCurrentTimestamp: function() {
 		var d = new Date();
 		var timestamp = Math.floor(d.getTime() / 1000);
-		timestamp -= timestamp % 300;
+		timestamp -= ((timestamp % 300) + 300);
 		return timestamp;
 	},
 

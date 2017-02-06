@@ -41,3 +41,9 @@ function setResolution (type, value) {
 	setGraphCenter(Graph.curTime1);							// Reset time window
 	acquireGraphData(updateGraph, true);					// Update stuff
 }
+
+function initResolution(value) {
+	var list = document.getElementById("DisplayResolutionList").getElementsByTagName("a");
+	list[resolutionPtr].className = "list-group-item active";
+	document.getElementById("DisplaySizePrint").innerHTML = list[resolutionPtr].innerHTML;
+}
