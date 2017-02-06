@@ -34,15 +34,12 @@ function execDbRequest() {														// This gets called when this thread is 
 	unset($ARR_AVAILS);
 	
 	/* GET CHANNELS TO PROPER FORMAT */
-	// TODO: Uncomment
 	// NOTE: deal with shadow profiles
-	/*
 	$srcArr = explode(':', $src);
 	$src = "";
-	for ($i = 0; $i < sizeof($srcArr); $++) {
+	for ($i = 0; $i < sizeof($srcArr); $i++) {
 		$src .= $srcArr[$i].' ';
 	}
-	*/
 	
 	/* SEARCH FOR SELECTED SUBPROFILE ROOT */
 	$aux = null;
@@ -79,7 +76,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	
 	$cmdBackup = "";
 	if ($SINGLE_MACHINE) {
-		$cmdBackup = "$FDUMP -f \"$filter\" $opts";
+		$cmdBackup = "$FDUMP -f \"$filter\" $opts $src";
 	}
 	else {
 		$cmdBackup = "$FDUMP_HA -f=\"$filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);
@@ -94,7 +91,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$cmd = "";
 	if ($SINGLE_MACHINE) {
 		// *** proc_open params ***
-		$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ".substr($profile, 1);	// <---------- $CMD --------------
+		$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json $src";	// <---------- $CMD --------------
 	}
 	else {
 		$cmd = "$FDUMP_HA -f=\"$filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);
@@ -106,7 +103,8 @@ function execDbRequest() {														// This gets called when this thread is 
 		2 => array ('pipe', 'w')
 	);
 	$pipes = array();
-	$cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA : $IPFIXCOL_DATA."$profile/";
+	// OLD WAY: $cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA."$profile/channels/" : $IPFIXCOL_DATA."$profile/";
+	$cwd = $IPFIXCOL_DATA."$profile/channels/";
 	
 	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');							// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
