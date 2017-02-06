@@ -61,11 +61,9 @@
 	$prefix = preg_replace('/\/[a-zA-Z_][a-zA-Z0-9_]*$/', "", $name);		// Output: /live/path/to
 	$flname	= preg_replace('/^(\/[a-zA-Z_][a-zA-Z0-9_]*)*\//', "", $name);	// Output: profile
 	
-	echo $prefix,' ',$flname,'<br>';
-	
 	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
 	$ARR_AVAILS = getAvailableProfiles('me');
-	$PROFILE = $prefix;
+	$PROFILE = $name == '/live' ? $name : $prefix;
 	if (!verifySelectedProfile($PROFILE, $ARR_AVAILS)) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert">
@@ -80,26 +78,28 @@
 	$parent = null;
 	findParentNode($xml, "", $prefix, $parent);
 	
-	if ($parent == null) {
-		?>
-		<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			The path <?php echo $prefix; ?> does not even exist in the profiles hierarchy.
-			<span style="display: none" id="AsyncQuerryResult">fail</span>
-		</div>
-		<?php
-		exit(1);
-	}
-	
-	if ($parent->type == "shadow") {
-		?>
-		<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			You cannot create a subprofile of a shadow profile.
-			<span style="display: none" id="AsyncQuerryResult">fail</span>
-		</div>
-		<?php
-		exit(1);
+	if ($name != '/live') {
+		if ($parent == null) {
+			?>
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				The path <?php echo $prefix; ?> does not even exist in the profiles hierarchy.
+				<span style="display: none" id="AsyncQuerryResult">fail</span>
+			</div>
+			<?php
+			exit(1);
+		}
+		
+		if ($parent->type == "shadow") {
+			?>
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				You cannot create a subprofile of a shadow profile.
+				<span style="display: none" id="AsyncQuerryResult">fail</span>
+			</div>
+			<?php
+			exit(1);
+		}
 	}
 	
 	/* ========= */
