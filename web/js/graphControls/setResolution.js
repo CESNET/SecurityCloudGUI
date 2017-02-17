@@ -1,7 +1,7 @@
 /**
  *  This function is called by setResolution(...).
  *  It's purpose is to find currently selected resolution,
- *  unselect it a return its index.
+ *  unselect it and return its index.
  */
 function unselectResolution(list) {
 	for (var i = 0; i < list.length; i++) {
@@ -40,10 +40,4 @@ function setResolution (type, value) {
 	
 	setGraphCenter(Graph.curTime1);							// Reset time window
 	acquireGraphData(updateGraph, true);					// Update stuff
-}
-
-function initResolution(value) {
-	var list = document.getElementById("DisplayResolutionList").getElementsByTagName("a");
-	list[resolutionPtr].className = "list-group-item active";
-	document.getElementById("DisplaySizePrint").innerHTML = list[resolutionPtr].innerHTML;
 }

@@ -91,11 +91,12 @@ function timeWindowHandle() {
 	var displ = document.getElementById("SelectedTimeBox");
 	
 	var str = Utility.timestampToNiceReadable(Graph.curTime1);
-	displ.innerHTML = (Graph.interval ? " from " : " at ") + str;
+	//displ.innerHTML = (Graph.interval ? " from " : " at ") + str;
+	displ.innerHTML = str;
 	
 	if(Graph.interval) {
 		str = Utility.timestampToNiceReadable(Graph.curTime2);
-		displ.innerHTML += " to " + str;
+		displ.innerHTML += " - " + str;
 	}
 	else {														// Compute whether the cursor is not too close to a border
 		var windowSize = timestampEnd - timestampBgn;			// Width of the graph window
@@ -110,30 +111,19 @@ function timeWindowHandle() {
 		}
 	}
 	
-	if (isToggled("Statistics")) collectStatistics();
+	if (statsVisible()) collectStatistics();
 }
 
 /* =================== */
 /* COMPUTE RENDER MODE */
 /* =================== */
 function computeRenderMode() {
-	var type = document.getElementsByName("renderType");
-	var style= document.getElementsByName("renderStyle");
+	var render = document.getElementsByName('render');
 	
-	var prms = {};
+	var i = 0;
+	while (!render[i].checked) i++;
 	
-	var i;
-	for(i = 0; i < type.length; i++) {
-		if(type[i].checked) break;
-	}
-	prms["type"] = i;
-	
-	for(i = 0; i < style.length; i++) {
-		if(style[i].checked) break;
-	}
-	prms["style"] = i;
-	
-	return prms;
+	return i;
 }
 
 /* ================ */
@@ -161,13 +151,18 @@ function initializeGraph(none) {
 	updateThumbs();
 	
 	Graph.updateSourcesVisibility("Channels");
+	
+	if (selBgn != -1) {
+		console.log("setting cursor to new position" + (selBgn != selEnd) + "; selBgn = " + selBgn + "; selEnd = " + selEnd);
+		Graph.updateCursor(selBgn, selEnd, selBgn != selEnd);
+	}
 }
 
 /* ============ */
 /* UPDATE GRAPH */
 /* ============ */
 /**
- * Updates the graph area. This functino is called from acquireGraphData
+ * Updates the graph area. This function is called from acquireGraphData
  * as a callback. overridePosition:bool specifies whether the position of the
  * cursor will be preserved (FALSE) or whether it will reset to the center (TRUE).
  */

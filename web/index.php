@@ -57,72 +57,17 @@
 	<?php include 'php/misc/topbar.php'; ?>
 
 	<!-- MODALS -->
-	<!-- Modal with fdistdump manpage -->
-	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php'; ?>
-	<!-- Modal window with profile view/add/delete dialogs -->
-	<?php include 'php/profiles/profilesModifyModal.php' ?>
-	
-	<?php include 'php/misc/lookup.php'; ?>
+	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php';	// Fdistdump manpage modal ?>
+	<?php include 'php/profiles/profilesModifyModal.php'	// Modal for profile management ?>
+	<?php include 'php/misc/lookup.php';					// IPaddr lookup ?>
+	<?php include 'php/graph/thumbGraphs.php';				// Graph thumbnails?>
 	
 	<!-- Page Content -->
 	<div id="page-content-wrapper">
 		<div class="container-fluid">
-			<div id="WindowWorkbench">
-				<!-- GRAPH TOGGLER -->
-				<?php
-					$label = "Graph";
-					include 'php/misc/toggler.php';
-				?>
-				<div id="WorkbenchGraph">
-					<!-- ACTIVE GRAPH + CHANNELS -->
-					<div class="row">
-						<div class="col-lg-10">
-							<?php include 'php/graph/activeGraph.php'; ?>
-						</div>
-						<div class="col-lg-2">
-							<?php include 'php/graph/channelSelection.php'; ?>
-							<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
-						</div>
-					</div>
-					
-					<!-- THUMB TOGGLER -->
-					<?php
-						$label = "Thumbnails";
-						include 'php/misc/toggler.php';
-					?>
-					<div id="WorkbenchThumbnails">
-						<?php include 'php/graph/thumbGraphs.php'; ?>		
-					</div>
-				</div>
-				
-				<!-- STATS TOGGLER -->
-				<?php
-					$label = "Statistics";
-					include 'php/misc/toggler.php';
-				?>
-				<div id="WorkbenchStatistics">
-					<div class="row">
-						<div class="col-lg-12" id="StatsContent"></div>
-					</div>
-				</div>
-				
-				<!-- DBQRY TOGGLER -->
-				<?php
-					$label = "Dbqry";
-					include 'php/misc/toggler.php';
-				?>
-				<div id="WorkbenchDbqry">
-					<div class="row">
-						<div class="col-lg-12">
-							<?php include 'php/dbqry/dbqry.php'; ?>
-						</div>
-					</div>
-				</div>
-			</div>
+			<?php include 'php/views/workbench.php'; ?>
 			
-			<div id="WindowProfileManager">
-				<?php include 'php/profiles/profiles.php'; ?>
-			</div>
+			<?php include 'php/views/profilemgr.php'; ?>
 		</div>
 	</div>
 	<!-- /#page-content-wrapper -->
@@ -139,34 +84,20 @@
 		var ARR_GRAPH_NAME = [<?php $size = sizeof($ARR_GRAPH_NAME); for($i = 0; $i < $size; $i++) echo "\"$ARR_GRAPH_NAME[$i]\", "; ?>];
 		var USE_LOCAL_TIME = <?php if ($USE_LOCAL_TIME) echo "true"; else echo "false"; ?>;
 		var HISTORIC_DATA =  <?php if ($HISTORIC_DATA) echo "true"; else echo "false"; ?>;
-		var PENDING_RESIZE_EVENT = false;
-		var SELECTED_WINDOW = "Graph";
+		var pendingResizeEvent = false;
 	
 		/* ================ */
 		/* GLOBAL VARIABLES */
 		/* ================ */
 		var graphData, graphLegend;
-		var timestampBgn, timestampEnd;
-		var resolutionPtr;
+		var timestampBgn = -1, timestampEnd = -1, selBgn = -1, selEnd = -1;
+		var resolutionPtr = -1;
 		var currentVar = 0;
+		var selWindow = "Workbench";
+		var pendingResizeEvent = false;
 	</script>
 	
-	<script src="js/thirdparty/jquery.js"></script>
-	<script src="js/thirdparty/bootstrap.min.js"></script>
-	<script src="js/thirdparty/moment-with-locales.min.js"></script>
-	<script src="js/thirdparty/bootstrap-datetimepicker.min.js"></script>
-	<script src="js/thirdparty/dygraph-combined.min.js"></script>
-	
-	<script src="js/utility.js"></script>									<!-- Utility class -->
-	<script src="js/graph.js"></script>											<!-- Graph class -->
-	<script src="js/graphControls/setGraphCenter.js"></script>
-	<script src="js/graphControls/setResolution.js"></script>
-	<script src="js/graphControls/graphMoveStep.js"></script>
-	<script src="js/graphControls.js"></script>
-	<script src="js/dbqry.js"></script>
-	<script src="js/transactions.js"></script>
-	<script src="js/misc.js"></script>											<!-- gotoPage() -->
-	<script src="js/profiles.js"></script>
+	<?php include "php/misc/jsInclude.php"; ?>
 
 	<!-- Menu Toggle Script -->
 	<script>
@@ -174,13 +105,20 @@
 	/* DOCUMENT READY STUFF */
 	/* ==================== */
 	$(document).ready(function(){
-		/* CALLBACKS */
+		$(document).ready(function() {
+			$('#Option_AggregateList_1').multiselect( { enableFiltering: true, maxHeight: 200, } );
+		});
+
+		
 		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
 			format: "YYYY-MM-DD HH:mm",									// ISO time format
 			useCurrent: true,
 			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),	// Can't select time in the future
 			sideBySide: true,											// For seeing days and daytime side by side
 			ignoreReadonly: true,										// Because the input field is readonly
+			toolbarPlacement: 'top',
+			showClose: true,
+			icons: { close: 'glyphicon glyphicon-ok' },
 		});
 		$('#TimePicker').on(											// Register onhide event callback for datetimepicker
 			"dp.hide",
@@ -190,61 +128,51 @@
 			}
 		);
 		$(window).resize(function(){									// Register callback (reset cursor position if window was resized)
-			if (!isToggled("Graph") || SELECTED_WINDOW != "Workbench") {
-				PENDING_RESIZE_EVENT = true;
+			if (selectedWindow != "Workbench") {
+				pendingResizeEvent = true;
 				Graph.miniature.resize();
 			}
 			else							resizeGraph();
 		});
 		
-		gotoWindow("Workbench");
+		// *** PARSE URL PARAMS ***
+		<?php
+		if (isset($_GET['tbgn']) && isset($_GET['tend']) && isset($_GET['tres'])) {
+			echo 'timestampBgn =',$_GET['tbgn'],';';
+			echo 'timestampEnd =',$_GET['tend'],';';
+			echo 'resolutionPtr=',$_GET['tres'],';';
+		}
 		
-		/* NEMEA HOOK */
-		<?php if (isset($_GET['source']) && $_GET['source'] == "nemea") { ?>
-			// Grab time selection
-			var selBgn = <?php echo $_GET['sel_bgn']; ?>;
-			var selEnd = <?php echo (isset($_GET['sel_end']) ? $_GET['sel_end'] : 'cursorLeft'); ?>;
-			var selCtr = (selBgn + selEnd) / 2;
+		if (isset($_GET['start'])) {
+			// *** GRAB CURSOR SELECTION ***
+			echo 'selBgn = ',$_GET['start'],';';
+			if (isset($_GET['end']))	echo 'selEnd = ',$_GET['end'],';';
+			else						echo 'selEnd = selBgn;';
+			?>
 			
-			// Find correct resolution
-			var dist = (selEnd - selBgn) / 3600; // Size of the window in hours
-			for (resolutionPtr = 0; resolutionPtr < ARR_RESOLUTION.length; resolutionPtr++) {
-				if (ARR_RESOLUTION[resolutionPtr] > dist) break;
+			if (timestampBgn == -1 || timestampEnd == -1 || resolutionPtr == -1) {
+				Core.computeTimeWindow();
+				Core.computeResolution();
 			}
-			
-			// Select proper border timestamps
-			
-			// Toggle tabs
-			toggleTab("Graph");
-			toggleTab("Thumbnails");
-			toggleTab("Statistics");
-		<?php } else { ?> /* NORMAL START */
-			<?php if (isset($_GET['begin']) && isset($_GET['end'])) {	// Custom time window
-				echo 'timestampBgn = ',$_GET['begin'],';';
-				echo 'timestampEnd = ',$_GET['end'],';';
-			}
-			else {
-				echo 'timestampBgn = Utility.getCurrentTimestamp()-(24*3600);';
-				echo 'timestampEnd = Utility.getCurrentTimestamp();';
-			} ?>
-			
-			<?php if (isset($_GET['res'])) {							// Custom resolution
-				echo 'resolutionPtr = ',$_GET['res'],';';
-			}
-			else {
-				echo 'resolutionPtr = 2;';
-			} ?>		
+			<?php
+		}
 		
-			toggleTab("Thumbnails");
-			toggleTab("Statistics");
-			toggleTab("Dbqry");
-		<?php } ?>
+		if (isset($_GET['filter'])) {
+			echo 'document.getElementById(\'Dbqry_Filter_1\').innerHTML = "',$_GET['filter'],'";';
+			echo 'location.href = "#"; location.href = "#WorkbenchDbqry";';
+		}
+		?>
 		
-		/* RESOLUTION INIT */
-		initResolution(resolutionPtr);
+		// *** FALLBACK TO DEFAULTS IF SOMETHING IS UNSET ***
+		if (resolutionPtr == -1)						Default.setResolution();
+		if (timestampBgn == -1 || timestampEnd == -1)	Default.setTimeWindow();
 		
-		/* INIT GRAPH */
-		acquireGraphData(initializeGraph, null);
+		// *** SANITY CHECK ***
+		Core.sanityCheck();
+		
+		// *** ALL SET, INITIALIZE ***
+		Core.initResolution(resolutionPtr);		
+		Core.initWorkbench();
 	});
 	</script>
 </body>

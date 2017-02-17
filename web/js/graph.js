@@ -86,6 +86,13 @@ var Graph = {
 		Graph.placeCursor(cursor, row);
 	},
 	
+	showHighlight: function(timeA, timeB) {
+		var rowA = Math.floor ((timeA - this.beginTime) / this.stepTime);
+		var rowB = Math.floor ((timeB - this.beginTime) / this.stepTime);
+		
+		Graph.curspan.style.width = ((rowB - rowA) * this.ppr) + "px";
+	},
+	
 	initAreaValues: function () {
 		this.area	= this.dygraph.getArea();
 		this.rows	= this.dygraph.numRows();
@@ -124,32 +131,18 @@ var Graph = {
 					},
 				},
 			},
-			stackedGraph: render["type"],
-			fillGraph: render["style"],
+			stackedGraph: render,
+			fillGraph: render,
 			labelsKMG2: true,		// Kilo, Mega, Giga notations
 			labelsUTC: !USE_LOCAL_TIME,		// Hopefully, it'll fix the off-by-one hour
 			highlightCircleSize: 5,
 			panEdgeFraction: 0.1,
+			//plotter: barChartPlotter,
 			interactionModel: {},
 		};
 		this.dygraph = new Dygraph(document.getElementById(canvasDomId), gData, options);
 		
 		Graph.initAreaValues();
-		
-		var options2 = {
-			colors: this.generateColours(gLegend.length - 1),
-			labels: gLegend,
-			legend: 'never',
-			axes : {
-				y : { drawAxis: false, drawGrid: true,},
-				x : { drawAxis: false, drawGrid: true,},
-			},
-			stackedGraph: true,
-			fillGraph: true,
-			panEdgeFraction: 0.1,
-			interactionModel: {},
-		};
-		this.miniature = new Dygraph(document.getElementById("miniDygraph"), gData, options2);
 	},
 	
 	/**
@@ -221,8 +214,7 @@ var Graph = {
 	/* UPDATE FUNC */
 	/* =========== */
 	update: function(newData, newTitle, render) {
-		this.dygraph.updateOptions( {file: newData, ylabel: newTitle, stackedGraph: render["type"], fillGraph: render["style"]} );
-		//this.miniature.updateOptions( {file: newData,} );
+		this.dygraph.updateOptions( {file: newData, ylabel: newTitle, stackedGraph: render, fillGraph: render} );
 		
 		Graph.initAreaValues();
 	},
@@ -239,8 +231,12 @@ var Graph = {
 		this.interval = interval;
 		
 		if (this.interval) {
-			Graph.timeToRow(this.curspan, newTimeA);
 			Graph.timeToRow(this.cursor2, newTimeB);
+			this.cursor2.style.display = "";
+			
+			Graph.timeToRow(this.curspan, newTimeA);
+			this.curspan.style.display = "";
+			this.showHighlight(newTimeA, newTimeB);
 		}
 	},
 	
@@ -252,7 +248,7 @@ var Graph = {
 	*	\see createGraph()
 	*/
 	updateRenderMode: function(prms) {
-		this.dygraph.updateOptions( { stackedGraph: prms["type"], fillGraph: prms["style"]} );
+		this.dygraph.updateOptions( { stackedGraph: prms, fillGraph: prms,} );
 	},
 	
 	/**

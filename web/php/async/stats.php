@@ -99,7 +99,7 @@ $statsRate = array();
 $statsSums = array();
 $totalRate = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 $totalSums = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-$names = array("Flows", "Packets", "Traffic");
+$names = array("Flows", "Packets", "Bytes");
 $srcs = explode(':', $src);
 $srcsSize = (int)sizeof($srcs);
 $segm;	// Backup constant for computing $totalRate properly
@@ -117,15 +117,17 @@ for ($s = 0; $s < $srcsSize; $s++) {
 	}
 
 	$buffer = "";															// Stdout buffer
-	if(is_resource($p)) {												
+	if(is_resource($p)) {
 		while($f = fgets($pipes[1])) {										// While any stdout is inbound
 			$buffer .= $f;													// Buffer it
 		}
 	}
-
+	
 	$segments = explode(';', $buffer);
 	$segmentsSize = (int)sizeof($segments) - 1;
 
+	//var_dump($segments);
+	
 	$statsRate[$s] = array();
 	$statsSums[$s] = array();
 	for ($i = 0; $i < 15; $i++) {
@@ -135,6 +137,8 @@ for ($s = 0; $s < $srcsSize; $s++) {
 	for ($i = 0; $i < $segmentsSize; $i++) {
 		$vars = explode(',', $segments[$i]);
 		$varsSize = (int)sizeof($vars);
+		
+		//var_dump($vars);
 		
 		if ($varsSize != 20) {
 			echo "Unknown error occured.\n";
@@ -164,8 +168,10 @@ for($i = 0; $i < 15; $i++) {
 	else			$totalRate[$i] = 0;
 }
 
+/*
 echo '<div class=\'panel panel-primary\'>';
 echo '<div class=\'panel-heading\' id=\'StatsContentHeader\'></div></div>'; // content will be added by JS
+*/
 
 /* COMPUTE WHICH ROWS OF EACH SET (Flows, Packets, Traffic) has the most significant sum of values (All protos) */
 $maxima = array(0, 0, 0);
@@ -179,7 +185,7 @@ for ($i = 0; $i < 3; $i++) {
 echo '<div class=\'row\'>';
 for($i = 0; $i < 3; $i++) {
 	echo '<div class=\'col-md-4\'>';
-	echo '<div class=\'panel panel-primary\'>';
+	echo '<div class=\'panel panel-info\'>';
 	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
 	echo '<div class=\'panel-body\'>';
 	echo '<table class=\'table table-striped table-condensed table-hover\'>';
@@ -200,7 +206,7 @@ echo '</div>';
 echo '<div class=\'row\'>';
 for($i = 0; $i < 3; $i++) {
 	echo '<div class=\'col-md-4\'>';
-	echo '<div class=\'panel panel-primary\'>';
+	echo '<div class=\'panel panel-info\'>';
 	echo '<div class=\'panel-heading\'>',$names[$i],'</div>';
 	echo '<div class=\'panel-body\'>';
 	echo '<table class=\'table table-striped table-condensed table-hover\'>';

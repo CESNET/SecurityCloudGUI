@@ -158,9 +158,11 @@ var Profile = {
 		// Now we have to create a link to change location to
 		// At this point we only need the timestamps (and the resolution)
 		var address = "index.php?profile=" + name;
-		address += "&begin=" + timestampBgn;
-		address += "&end=" + timestampEnd;
-		address += "&res=" + resolutionPtr;
+		address += "&tbgn=" + timestampBgn;
+		address += "&tend=" + timestampEnd;
+		address += "&tres=" + resolutionPtr;
+		address += "&start=" + Graph.curTime1;
+		if (Graph.interval) address += "&end=" + Graph.curTime2;
 		
 		// alert(address);
 		location.assign(address);

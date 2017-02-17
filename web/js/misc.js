@@ -1,7 +1,7 @@
 /**
  *  @brief Async function for grabbing graph statistics
  *  
- *  @return None, but "StatsContent" object will be updated with result output
+ *  @return Nothing, but "StatsContent" object will be updated with result output
  *  
  *  @details Selects all available channels and collects a rrd based stats for selected time.
  */
@@ -24,11 +24,11 @@ function collectStatistics() {
 		if (ajax.readyState == 4) {
 			document.getElementById("StatsContent").innerHTML = ajax.responseText;
 			
-			var txt = "Statistics for: " + Utility.timestampToNiceReadable(Graph.curTime1);
+			/*var txt = "Statistics for: " + Utility.timestampToNiceReadable(Graph.curTime1);
 			if(Graph.interval) {
 				txt += " - " + Utility.timestampToNiceReadable(Graph.curTime2);
 			}
-			document.getElementById("StatsContentHeader").innerHTML = txt;
+			document.getElementById("StatsContentHeader").innerHTML = txt;*/
 		}
 	}
 	
@@ -52,46 +52,30 @@ function gotoWindow(id) {
 	document.getElementById("Window" + id).style.display = "";
 	document.getElementById("TopbarLink" + id).className = "active";
 	
-	SELECTED_WINDOW = id;
-	if (id == "Workbench" && PENDING_RESIZE_EVENT) {
+	selectedWindow = id;
+	if (id == "Workbench" && pendingResizeEvent) {
 		resizeGraph();
-		PENDING_RESIZE_EVENT = false;
+		pendingResizeEvent = false;
 	}
 }
 
-function toggleTab(tab) {
-	var elem = document.getElementById("Workbench" + tab);
-	var panel = document.getElementById("Toggler" + tab);
+function toggleStats() {
+	var elem = document.getElementById("StatsToggleArea");
+	var chvr = document.getElementById("StatsToggleChevron");
 	
 	if (elem.style.display == "none") {
 		elem.style.display = "";
-		panel.className = "glyphicon glyphicon-chevron-up";
-		location.href = "#";
-		location.href = "#TogglerAnchor" + tab;
+		chvr.className = "glyphicon glyphicon-chevron-up";
+		collectStatistics();
 	}
 	else {
 		elem.style.display = "none";
-		panel.className = "glyphicon glyphicon-chevron-down";
+		chvr.className = "glyphicon glyphicon-chevron-down";
 	}
-	
-	if (tab == "Graph") {
-		if (elem.style.display == "none") {
-			document.getElementById("GraphMiniArea").style.display = "";
-			Graph.miniature.updateOptions({file: graphData,});
-			Graph.miniature.resize();
-		}
-		else document.getElementById("GraphMiniArea").style.display = "none";
-		
-		if (PENDING_RESIZE_EVENT) {
-			resizeGraph();
-			PENDING_RESIZE_EVENT = false;
-		}
-	}
-	else if (tab == "Statistics" && isToggled("Statistics")) collectStatistics();
 }
 
-function isToggled(tab) {
-	return document.getElementById("Workbench" + tab).style.display != "none";
+function statsVisible() {
+	return document.getElementById("StatsToggleArea").style.display != "none";
 }
 
 /**

@@ -1,0 +1,20 @@
+<script src="js/thirdparty/jquery.js"></script>
+<script src="js/thirdparty/bootstrap.min.js"></script>
+<script src="js/thirdparty/moment-with-locales.min.js"></script>
+<script src="js/thirdparty/bootstrap-datetimepicker.min.js"></script>
+<script src="js/thirdparty/dygraph-combined.min.js"></script>
+<script src="js/thirdparty/bootstrap-multiselect.js"></script>
+
+<script src="js/utility.js"></script>									<!-- Utility class -->
+<script src="js/barchart.js"></script>
+<script src="js/graph.js"></script>										<!-- Graph class -->
+<script src="js/graphControls/setGraphCenter.js"></script>
+<script src="js/graphControls/setResolution.js"></script>
+<script src="js/graphControls/graphMoveStep.js"></script>
+<script src="js/graphControls.js"></script>
+<script src="js/dbqry.js"></script>
+<script src="js/transactions.js"></script>
+<script src="js/misc.js"></script>										<!-- gotoPage() -->
+<script src="js/profiles.js"></script>
+<script src="js/core.js"></script>
+<script src="js/default.js"></script>

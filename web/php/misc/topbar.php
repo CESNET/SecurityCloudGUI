@@ -1,12 +1,12 @@
 <?php
-	function printProfileDropdown($object, $level) {
+	function _printProfileDropdown($object, $level) {
 		$str = preg_replace('/^\/[a-zA-Z0-9_\/]+\//', "", $object->getName());
 		echo '<li><a href=\'#\' onclick=\'Profile.changeLocation("',$object->getName(),'");\'>';
 		for ($i = 0; $i < $level; $i++) echo '-';
 		echo ' ',$str,'</a></li>';
 		
 		foreach($object->getChildren() as $o) {
-			printProfileDropdown($o, $level + 1);
+			_printProfileDropdown($o, $level + 1);
 		}
 	}
 ?>
@@ -29,7 +29,7 @@
 						foreach ($ARR_AVAILS as $av) {
 							$object = null;
 							searchForProfile($TREE_PROFILE, $av, $object);
-							printProfileDropdown($object, 0);
+							_printProfileDropdown($object, 0);
 						}
 						?>
 					</ul>

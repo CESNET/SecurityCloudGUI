@@ -6,6 +6,7 @@
 
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<link href="css/bootstrap-multiselect.css" rel="stylesheet">
 <link href="css/globals.css" rel="stylesheet">
 <link href="css/dropdown-submenu.css" rel="stylesheet">
 <link href="css/flags.css" rel="stylesheet">

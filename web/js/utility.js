@@ -45,7 +45,7 @@ var Utility = {
 	// It was used for formatting the timestamps into
 	// at-time format before fdistdump started to
 	// accept unix timestamps
-	timestampToFdistdump: function(timestamp) {
+	_timestampToFdistdump: function(timestamp) {
 		var d = new Date(timestamp * 1000);
 		return ('0'+d.getDate()).slice(-2)+"."+('0'+d.getMonth()).slice(-2)+"."+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
 	},
@@ -64,21 +64,8 @@ var Utility = {
 		return d.getFullYear() + "-" + ('0'+(d.getMonth()+1)).slice(-2) + "-" + ('0'+d.getDate()).slice(-2) + " " +('0'+d.getHours()).slice(-2) + ":" + ('0'+d.getMinutes()).slice(-2);
 	},
 	
-	// Accepts UNIX timestamp
-	// Outputs time in DD Mon YYYY HH:MM format
-	// Deprecated because ISO stadard was requested
-	_timestampToNiceReadable: function(timestamp) {
-		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		var d = new Date(timestamp * 1000);
-		return month[d.getMonth()]+" "+('0'+d.getDate()).slice(-2)+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
-	},
-	
-	// Accepts Javascript timestamp
-	// Outputs time in DD Mon YYYY HH:MM format
-	// Deprecated because ISO stadard was requested
-	_JStimestampToNiceReadable: function(timestamp) {
-		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		var d = new Date(timestamp);
-		return month[d.getMonth()]+" "+('0'+d.getDate()).slice(-2)+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
+	openInNewTab : function (url) {
+		var win = window.open(url, '_blank');
+		win.focus();
 	},
 }

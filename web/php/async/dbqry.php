@@ -39,7 +39,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$src = "";
 	for ($i = 0; $i < sizeof($srcArr); $i++) {
 		$src .= $srcArr[$i].' ';
-	}
+	}	
 	
 	/* SEARCH FOR SELECTED SUBPROFILE ROOT */
 	$aux = null;
@@ -103,7 +103,8 @@ function execDbRequest() {														// This gets called when this thread is 
 		2 => array ('pipe', 'w')
 	);
 	$pipes = array();
-	// OLD WAY: $cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA."$profile/channels/" : $IPFIXCOL_DATA."$profile/";
+	
+	// OLD WAD: $cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA."$profile/channels/" : $IPFIXCOL_DATA."$profile/";
 	$cwd = $IPFIXCOL_DATA."$profile/channels/";
 	
 	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');							// Apply mutex, so the transaction file can only be modified by this thread
@@ -173,14 +174,11 @@ function execDbRequest() {														// This gets called when this thread is 
 	*/
 	
 	// BOOTSTRAP CODE:
-	echo '<div class=\'panel panel-info\'>';								// Print info about used parameters
-	echo '<div class=\'panel-heading\'>Query parameters</div>';			// Heading will be light blue
-	echo '<div class=\'panel-body\'><pre>',$cmdBackup,'</pre></div>';		// Print commands
-	echo '</div>';
+	echo '<div class=\'panel panel-info\'>';
+	echo '<div class=\'panel-heading\'><div class=\'row\'><div class=\'col-md-11\'>Output</div><div class=\'col-md-1\'><a href=\'#\' onclick=\'Local_clearTab("1");\'>Clear results</a></div></div></div>';
+	echo '<div class=\'panel-body\'><pre>',$cmdBackup,'</pre><pre>';
+	
 	if (strlen($buffer) > 0) {
-		echo '<div class=\'panel panel-success\'>';							// Print stdout from fdistdump
-		echo '<div class=\'panel-heading\'>Query output</div>';			// Heading will be dark blue
-		echo '<div class=\'panel-body\'><pre>';
 		$auxbuf = "";
 		$size = strlen($buffer);
 		for ($i = 0; $i < $size; $i++) {
@@ -202,15 +200,13 @@ function execDbRequest() {														// This gets called when this thread is 
 				$auxbuf .= $buffer[$i];
 			}
 		}
-		echo '</pre></div></div>';											// Print stdout
 	}
-	if(strlen($errlog) > 0) {
-?>
-<div class='panel panel-danger'>
-	<div class='panel-heading'>Query errors</div>
-	<div class='panel-body'><pre><?php echo $errlog; ?></pre></div>
-</div>
-<?php }
+	
+	echo '</pre>';
+	
+	if (strlen($errlog) > 0) {
+		echo '<pre>',$errlog,'</pre>';
+	}
 }
 
 $mode	= $_GET['mode'];
