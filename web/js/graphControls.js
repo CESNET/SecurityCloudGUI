@@ -91,7 +91,6 @@ function timeWindowHandle() {
 	var displ = document.getElementById("SelectedTimeBox");
 	
 	var str = Utility.timestampToNiceReadable(Graph.curTime1);
-	//displ.innerHTML = (Graph.interval ? " from " : " at ") + str;
 	displ.innerHTML = str;
 	
 	if(Graph.interval) {

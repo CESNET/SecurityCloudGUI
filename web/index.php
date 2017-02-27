@@ -106,7 +106,7 @@
 	/* ==================== */
 	$(document).ready(function(){
 		$(document).ready(function() {
-			$('#Option_AggregateList_1').multiselect( { enableFiltering: true, maxHeight: 200, } );
+			$('#Option_AggregateList_1').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%', } );
 		});
 
 		
