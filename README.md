@@ -135,9 +135,6 @@ Please, do read the disclaimer before deleting the live profile. The live profil
 ### I want to restrict selected profiles for selected users only
 This feature is currently in development.
 
-### Selecting channels in the fdistdump has no effect
-Correct, it hasn't. Ipfixcol currently cannot export separate channels. For the same reason the statistics are only for all channels together.
-
 ### Shadow profiles don't work
 Correct, they don't. But they will.
 
@@ -145,5 +142,4 @@ Correct, they don't. But they will.
 Following features are expected to be implemented in the future:
 
 * shadow profiles
-* channel selection in fdistdump queries (currently the selection has no effect)
 * user control and profile restriction
