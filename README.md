@@ -145,5 +145,4 @@ Correct, they don't. But they will.
 Following features are expected to be implemented in the future:
 
 * shadow profiles
-* channel selection in fdistdump queries (currently the selection has no effect)
 * user control and profile restriction
