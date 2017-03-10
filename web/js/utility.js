@@ -2,10 +2,13 @@ var Utility = {
 	/* ===================== */
 	/* GET CURRENT TIMESTAMP */
 	/* ===================== */
+	/* This timestamp is rounded to full five minutes interval and moved five minutes
+	to the past simply because current interval is not finished and thus it should not
+	be accessible for any querying. */
 	getCurrentTimestamp: function() {
 		var d = new Date();
 		var timestamp = Math.floor(d.getTime() / 1000);
-		timestamp -= timestamp % 300;
+		timestamp -= ((timestamp % 300) + 300);
 		return timestamp;
 	},
 
@@ -42,7 +45,7 @@ var Utility = {
 	// It was used for formatting the timestamps into
 	// at-time format before fdistdump started to
 	// accept unix timestamps
-	timestampToFdistdump: function(timestamp) {
+	_timestampToFdistdump: function(timestamp) {
 		var d = new Date(timestamp * 1000);
 		return ('0'+d.getDate()).slice(-2)+"."+('0'+d.getMonth()).slice(-2)+"."+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
 	},
@@ -61,21 +64,8 @@ var Utility = {
 		return d.getFullYear() + "-" + ('0'+(d.getMonth()+1)).slice(-2) + "-" + ('0'+d.getDate()).slice(-2) + " " +('0'+d.getHours()).slice(-2) + ":" + ('0'+d.getMinutes()).slice(-2);
 	},
 	
-	// Accepts UNIX timestamp
-	// Outputs time in DD Mon YYYY HH:MM format
-	// Deprecated because ISO stadard was requested
-	_timestampToNiceReadable: function(timestamp) {
-		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		var d = new Date(timestamp * 1000);
-		return month[d.getMonth()]+" "+('0'+d.getDate()).slice(-2)+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
-	},
-	
-	// Accepts Javascript timestamp
-	// Outputs time in DD Mon YYYY HH:MM format
-	// Deprecated because ISO stadard was requested
-	_JStimestampToNiceReadable: function(timestamp) {
-		var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-		var d = new Date(timestamp);
-		return month[d.getMonth()]+" "+('0'+d.getDate()).slice(-2)+" "+d.getFullYear()+" "+('0'+d.getHours()).slice(-2)+":"+('0'+d.getMinutes()).slice(-2);
+	openInNewTab : function (url) {
+		var win = window.open(url, '_blank');
+		win.focus();
 	},
 }

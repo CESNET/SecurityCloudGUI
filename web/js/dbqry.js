@@ -20,6 +20,20 @@ function Dbqry_parseSelectedTime() {
 	return timeSpec;
 }
 
+function Dbqry_getAggregation(tab) {
+	var sel = document.getElementById("Option_AggregateList_" + tab);
+	
+	var str = "";
+	for (var i = 0, L = sel.options.length; i < L; i++) {
+		if (sel.options[i].selected) {
+			if (i == 0) str = sel.options[i].value;
+			else		str += "," + sel.options[i].value;
+		}
+	}
+	
+	return str;
+}
+
 function Dbqry_parseQuerryParameter(tab) {
 	if (document.getElementById("DbMainOptPicker_"+tab).getElementsByTagName("li")[0].className == "active") {
 		/* Time window */
@@ -30,10 +44,8 @@ function Dbqry_parseQuerryParameter(tab) {
 		var limitTo = limitSel.options[limitSel.selectedIndex].value;
 	
 		/* Aggregation */
-		var aggreg = "";
-		if (document.getElementById("Option_AggregateList_"+tab).value != "") {
-			aggreg = "-a "+document.getElementById("Option_AggregateList_"+tab).value;	// "-a field1,field2,field3"
-		}
+		var aggreg = Dbqry_getAggregation(tab);
+		if (aggreg != "")	aggreg = "-a " + aggreg;	// "-a field1,field2,field3"
 	
 		/* Order by */
 		var orderSel = document.getElementById("Option_OrderBy_"+tab);

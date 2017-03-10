@@ -1,6 +1,6 @@
 <div class="row row-eq-height">
 	<div class="col-md-2">
-		<div class="panel panel-primary">
+		<div class="panel panel-info">
 			<div class="panel-heading">
 				Channels
 			</div>
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 	<div class="col-md-4">
-		<div class="panel panel-primary">
+		<div class="panel panel-info">
 			<div class="panel-heading">
 				Filter
 			</div>
@@ -30,7 +30,7 @@
 		</div>
 	</div>
 	<div class="col-md-6">
-		<div class="panel panel-primary">
+		<div class="panel panel-info">
 			<div class="panel-body bg-info" style="padding: 0px;">
 				<ul class="nav nav-pills nav-justified" id="DbMainOptPicker_<?php echo $tab; ?>">
 					<li class="active"><a data-toggle="pill" href="#DbMainOpt1_<?php echo $tab; ?>">Fast Options</a></li>
@@ -39,7 +39,7 @@
 			</div>
 			<div class="panel-body">
 				<div class="tab-content">
-					<div id="DbMainOpt1_<?php echo $tab; ?>" class="tab-pane fade in active">
+					<div id="DbMainOpt1_<?php echo $tab; ?>" class="tab-pane fade in active clearfix">
 						<?php include 'dbgryOptions.php'; ?>
 					</div>
 					<div id="DbMainOpt2_<?php echo $tab; ?>" class="tab-pane fade">
@@ -50,7 +50,7 @@
 			</div>
 			<div class="panel-footer">
 				<button class="btn btn-default btn-block" id="Dbqry_ProcessButton_<?php echo $tab; ?>" onclick="Dbqry_processRequest('<?php echo $tab; ?>');">Process request</button>
-				<button class="btn btn-default btn-block" id="Dbqry_StopButton_<?php echo $tab; ?>" onclick="Dbqry_stopRequest('<?php echo $tab; ?>');" style="display:none;">Kill request</button>
+				<button class="btn btn-danger btn-block" id="Dbqry_StopButton_<?php echo $tab; ?>" onclick="Dbqry_stopRequest('<?php echo $tab; ?>');" style="display:none;">Kill request</button>
 			</div>
 		</div>
 	</div>

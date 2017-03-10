@@ -1,56 +1,38 @@
-<script>
-	function Local_addItemToList(self, tab) {
-		var input = document.getElementById("Option_AggregateList_"+tab);
-		
-		if (input.value != "") {
-			input.value += ",";
-		}
-		input.value += self.options[self.selectedIndex].value;
-	}
-</script>
-
-<div class="row">
-	<div class="col-sm-2">
-		<b>Limit to:</b>
-	</div>
-	<div class="col-sm-4">
-		<select id="Option_LimitTo_<?php echo $tab; ?>" class="form-control">
-			<?php
-			$size = sizeof($ARR_OPTIONS_CODE_LIMITTO);
-			for($i = 0; $i < $size; $i++) {
-				echo '<option value=\'',$ARR_OPTIONS_CODE_LIMITTO[$i],'\'';
-				if($i == 0) echo ' selected';
-				echo '>',$ARR_OPTIONS_NAME_LIMITTO[$i],'</option>';
-			}
-			?>
-		</select>
-	</div>
-	<div class="col-sm-6">
-		records
-	</div>
+<div class="row" style="vertical-align: middle;">
+	<div class="col-lg-6"><div class="row">
+		<div class="col-sm-4">
+			<b>Limit to:</b>
+		</div>
+		<div class="col-sm-8">
+			<select id="Option_LimitTo_<?php echo $tab; ?>" class="form-control">
+				<?php
+				$size = sizeof($ARR_OPTIONS_CODE_LIMITTO);
+				for($i = 0; $i < $size; $i++) {
+					echo '<option value=\'',$ARR_OPTIONS_CODE_LIMITTO[$i],'\'';
+					if($i == 0) echo ' selected';
+					echo '>',$ARR_OPTIONS_NAME_LIMITTO[$i],'</option>';
+				}
+				?>
+			</select>
+		</div>
+	</div></div>
+	<div class="col-lg-6"><div class="row">
+		<div class="col-sm-4">
+			<b>Aggregate:</b>
+		</div>
+		<div class="col-sm-8">
+			<select id="Option_AggregateList_<?php echo $tab; ?>" multiple="multiple" class="form-control">
+				<?php
+				$size = sizeof($ARR_OPTIONS_NAME_FIELDS);
+				for($i = 0; $i < $size; $i++) {
+					echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>';
+				}
+				?>
+			</select>
+		</div>
+	</div></div>
 </div>
-<div class="row">
-	<div class="col-sm-2">
-		<b>Aggregate:</b>
-	</div>
-	<div class="col-sm-4">
-		<input type="text" class="form-control" id="Option_AggregateList_<?php echo $tab; ?>">
-	</div>
-	<div class="col-sm-2">
-		add
-	</div>
-	<div class="col-sm-4">
-		<select onchange="Local_addItemToList(this, <?php echo $tab; ?>);" class="form-control">
-			<?php
-			$size = sizeof($ARR_OPTIONS_NAME_FIELDS);
-			for($i = 0; $i < $size; $i++) {
-				echo '<option value=\'',$ARR_OPTIONS_NAME_FIELDS[$i],'\' title=\'',$ARR_OPTIONS_HINT_FIELDS[$i],'\'>',$ARR_OPTIONS_NAME_FIELDS[$i],'</option>';
-			}
-			?>
-		</select>
-	</div>
-</div>
-<div class="row">
+<div class="row" style="vertical-align: middle;">
 	<div class="col-sm-2">
 		<b>Order by:</b>
 	</div>
@@ -66,7 +48,7 @@
 		</select>
 	</div>
 	<div class="col-sm-2">
-	direction
+		<b>Direction:</b>
 	</div>
 	<div class="col-sm-4">
 		<select id="Option_OrderDirection_<?php echo $tab; ?>" class="form-control">
@@ -76,7 +58,7 @@
 		</select>
 	</div>
 </div>
-<div class="row">
+<div class="row" style="vertical-align: middle;">
 	<div class="col-sm-2">
 		<b>Output:</b>
 	</div>

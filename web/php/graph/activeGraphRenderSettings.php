@@ -1,19 +1,13 @@
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		Graph Rendering
-	</div>
-	
-	<div class="panel-body">
-		<p>
-			Render style<br>
-			<label><input type='radio' name='renderStyle' onclick="Graph.updateRenderMode(computeRenderMode());"> Lines</label>
-			<br>
-			<label><input type='radio' name='renderStyle' checked onclick="Graph.updateRenderMode(computeRenderMode());"> Areas</label>
-			<hr>
-			Render type<br>
-			<label><input type='radio' name='renderType' onclick="Graph.updateRenderMode(computeRenderMode());"> Comparative</label>
-			<br>
-			<label><input type='radio' name='renderType' checked onclick="Graph.updateRenderMode(computeRenderMode());"> Stacked</label>
-		</p>
-	</div>
+<div class="well well-sm text-center">
+	<label><input type='radio' name='render' onclick="Graph.updateRenderMode(computeRenderMode());">&nbsp;Line</label>
+	&nbsp;&nbsp;&nbsp;
+	<label><input type='radio' name='render' checked onclick="Graph.updateRenderMode(computeRenderMode());">&nbsp;Stacked</label>
+	<!--div class="row">
+		<div class="col-xs-6">
+			<label><input type='radio' name='render' onclick="Graph.updateRenderMode(computeRenderMode());">&nbsp;Line</label>
+		</div>
+		<div class="col-xs-6">
+			<label><input type='radio' name='render' checked onclick="Graph.updateRenderMode(computeRenderMode());">&nbsp;Stacked</label>
+		</div>
+	</div-->
 </div>

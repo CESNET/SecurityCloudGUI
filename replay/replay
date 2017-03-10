@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# *** PATH DEFINITIONS ***
+RRDTOOL="/opt/rrdtool/bin/rrdtool"
+MPI_MODULE="mpi/mpich-3.2-x86_64"
+DATA_DIR="/data/live"
+
+# *** PARAMETERS ***
+REPLAY_DIR="$1"
+PROFILE_NM="$2"
+CHANNELS=$(cd $REPLAY_DIR && ls -d */)
+CHANBUF=""
+
+# *** INITIALIZATION ***
+make
+module load $MPI_MODULE
+mkdir -p $DATA_DIR/$PROFILE_NM/channels
+mkdir -p $DATA_DIR/$PROFILE_NM/rrd/channels
+
+# *** WORK LOOP ***
+for ch in $CHANNELS
+do
+	ch=$(echo $ch | sed -r 's/\///')
+	$RRDTOOL restore template.xml template.rrd --force-overwrite
+	$RRDTOOL create $ch.rrd --template template.rrd --start 723168000
+	for x in $(find $REPLAY_DIR/$ch -type f | egrep 'nfcapd')
+	do
+		crop=$(echo $x | sed -r 's/^.*\///')
+		cmd=$(mpiexec -n 2 fdistdump --output-format=csv --fields=pkts,bytes,proto --output-volume-conv=none $x | tail -n +2 | tr ',' ' ' | ./cmprrd $ch.rrd $crop)
+		npath=$(./nftopath $crop)
+		
+		#echo $cmd
+		eval $cmd && echo "Success for $crop";
+		mkdir -p $DATA_DIR/$PROFILE_NM/channels/$ch/$npath
+		cp $x $DATA_DIR/$PROFILE_NM/channels/$ch/$npath/$crop
+	done
+	
+	mv $ch.rrd $DATA_DIR/$PROFILE_NM/rrd/channels/
+	
+	CHANBUF=$(echo "$CHANBUF $ch")
+done
+
+echo "If everything went well (see above output for error details)"
+echo "then you can add a new profile from within SecurityCloudGUI."
+echo "Add new subprofile of /live"
+echo "Name: $PROFILE_NM"
+echo "Type: normal"
+echo "Channels: $CHANBUF"
+echo "Have a nice day!"
