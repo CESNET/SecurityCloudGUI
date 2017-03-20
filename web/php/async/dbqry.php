@@ -39,11 +39,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$src = "";
 	for ($i = 0; $i < sizeof($srcArr); $i++) {
 		$src .= $srcArr[$i].' ';
-<<<<<<< HEAD
-	}
-=======
 	}	
->>>>>>> refs/remotes/origin/no_sidebar
 	
 	/* SEARCH FOR SELECTED SUBPROFILE ROOT */
 	$aux = null;
@@ -107,12 +103,8 @@ function execDbRequest() {														// This gets called when this thread is 
 		2 => array ('pipe', 'w')
 	);
 	$pipes = array();
-<<<<<<< HEAD
-	// OLD WAY: $cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA."$profile/channels/" : $IPFIXCOL_DATA."$profile/";
-=======
 	
 	// OLD WAD: $cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA."$profile/channels/" : $IPFIXCOL_DATA."$profile/";
->>>>>>> refs/remotes/origin/no_sidebar
 	$cwd = $IPFIXCOL_DATA."$profile/channels/";
 	
 	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');							// Apply mutex, so the transaction file can only be modified by this thread

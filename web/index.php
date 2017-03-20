@@ -170,23 +170,9 @@
 		// *** SANITY CHECK ***
 		Core.sanityCheck();
 		
-<<<<<<< HEAD
-		/* TODO: After all initial setup, check whether this is a call from Nemea and deal with it */
-		<?php if (isset($_GET['source']) && $_GET['source'] == "nemea") { ?>
-			// Collect stuff from url
-			// Deal with it
-			gotoPage('Dbqry');	// Teleport to proper tab
-		<?php } ?>
-	});
-	
-	$("#menu-toggle").click(function(e) {										// Sidebar toggling
-		e.preventDefault();
-		$("#wrapper").toggleClass("toggled");
-=======
 		// *** ALL SET, INITIALIZE ***
 		Core.initResolution(resolutionPtr);		
 		Core.initWorkbench();
->>>>>>> refs/remotes/origin/no_sidebar
 	});
 	</script>
 </body>
