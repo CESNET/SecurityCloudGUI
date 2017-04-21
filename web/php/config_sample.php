@@ -36,4 +36,6 @@
 	// in the gui.
 	// ipfixcol is updated by sending SIGUSR1 to it's running process
 	$PIDFILE			= $IPFIXCOL_DATA.'pidfile.txt';
+	
+	$IPFIXCOL_UPDATE_FILE = $IPFIXCOL_DATA.'updatecfg'; // In distributed environment, ipfixcol conf reload is handled by creation of this file
 ?>

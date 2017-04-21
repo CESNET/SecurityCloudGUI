@@ -207,9 +207,15 @@
 	// Rewrite the original ipfixcol cfg file
 	$xml->asXML($IPFIXCOL_CFG);
 	
-	// Find out the ipfixcol PID and reload it's configuration
-	$pid = exec("head -1 $PIDFILE");
-	$rtn = exec("kill -10 $pid && echo $?");
+	if ($SINGLE_MACHINE) {
+		// Find out the ipfixcol PID and reload it's configuration
+		$pid = exec("head -1 $PIDFILE");
+		$rtn = exec("kill -10 $pid && echo $?");
+	}
+	else {
+		$updater = fopen($IPFIXCOL_UPDATE_FILE, "w");
+		fclose($updater);
+	}
 	
 	// Release the lock
 	flock($lock, LOCK_UN);
