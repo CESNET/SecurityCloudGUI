@@ -196,17 +196,18 @@ function execDbRequest() {														// This gets called when this thread is 
 					$auxbuf = "";
 				}
 			}
-			else {
+			else
 				$auxbuf .= $buffer[$i];
-			}
 		}
+		
+		if (sizeof($auxbuf) > 0)	// Any trailing text will be printed out
+			echo $auxbuf;
 	}
 	
 	echo '</pre>';
 	
-	if (strlen($errlog) > 0) {
+	if (strlen($errlog) > 0)
 		echo '<pre>',$errlog,'</pre>';
-	}
 }
 
 $mode	= $_GET['mode'];
