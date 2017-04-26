@@ -1,19 +1,19 @@
 # SecurityCloud GUI
 ## Table of Contents
 1. [Introduction](#intro)
-2. [Screenshots] (#screen)
+2. [Screenshots](#screen)
 3. [Prerequisities](#pre)
 4. [Instalation](#install)
 5. [Analyzing historical data](#historic)
 6. [Troubleshooting](#trouble)
 7. [Todolist](#todo)
 
-##<a name="intro"></a> Introduction
+## <a name="intro"></a>Introduction
 This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows you to visualize and analyze your internet flows collected by the ipfix collector.
 
 The GUI also allows you to perform queries on the flow data using the fdistdump and also to organize and manage export profiles of the ipfixcol.
 
-##<a name="screen"></a> Screenshots
+## <a name="screen"></a>Screenshots
 ### Graphs tab
 ![Graphs](/screens/graph.png)
 
@@ -27,7 +27,7 @@ The GUI also allows you to perform queries on the flow data using the fdistdump 
 ![Profiles](/screens/profiles.png)
 
 
-##<a name="pre"></a> Prerequisities:
+## <a name="pre"></a>Prerequisities:
 - [rrdtool 1.6](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
 - [ipfixcol](https://github.com/CESNET/ipfixcol/) with the following 3rd party plugins:
 	* profile_stats (intermediate)
@@ -36,7 +36,7 @@ The GUI also allows you to perform queries on the flow data using the fdistdump 
 - [fdistdump](https://github.com/CESNET/fdistdump)
 - webserver with php5 or higher
 
-##<a name="install"></a> Instalation
+## <a name="install"></a>Instalation
 **NOTE:** These installation notes work for the default configuration on CentOS 7. For custom configuration see [Troubleshooting & Advanced installation](#trouble).
 
 After installing all prerequisities, clone the Github repo and copy all relevant data to the folders as shown below:
@@ -73,7 +73,7 @@ su apache --shell "/bin/bash" -c "ipfixcol -c /data/startup.xml -v 2 -p /data/pi
 
 At this point, if your webserver is set up properly, the GUI should work.
 
-##<a name="historic"></a> Analyzing historical data
+## <a name="historic"></a>Analyzing historical data
 It may happen to you that you only have a bunch of nfdump files and you want to analyze them with the help of the GUI. This can be done. The following lines are a complete guide to importing historical data to the GUI. First and foremost please note that GUI was not originally meant for this and the process of importing is clunky at best. You also need a separate instance of the GUI for analyzing the historical data. Mixing it with ipfixcol and live traffic is a highway to hell.
 
 ### Preparations
@@ -105,7 +105,7 @@ The make command will compile two programs for computing rrd statistics and dest
 ### Rinse and repeat
 At this point if you wish to import new data, you just have to create a new profile and then only execute 'replay.sh' script.
 
-##<a name="trouble"></a> Troubleshooting & Advanced Installation
+## <a name="trouble"></a>Troubleshooting & Advanced Installation
 For many reasons the default configuration might failed or you just want to put the data somewhere else. In that case, consult this part of the guide.
 Most of your issues can be solved via editing the 'config.php' which is located in the 'php' folder of the GUI root.
 
@@ -151,7 +151,7 @@ Correct, it hasn't. Ipfixcol currently cannot export separate channels. For the 
 ### Shadow profiles don't work
 Correct, they don't. But they will.
 
-##<a name="todo"></a> Todolist
+## <a name="todo"></a>Todolist
 Following features are expected to be implemented in the future:
 
 * shadow profiles
