@@ -51,7 +51,7 @@
 	}
 	
 	// Descriptor array for proc open. Do not change unless you know what you're doing
-	$cmd = "exec $RRDTOOL graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render";
+	$cmd = "exec $RRDTOOL graph - $format -Z --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render";
 	$desc = array(0 => array ('pipe', 'r'), 1 => array ('pipe', 'w'), 2 => array ('pipe', 'w') );
 	/*$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/rrd/channels/");
 
