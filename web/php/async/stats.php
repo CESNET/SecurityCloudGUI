@@ -58,7 +58,13 @@ if (sizeof($timeSplit) != 2) {
 }
 else {
 	$intervals /= $chnlSize;
-	$interval = (intval($timeSplit[1]) - intval($timeSplit[0])) / $intervals;
+	
+	if ($intervals != 0) {
+		$interval = (intval($timeSplit[1]) - intval($timeSplit[0])) / $intervals;
+	}
+	else {
+		$interval = 300;
+	}
 }
 
 if ($intervals != 0) computeRates($rate, $total, $chnlSize, $intervals);
