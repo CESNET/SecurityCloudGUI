@@ -131,15 +131,3 @@ Do not be hasty when using the graph. Whatever you do, the request is send to th
 
 ### I cannot delete the live profile
 Please, do read the disclaimer before deleting the live profile. The live profile cannot be deleted and you have to edit it manually in the text editor. Deleting it from the GUI will only result in deletion of its children.
-
-### I want to restrict selected profiles for selected users only
-This feature is currently in development.
-
-### Shadow profiles don't work
-Correct, they don't. But they will.
-
-## <a name="todo"></a> Todolist
-Following features are expected to be implemented in the future:
-
-* shadow profiles
-* user control and profile restriction
