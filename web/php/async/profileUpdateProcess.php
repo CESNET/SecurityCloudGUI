@@ -119,11 +119,11 @@
 			<?php
 			exit(2);
 		}
-		else if ($type != 'normal' && $type != 'shadow') {					// ERROR handling (BADTYPE)
+		else if ($type != 'normal'/* && $type != 'shadow'*/) {					// ERROR handling (BADTYPE)
 			?>
 			<div class="alert alert-danger alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				Please stop trying to hack this... Profile type can be 'normal' or 'shadow', nothing else.
+				Please stop trying to hack this... Profile type can be 'normal', nothing else.
 				<span style="display: none" id="AsyncQuerryResult">fail</span>
 			</div>
 			<?php

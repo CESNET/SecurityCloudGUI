@@ -49,6 +49,9 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);
 	}
 	
+	/*
+	ipfixcol currently has different filter syntax than fdistdump, thus shadow profiles can't be
+	supported
 	if($aux->getShadow()) {
 		$profile = $aux->getParentName();
 		
@@ -72,7 +75,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		else {
 			$filter = "(($filter) and ($f))";
 		}
-	}
+	}*/
 	
 	$cmdBackup = "";
 	if ($SINGLE_MACHINE) {

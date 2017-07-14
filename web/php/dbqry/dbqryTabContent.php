@@ -22,7 +22,7 @@
 				Filter
 			</div>
 			<div class="panel-body">
-				<textarea class="form-control" rows="5" id="Dbqry_Filter_<?php echo $tab; ?>"></textarea>
+				<textarea class="form-control" rows="4" id="Dbqry_Filter_<?php echo $tab; ?>"></textarea>
 			</div>
 			<div class="panel-footer">
 				<button class="btn btn-default btn-block" onclick="Local_clearTextarea(<?php echo $tab; ?>);">Clear filter</button>
