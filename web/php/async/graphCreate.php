@@ -53,19 +53,19 @@
 	// Descriptor array for proc open. Do not change unless you know what you're doing
 	$cmd = "exec $RRDTOOL graph - $format -Z --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render";
 	$desc = array(0 => array ('pipe', 'r'), 1 => array ('pipe', 'w'), 2 => array ('pipe', 'w') );
-	/*$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/rrd/channels/");
-
-	//echo "exec rrdtool graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render"; exit;
 	
-	$buffer = "";
-	if(is_resource($p)) {
-		while($f = fgets($pipes[1])) {
-			$buffer .= $f;
+	// Either return .png data of an image
+	if ($mode == 'thumb') {
+		if ($SINGLE_MACHINE) {
+			echo getGraphThumb(strval($cmd), $desc, $pipes, "");
 		}
+		else {
+			echo getGraphThumb(strval($cmd), $desc, $pipes, $SLAVE_HOSTNAMES[0]);
+		}
+		exit;
 	}
-	
-	echo $buffer;*/
-	
+
+	// Or return graph JSON data
 	if ($SINGLE_MACHINE)
 		echo getGraphJSON(strval($cmd), $desc, $pipes, "");
 	else {

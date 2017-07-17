@@ -3,7 +3,9 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<h4>Graph <i>variable</i> selection</h4>
+				<h4>
+					Choose a graph variable to display
+				</h4>
 			</div>
 			
 			<div class="modal-body">

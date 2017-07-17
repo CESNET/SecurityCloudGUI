@@ -84,6 +84,28 @@
 	}
 	
 	/**
+	 *  @brief Retrieves graph as png image binary source
+	 *  
+	 *  @param [in] $cmd rrdtool command
+	 *  @param [in] $desc Array of descriptors
+	 *  @param [in] $pipes Communication pipes
+	 *  @param [in] $slave Name of a slave (or empty string)
+	 *  @return Binary source of an image
+	 */
+	function getGraphThumb($cmd, &$desc, &$pipes, $slave) {
+		global $IPFIXCOL_DATA, $profile;
+		
+		$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$slave."$profile/rrd/channels/");
+		
+		$buffer = "";
+		if(is_resource($p))
+			while($f = fgets($pipes[1]))
+				$buffer .= $f;
+			
+		return $buffer;
+	}
+	
+	/**
 	 *  When not $SINGLE_MACHINE then the resulting JSON
 	 *  needs to be merge from all slaves. This function
 	 *  allows to update resulting JSON with buffer loaded
