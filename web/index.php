@@ -54,63 +54,23 @@
 </head>
 
 <body onload="Transactions.init();" onbeforeunload="Transactions.deinit();">
-    <div id="wrapper">
-
-	<!-- Sidebar -->
-	<?php include 'php/misc/sidebar.php'; ?>
+	<?php include 'php/misc/topbar.php'; ?>
 
 	<!-- MODALS -->
-	<!-- Modal window with render settings for the active graph -->
-	<!--?php include 'php/graph/activeGraphRenderSettings.php'; ?>
-	<!-- Modal with fdistdump manpage -->
-	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php'; ?>
-	<!-- Modal window with profile view/add/delete dialogs -->
-	<?php include 'php/profiles/profilesModifyModal.php' ?>
-	
-	<?php include 'php/misc/lookup.php'; ?>
-	<!--a class="btn btn-default" id="menu-toggle" href="#menu-toggle">Toggle Menu</a-->
+	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php';	// Fdistdump manpage modal ?>
+	<?php include 'php/profiles/profilesModifyModal.php'	// Modal for profile management ?>
+	<?php include 'php/misc/lookup.php';					// IPaddr lookup ?>
+	<?php include 'php/graph/thumbGraphs.php';				// Graph thumbnails?>
 	
 	<!-- Page Content -->
 	<div id="page-content-wrapper">
-		<div class="container-fluid">		
-			<div id="MainPageGraphs">
-				<!-- ACTIVE GRAPH + SOURCES -->
-				<div class="row">
-					<div class="col-lg-10">
-						<?php include 'php/graph/activeGraph.php'; ?>
-					</div>
-					<div class="col-lg-2">
-						<?php include 'php/graph/channelSelection.php'; ?>
-						
-						<!-- TODO -->
-						<?php include 'php/graph/activeGraphRenderSettings.php'; ?>
-					</div>
-				</div>
-				
-				<!-- THUMBNAILS -->
-				<?php include 'php/graph/thumbGraphs.php'; ?>		
-			</div>
-			<div id="MainPageStats">
-				<div class="row">
-					<div class="col-lg-12" id="StatsContent"></div>
-				</div>
-			</div>
-			<div id="MainPageDbqry">
-				<div class="row">
-					<div class="col-lg-12">
-						<?php include 'php/dbqry/dbqry.php'; ?>
-					</div>
-				</div>
-			</div>
-			<div id="MainPageProfiles">
-				<?php include 'php/profiles/profiles.php'; ?>
-			</div>
+		<div class="container-fluid">
+			<?php include 'php/views/workbench.php'; ?>
+			
+			<?php include 'php/views/profilemgr.php'; ?>
 		</div>
 	</div>
 	<!-- /#page-content-wrapper -->
-
-	</div>
-	<!-- /#wrapper -->
 
 	<script>
 		/* ========= */
@@ -124,32 +84,20 @@
 		var ARR_GRAPH_NAME = [<?php $size = sizeof($ARR_GRAPH_NAME); for($i = 0; $i < $size; $i++) echo "\"$ARR_GRAPH_NAME[$i]\", "; ?>];
 		var USE_LOCAL_TIME = <?php if ($USE_LOCAL_TIME) echo "true"; else echo "false"; ?>;
 		var HISTORIC_DATA =  <?php if ($HISTORIC_DATA) echo "true"; else echo "false"; ?>;
+		var pendingResizeEvent = false;
 	
 		/* ================ */
 		/* GLOBAL VARIABLES */
 		/* ================ */
 		var graphData, graphLegend;
-		var timestampBgn, timestampEnd;
-		var resolutionPtr;
+		var timestampBgn = -1, timestampEnd = -1, selBgn = -1, selEnd = -1;
+		var resolutionPtr = -1;
 		var currentVar = 0;
+		var selWindow = "Workbench";
+		var pendingResizeEvent = false;
 	</script>
 	
-	<script src="js/thirdparty/jquery.js"></script>
-	<script src="js/thirdparty/bootstrap.min.js"></script>
-	<script src="js/thirdparty/moment-with-locales.min.js"></script>
-	<script src="js/thirdparty/bootstrap-datetimepicker.min.js"></script>
-	<script src="js/thirdparty/dygraph-combined.min.js"></script>
-	
-	<script src="js/utility.js"></script>									<!-- Utility class -->
-	<script src="js/graph.js"></script>											<!-- Graph class -->
-	<script src="js/graphControls/setGraphCenter.js"></script>
-	<script src="js/graphControls/setResolution.js"></script>
-	<script src="js/graphControls/graphMoveStep.js"></script>
-	<script src="js/graphControls.js"></script>
-	<script src="js/dbqry.js"></script>
-	<script src="js/transactions.js"></script>
-	<script src="js/misc.js"></script>											<!-- gotoPage() -->
-	<script src="js/profiles.js"></script>
+	<?php include "php/misc/jsInclude.php"; ?>
 
 	<!-- Menu Toggle Script -->
 	<script>
@@ -157,12 +105,20 @@
 	/* DOCUMENT READY STUFF */
 	/* ==================== */
 	$(document).ready(function(){
+		$(document).ready(function() {
+			$('#Option_AggregateList_1').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%', } );
+		});
+
+		
 		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
-			format: "YYYY-MM-DD HH:mm",
+			format: "YYYY-MM-DD HH:mm",									// ISO time format
 			useCurrent: true,
-			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),
-			sideBySide: true,
-			ignoreReadonly: true,
+			maxDate: new Date(Utility.getCurrentTimestamp() * 1000),	// Can't select time in the future
+			sideBySide: true,											// For seeing days and daytime side by side
+			ignoreReadonly: true,										// Because the input field is readonly
+			toolbarPlacement: 'top',
+			showClose: true,
+			icons: { close: 'glyphicon glyphicon-ok' },
 		});
 		$('#TimePicker').on(											// Register onhide event callback for datetimepicker
 			"dp.hide",
@@ -171,42 +127,52 @@
 				acquireGraphData(updateGraph, true);
 			}
 		);
-		
-		gotoPage('Graphs');												// Set the default viewpoint
-		
-		/* TIMESTAMP INIT */
-		<?php if (isset($_GET['begin']) && isset($_GET['end'])) {
-			echo 'timestampBgn = ',$_GET['begin'],';';
-			echo 'timestampEnd = ',$_GET['end'],';';
-		}
-		else {
-			echo 'timestampBgn = Utility.getCurrentTimestamp()-(24*3600);';
-			echo 'timestampEnd = Utility.getCurrentTimestamp();';
-		} ?>
-		
-		<?php if (isset($_GET['res'])) {
-			echo 'resolutionPtr = ',$_GET['res'],';';
-		}
-		else {
-			echo 'resolutionPtr = 2;';
-		} ?>
-		
-		/* RESOLUTION INIT */
-		var list = document.getElementById("DisplayResolutionList").getElementsByTagName("a");
-		document.getElementById("DisplaySizePrint").innerHTML = list[resolutionPtr].innerHTML;
-		
-		acquireGraphData(initializeGraph, null);								// Create graph
-		
-		$(window).resize(function(){											// Register callback (reset cursor position if window was resized)
-			Graph.initAreaValues();
-			Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-			Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+		$(window).resize(function(){									// Register callback (reset cursor position if window was resized)
+			if (selectedWindow != "Workbench") {
+				pendingResizeEvent = true;
+				Graph.miniature.resize();
+			}
+			else							resizeGraph();
 		});
-	});
-	
-	$("#menu-toggle").click(function(e) {										// Sidebar toggling
-		e.preventDefault();
-		$("#wrapper").toggleClass("toggled");
+		
+		// *** PARSE URL PARAMS ***
+		<?php
+		if (isset($_GET['tbgn']) && isset($_GET['tend']) && isset($_GET['tres'])) {
+			echo 'timestampBgn =',$_GET['tbgn'],';';
+			echo 'timestampEnd =',$_GET['tend'],';';
+			echo 'resolutionPtr=',$_GET['tres'],';';
+		}
+		
+		if (isset($_GET['start'])) {
+			// *** GRAB CURSOR SELECTION ***
+			echo 'selBgn = ',$_GET['start'],';';
+			if (isset($_GET['end']))	echo 'selEnd = ',$_GET['end'],';';
+			else						echo 'selEnd = selBgn;';
+			?>
+			
+			if (timestampBgn == -1 || timestampEnd == -1 || resolutionPtr == -1) {
+				Core.computeTimeWindow();
+				Core.computeResolution();
+			}
+			<?php
+		}
+		
+		if (isset($_GET['filter'])) {
+			echo 'document.getElementById(\'Dbqry_Filter_1\').innerHTML = "',$_GET['filter'],'";';
+			echo 'location.href = "#"; location.href = "#WorkbenchDbqry";';
+		}
+		?>
+		
+		// *** FALLBACK TO DEFAULTS IF SOMETHING IS UNSET ***
+		if (resolutionPtr == -1)						Default.setResolution();
+		if (timestampBgn == -1 || timestampEnd == -1)	Default.setTimeWindow();
+		
+		// *** SANITY CHECK ***
+		Core.sanityCheck();
+		
+		// *** ALL SET, INITIALIZE ***
+		Core.initResolution(resolutionPtr);		
+		Core.initWorkbench();
 	});
 	</script>
 </body>

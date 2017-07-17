@@ -20,6 +20,7 @@
 	/* DIRECTORIES */
 	/* =========== */
 	$BASE_DIR			= '/var/www/html/';	// Full path to the index.php file of the GUI
+	$SLAVE_HOSTNAMES	= array ('slave1/', 'slave2/', 'slave3/'); // do not omit final slash
 	
 	// Folder for storing transactions of the GUI.
 	// User apache needs privileges to write into this
@@ -35,4 +36,6 @@
 	// in the gui.
 	// ipfixcol is updated by sending SIGUSR1 to it's running process
 	$PIDFILE			= $IPFIXCOL_DATA.'pidfile.txt';
+	
+	$IPFIXCOL_UPDATE_FILE = $IPFIXCOL_DATA.'updatecfg'; // In distributed environment, ipfixcol conf reload is handled by creation of this file
 ?>

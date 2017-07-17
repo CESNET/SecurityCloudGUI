@@ -13,9 +13,10 @@
 				<pre id="LookupModalContentGeolc"></pre>
 			</div>
 			
-			<!--div class="modal-footer">
-				<a href="#" class="btn btn-default" data-dismiss="modal" onclick="Graph.updateRenderMode(computeRenderMode());">Update</a>
-			</div-->
+			<div class="modal-footer">
+				<a target="_blank" href="#" class="btn btn-default" id="LookupToNERD">Go to NERD for more info</a>
+				<a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
+			</div>
 		</div>
 	</div>
 </div>

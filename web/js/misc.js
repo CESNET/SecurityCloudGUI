@@ -1,5 +1,11 @@
+/**
+ *  @brief Async function for grabbing graph statistics
+ *  
+ *  @return Nothing, but "StatsContent" object will be updated with result output
+ *  
+ *  @details Selects all available channels and collects a rrd based stats for selected time.
+ */
 function collectStatistics() {
-	//var timeSpec = Dbqry_parseSelectedTime();
 	var timeSpec = Graph.curTime1;
 	if (Graph.interval) {
 		timeSpec += ":"+Graph.curTime2;
@@ -8,7 +14,6 @@ function collectStatistics() {
 	for (var i = 1; i < ARR_SOURCES.length; i++) {
 		srcs += ":"+ARR_SOURCES[i];
 	}
-	//var srcs="./";
 	
 	timeSpec = encodeURIComponent(timeSpec);
 	srcs = encodeURIComponent(srcs);
@@ -19,11 +24,11 @@ function collectStatistics() {
 		if (ajax.readyState == 4) {
 			document.getElementById("StatsContent").innerHTML = ajax.responseText;
 			
-			var txt = "Statistics for: " + Utility.timestampToNiceReadable(Graph.curTime1);
+			/*var txt = "Statistics for: " + Utility.timestampToNiceReadable(Graph.curTime1);
 			if(Graph.interval) {
 				txt += " - " + Utility.timestampToNiceReadable(Graph.curTime2);
 			}
-			document.getElementById("StatsContentHeader").innerHTML = txt;
+			document.getElementById("StatsContentHeader").innerHTML = txt;*/
 		}
 	}
 	
@@ -31,31 +36,46 @@ function collectStatistics() {
 	ajax.send(null);
 }
 
-/**
- *  This function is responsible for (apparently) changing pages.
- *  Note that dygraph library used for rendering graphs is not
- *  happy when it's hidden with display:none attribute. For that
- *  reason, the Graphs page is only moved outside of visible plane.
- *  This thing may break lots of stuff...
- */
-function gotoPage(page) {
-	//document.getElementById("MainPageGraphs").style.display = "none";
-	var gpage = document.getElementById("MainPageGraphs");
-	gpage.style.position = "absolute";
-	gpage.style.top = -gpage.scrollHeight+"px";	// Moves outside of visible area
+function resizeGraph() {
+	Graph.dygraph.resize();
+	Graph.initAreaValues();
+	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
+	Graph.initTime(graphData[0][0].getTime()/1000, graphData[graphData.length - 1][0].getTime()/1000);
+}
+
+function gotoWindow(id) {
+	document.getElementById("WindowWorkbench").style.display = "none";
+	document.getElementById("TopbarLinkWorkbench").className = "";
+	document.getElementById("WindowProfileManager").style.display = "none";
+	document.getElementById("TopbarLinkProfileManager").className = "";
 	
-	document.getElementById("MainPageStats").style.display = "none";
-	document.getElementById("MainPageDbqry").style.display = "none";
-	document.getElementById("MainPageProfiles").style.display = "none";
+	document.getElementById("Window" + id).style.display = "";
+	document.getElementById("TopbarLink" + id).className = "active";
 	
-	if (page == "Graphs") {
-		gpage.style.position = "static";	// return back to page
+	selectedWindow = id;
+	if (id == "Workbench" && pendingResizeEvent) {
+		resizeGraph();
+		pendingResizeEvent = false;
 	}
-	else document.getElementById("MainPage"+page).style.display = "";
+}
+
+function toggleStats() {
+	var elem = document.getElementById("StatsToggleArea");
+	var chvr = document.getElementById("StatsToggleChevron");
 	
-	if (page == "Stats") {
+	if (elem.style.display == "none") {
+		elem.style.display = "";
+		chvr.className = "glyphicon glyphicon-chevron-up";
 		collectStatistics();
 	}
+	else {
+		elem.style.display = "none";
+		chvr.className = "glyphicon glyphicon-chevron-down";
+	}
+}
+
+function statsVisible() {
+	return document.getElementById("StatsToggleArea").style.display != "none";
 }
 
 /**
@@ -72,6 +92,10 @@ function isAcceptableWhoisInfo(infoName) {
 	return false;
 }
 
+/**
+ *  Async grab whois information for selected IP address.
+ *  Whois is mostly grabbed from ripe.net
+ */
 function lookupGrabWhois(ipaddr) {
 	var ajax = Utility.initAjax();
 	
@@ -148,4 +172,6 @@ function lookupGrab(ipaddr) {
 	lookupGrabRvdns(ipaddr);
 	lookupGrabWhois(ipaddr);
 	lookupGrabGeolc(ipaddr);
+	
+	document.getElementById("LookupToNERD").href = "https://nerd.cesnet.cz/nerd/ip/" + ipaddr;
 }

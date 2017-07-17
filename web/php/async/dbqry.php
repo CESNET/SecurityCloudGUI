@@ -18,7 +18,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$filter = $_GET['filter'];													// 	...
 	$stamp	= $_GET['stamp'];													//	...
 	$tab	= $_GET['tab'];														//	...
-	$src	= $_GET['src'];														//  ...
+	$src	= $_GET['src'];														// TODO: Parse chnl1:chnl2:..:chnlN fmt
 	
 	/* CREATE A MASTER TREE FROM XML */
 	$TREE_PROFILE = new Profile();												// Full tree of profiles
@@ -33,6 +33,14 @@ function execDbRequest() {														// This gets called when this thread is 
 	}
 	unset($ARR_AVAILS);
 	
+	/* GET CHANNELS TO PROPER FORMAT */
+	// NOTE: deal with shadow profiles
+	$srcArr = explode(':', $src);
+	$src = "";
+	for ($i = 0; $i < sizeof($srcArr); $i++) {
+		$src .= $srcArr[$i].' ';
+	}	
+	
 	/* SEARCH FOR SELECTED SUBPROFILE ROOT */
 	$aux = null;
 	searchForProfile($TREE_PROFILE, $profile, $aux);
@@ -41,6 +49,9 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);
 	}
 	
+	/*
+	ipfixcol currently has different filter syntax than fdistdump, thus shadow profiles can't be
+	supported
 	if($aux->getShadow()) {
 		$profile = $aux->getParentName();
 		
@@ -64,11 +75,11 @@ function execDbRequest() {														// This gets called when this thread is 
 		else {
 			$filter = "(($filter) and ($f))";
 		}
-	}
+	}*/
 	
 	$cmdBackup = "";
 	if ($SINGLE_MACHINE) {
-		$cmdBackup = "$FDUMP -f \"$filter\" $opts";
+		$cmdBackup = "$FDUMP -f \"$filter\" $opts $src";
 	}
 	else {
 		$cmdBackup = "$FDUMP_HA -f=\"$filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);
@@ -83,7 +94,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$cmd = "";
 	if ($SINGLE_MACHINE) {
 		// *** proc_open params ***
-		$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ".substr($profile, 1);	// <---------- $CMD --------------
+		$cmd = "exec $FDUMP $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json $src";	// <---------- $CMD --------------
 	}
 	else {
 		$cmd = "$FDUMP_HA -f=\"$filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json\" ".substr($profile, 1);
@@ -95,9 +106,11 @@ function execDbRequest() {														// This gets called when this thread is 
 		2 => array ('pipe', 'w')
 	);
 	$pipes = array();
-	$cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA : $IPFIXCOL_DATA."$profile/";
 	
-	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');					// Apply mutex, so the transaction file can only be modified by this thread
+	// OLD WAD: $cwd = $SINGLE_MACHINE ? $IPFIXCOL_DATA."$profile/channels/" : $IPFIXCOL_DATA."$profile/";
+	$cwd = $IPFIXCOL_DATA."$profile/channels/";
+	
+	$lock = fopen($TMP_DIR.$stamp.'.lock', 'r');							// Apply mutex, so the transaction file can only be modified by this thread
 	if (!flock($lock, LOCK_EX)) {											// If that failed (
 		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
 		echo '<div class=\'panel-heading\'>Error</div>';
@@ -106,7 +119,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);															// And end this thread )
 	}																		// Else
 	
-	$p = proc_open($cmd, $desc, $pipes, $cwd, $FDUMP_ENV);// Execute the program command
+	$p = proc_open($cmd, $desc, $pipes, $cwd, $FDUMP_ENV);					// Execute the program command
 	if($p == false) {														// If execution failed (
 		echo '<div class=\'panel panel-danger\'>';							// Print this *very* serious error
 		echo '<div class=\'panel-heading\'>Error</div>';
@@ -153,7 +166,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	$index = findTransaction($TMP_DIR.$stamp, $tab, $pid);	// Find our transaction (pid is not needed, but it is a mandatory argument for function call)
 	
 	if($index != -1) {														// If index was found (i.e. nobody stopped this query)
-		removeTransaction($TMP_DIR.$stamp, $index);			// Remove the transaction with success
+		removeTransaction($TMP_DIR.$stamp, $index);							// Remove the transaction with success
 	}
 	
 	flock($lock, LOCK_UN);													// Release the lock
@@ -164,14 +177,11 @@ function execDbRequest() {														// This gets called when this thread is 
 	*/
 	
 	// BOOTSTRAP CODE:
-	echo '<div class=\'panel panel-info\'>';								// Print info about used parameters
-	echo '<div class=\'panel-heading\'>Query parameters</div>';			// Heading will be light blue
-	echo '<div class=\'panel-body\'><pre>',$cmdBackup,'</pre></div>';		// Print commands
-	echo '</div>';
+	echo '<div class=\'panel panel-info\'>';
+	echo '<div class=\'panel-heading\'><div class=\'row\'><div class=\'col-md-11\'>Output</div><div class=\'col-md-1\'><a href=\'#\' onclick=\'Local_clearTab("1");\'>Clear results</a></div></div></div>';
+	echo '<div class=\'panel-body\'><pre>',$cmdBackup,'</pre><pre>';
+	
 	if (strlen($buffer) > 0) {
-		echo '<div class=\'panel panel-success\'>';							// Print stdout from fdistdump
-		echo '<div class=\'panel-heading\'>Query output</div>';			// Heading will be dark blue
-		echo '<div class=\'panel-body\'><pre>';
 		$auxbuf = "";
 		$size = strlen($buffer);
 		for ($i = 0; $i < $size; $i++) {
@@ -182,25 +192,25 @@ function execDbRequest() {														// This gets called when this thread is 
 				else {//http://rest.db.ripe.net/search.json?query-string=194.228.92.50&flags=no-filtering
 					if (@inet_pton($auxbuf)) {								// Convert string into binary ip. If the function returned valid string, $auxbuf is an ip
 						$auxbuf = "<a href='#' onclick=\"lookupGrab('$auxbuf');\" data-toggle='modal' data-target='#lookupModal'>$auxbuf</a>";
+						//$auxbuf = "<a target=\"_blank\" href=\"https://nerd.cesnet.cz/nerd/ip/$auxbuf\">$auxbuf</a>";
 					}
 				
 					echo $auxbuf.$buffer[$i];
 					$auxbuf = "";
 				}
 			}
-			else {
+			else
 				$auxbuf .= $buffer[$i];
-			}
 		}
-		echo '</pre></div></div>';											// Print stdout
+		
+		if (sizeof($auxbuf) > 0)	// Any trailing text will be printed out
+			echo $auxbuf;
 	}
-	if(strlen($errlog) > 0) {
-?>
-<div class='panel panel-danger'>
-	<div class='panel-heading'>Querry errors</div>
-	<div class='panel-body'><pre><?php echo $errlog; ?></pre></div>
-</div>
-<?php }
+	
+	echo '</pre>';
+	
+	if (strlen($errlog) > 0)
+		echo '<pre>',$errlog,'</pre>';
 }
 
 $mode	= $_GET['mode'];

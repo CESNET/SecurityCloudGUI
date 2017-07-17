@@ -171,7 +171,7 @@
 					<div class="col-sm-10">
 						<select id="ProfilesModalType" class="form-control">
 							<option value="normal" selected>normal</option>
-							<option value="shadow">shadow</option>
+							<!--option value="shadow">shadow</option-->
 						</select>
 					</div>
 				</div>

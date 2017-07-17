@@ -8,12 +8,12 @@
 6. [Troubleshooting](#trouble)
 7. [Todolist](#todo)
 
-## <a name="intro"></a>Introduction
+## <a name="intro"></a> Introduction
 This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows you to visualize and analyze your internet flows collected by the ipfix collector.
 
 The GUI also allows you to perform queries on the flow data using the fdistdump and also to organize and manage export profiles of the ipfixcol.
 
-## <a name="screen"></a>Screenshots
+## <a name="screen"></a> Screenshots
 ### Graphs tab
 ![Graphs](/screens/graph.png)
 
@@ -27,7 +27,7 @@ The GUI also allows you to perform queries on the flow data using the fdistdump 
 ![Profiles](/screens/profiles.png)
 
 
-## <a name="pre"></a>Prerequisities:
+## <a name="pre"></a> Prerequisities:
 - [rrdtool 1.6](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
 - [ipfixcol](https://github.com/CESNET/ipfixcol/) with the following 3rd party plugins:
 	* profile_stats (intermediate)
@@ -36,7 +36,7 @@ The GUI also allows you to perform queries on the flow data using the fdistdump 
 - [fdistdump](https://github.com/CESNET/fdistdump)
 - webserver with php5 or higher
 
-## <a name="install"></a>Instalation
+## <a name="install"></a> Instalation
 **NOTE:** These installation notes work for the default configuration on CentOS 7. For custom configuration see [Troubleshooting & Advanced installation](#trouble).
 
 After installing all prerequisities, clone the Github repo and copy all relevant data to the folders as shown below:
@@ -73,39 +73,29 @@ su apache --shell "/bin/bash" -c "ipfixcol -c /data/startup.xml -v 2 -p /data/pi
 
 At this point, if your webserver is set up properly, the GUI should work.
 
-## <a name="historic"></a>Analyzing historical data
+## <a name="historic"></a> Analyzing historical data
 It may happen to you that you only have a bunch of nfdump files and you want to analyze them with the help of the GUI. This can be done. The following lines are a complete guide to importing historical data to the GUI. First and foremost please note that GUI was not originally meant for this and the process of importing is clunky at best. You also need a separate instance of the GUI for analyzing the historical data. Mixing it with ipfixcol and live traffic is a highway to hell.
 
 ### Preparations
-Let's say you have a clean instance of SCGUI with properly set 'config.php'. At this point there's one additional value to be set in the config. You have to set variable '$HISTORIC_DATA' to true to enable some timestamp corrections. For purpose of this tutorial I suppose that '$IPFIXCOL_DATA' is set to '/data'. Also let's say you have a folder containing all nfcapd files to be imported at path '~/shared/nfcapd-replay'. Internal subfolder structure is not important. All files can be directly embed or they can be placed in the 'YYYY/MM/DD' structure. The final prerequisition is a 'replay' folder from this repo. This can be placed anywhere as it only contains scripts and templates.
-
-### Creating a new profile
-In the GUI, create a new subprofile of /live. Let's call it 'demo'. It has to be a normal profile and it must have only one channel named the same as profile itself. In this case the channel will be called 'demo'. The filter textarea can be used for notes about profile. Good practice is to write here a time window at which you can find the data in the graph. Create the profile.
-
-![Creating a profile](/screens/tutor1.png)
+Let's say you have a clean instance of SCGUI with properly set 'config.php'. At this point there's one additional value to be set in the config. You have to set variable '$HISTORIC_DATA' to true to enable some timestamp corrections. For purpose of this tutorial I suppose that '$IPFIXCOL_DATA' is set to '/data'. You also need some data for processing. This tutorial uses folder '~/shared/nfcapd-replay'. Within this folder there are three subfolders: 'pop3', 'smtp' and 'imap'. Internal structure of these subfolders is not important. Names of these three subfolders will define names of channels of a resulting SCGui profile. The final prerequisition is a 'replay' folder from this repo. This can be placed anywhere as it only contains scripts and templates.
 
 ### Configure replay script
-Open the 'replay' folder and edit the 'replay.sh' in a text editor. At the start of the script there are three variables that needs to be configured prior to data import. Value of the variable 'RRDTOOL' has to be the same as in the 'config.php'. Variable 'MPI_MODULE' specifies the module you use for executing fdistdump. I use mpich so for me it would have value 'mpi/mpich-x86_64'. You can find out how the modules are named by executing command 'module avails'. Last line of the output lists installed modules. Last variable to be set is the 'CORE_DIR'. It's the location of data folder for the live profile. If your '$IPFIXCOL_DATA' variable in 'config.php' is set to '/data', 'CORE_DIR' will be set to '/data/live'. You save and close the file.
+Open the 'replay' folder and edit the 'replay' script in a text editor. At the start of the script there are three variables that needs to be configured prior to data import. Value of the variable 'RRDTOOL' has to be the same as in the 'config.php'. Variable 'MPI_MODULE' specifies the module you use for executing fdistdump. I use mpich (version 3.2) so for me it would have value 'mpi/mpich-3.2-x86_64'. You can find out how the modules are named by executing command 'module avails'. Last line of the output lists installed modules. Last variable to be set is the 'DATA_DIR'. It's the location of data folder for the live profile. If your '$IPFIXCOL_DATA' variable in 'config.php' is set to '/data', 'DATA_DIR' will be set to '/data/live'. You save and close the file.
 
-![Configuring replay script](/screens/tutor2.png)
+![Configuring replay script](/screens/r-tutor.png)
 
 ### Run the scripts
-At this point the import can commence. Open shell in the 'replay' folder and execute following command:
+At this point the processing can commence. Open shell in the 'replay' folder and execute following command:
 ```
-make
 ./replay.sh ~/share/nfcapd-replay demo
 ```
 
-![Running replay script](/screens/tutor3.png)
-
-The make command will compile two programs for computing rrd statistics and destination path for copying nfcapd files. Second command executes the script you've edited in the previous set with two arguments. First argument is path to the folder containing your to-be-imported data. Second argument is name of the profile (and its channel) in which you're importing the data. After the second command finishes, you can open up the GUI and navigate to the time at which data are located. This time is based on the names of the nfcapd files. For example file nfcapd.201611011500 will have data located at 2016-11-01 at 15:00.
-
-![Finding the data](/screens/tutor4.png)
+First argument of the script specifies location of data of all channels within a profile. Second argument specifies name of a resulting profile. After script finishes, follow the instructions and explore the newly created profile.
 
 ### Rinse and repeat
 At this point if you wish to import new data, you just have to create a new profile and then only execute 'replay.sh' script.
 
-## <a name="trouble"></a>Troubleshooting & Advanced Installation
+## <a name="trouble"></a> Troubleshooting & Advanced Installation
 For many reasons the default configuration might failed or you just want to put the data somewhere else. In that case, consult this part of the guide.
 Most of your issues can be solved via editing the 'config.php' which is located in the 'php' folder of the GUI root.
 
@@ -141,19 +131,3 @@ Do not be hasty when using the graph. Whatever you do, the request is send to th
 
 ### I cannot delete the live profile
 Please, do read the disclaimer before deleting the live profile. The live profile cannot be deleted and you have to edit it manually in the text editor. Deleting it from the GUI will only result in deletion of its children.
-
-### I want to restrict selected profiles for selected users only
-This feature is currently in development.
-
-### Selecting channels in the fdistdump has no effect
-Correct, it hasn't. Ipfixcol currently cannot export separate channels. For the same reason the statistics are only for all channels together.
-
-### Shadow profiles don't work
-Correct, they don't. But they will.
-
-## <a name="todo"></a>Todolist
-Following features are expected to be implemented in the future:
-
-* shadow profiles
-* channel selection in fdistdump queries (currently the selection has no effect)
-* user control and profile restriction

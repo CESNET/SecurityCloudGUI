@@ -1,78 +1,27 @@
-TODOLIST
+TODOLIST:
+general:
+[ ] nemea hook
+[ ] nerd call
 
-*** GENERAL ***
-[X] Make master release
-> [X] Finish profiles
-> [X] Put web into 'web' folder
-> [X] Put default configurations (startup.xml, profiles.xml) into separate folder
-> [X] Commit to devel
-> [X] Clone and test clean install
-> [X] Write down install notes
-> [X] Merge devel to master
-[ ] minify js
-[X] web title -> SecurityCloudGUI
+devel:
+[X] Repair nemea hook in devel branch
+[X] Copy zero division solution of stats
+[X] Copy Rate/Sum labels of stats
 
-*** STATS ***
-[X] Highlight most important data
-[X] Total stats
-[X] Shadow->RRD->Stats
-[X] Channel
-[X] Date settings --> javascript
-
-*** DATABASE ***
-[ ] Source selection (ipfixcol fix)
-[ ] Shadow profile source selection (grab filter only of selected filters)
-
-*** PROFILES ***
-[ ] Proper function of shadow profiles (ipfixcol fix)
-[X] Normal mouse cursor for disabled inputs --> they are readonly now
-[X] Read PIDFILE
-[X] Reload ipfixcol
-[X] reload page raději na index s live, jinak se to může rozbít
-[X] Naming conventions
-[>] Filter checking --> return values
-[X] Add channel is buggy -- FIXED
-[X] Return any errors as a dismissible alert box, success also as alert box
-[X] Someone tries to create a subprofile of shadow, block this attempt
-[ ] profile name naming conventions
-
-*** SECURITY ***
-[X] createGraph.php shell injection
-
-*** TRANSACTIONS ***
-[X] Deleting of *.lock files
-
-*** DOCUMENTATION ***
-[X] profiles.js
-[X] profileUpdateProcess.php
-[ ] transactions.php
-
-*** GRAPH ***
-[X] Error reporting
-[X] Verifikace profile
-
-*** OPTIMIZATION ***
-[X] profileModalFill.php
-[X] profiles.php
-[X] index.php
-[X] dbqry.php
-[X] graphCreate.php
-[X] profileUpdateProcess.php
-...
-[ ] createProfilesTreeFromXml(...) - currently deprecated because it is broken (using previous version)
-
-*** FORMATS ***
-TEST: [ ] If the type of the profile in the profiles.xml has some whitespaces around, that could cause a problem
-
-NOTES:
-	escapeshellarg na každý jednotlivý argument shellu
-	pokud by pak byl problém s UTF8 oproti ASCII: <?php setlocale(LC_CTYPE, "en_US.UTF-8"); ?>
-	možná praktičtější by bylo zkusit escapeshellcmd, který se aplikuje na příkaz jako na celek
-	složky s daty potřebují oprávnění i pro zápis (json file) anebo bude potřeba to lifrovat zase do transakčního folderu
-
---output-items=m --output-format=csv --output-volume-conv=metric-prefix
-
-	Statistiky z fdistdump se musí vzít v nativním CSV formátu a také v tom metric-prefix formátu
-	Musí se vzít pro každý prefix separátně a pak pro všechny naráz a všechno tohle info se nějak musí zpracovat v loopu a vypsat
-	
-mpiexec -n 2 fdistdump -f "dstu port = 80" -l 1 2016/ --output-items=r --progress-bar-type=none >/dev/null 2>/dev/null; echo $?
+no_sidebar:
+[X] Create a replacement for SidebarSelectedTime box -> Graph panel
+[X] Deal with zero division bug in Statistics
+[X] Make statistics update automatically when are shown
+[X] New readme images
+[X] Repair graph resizing
+[X] Topbar
+[ ] Topbar scroll
+[X] Clickable panels
+[ ] Hierarchy vs Profile dropdown with -
+[X] Manage profiles in dedicated window
+[X] Keep original lookup and make only link to NERD
+[X] Graph miniature
+[ ] Graph miniature cursor
+[X] Move thumbnails
+[X] Thumbnails reorder
+[ ] Cannot create a subprofile of a subprofile

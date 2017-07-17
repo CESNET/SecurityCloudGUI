@@ -1,7 +1,7 @@
 /**
  *  This function is called by setResolution(...).
  *  It's purpose is to find currently selected resolution,
- *  unselect it a return its index.
+ *  unselect it and return its index.
  */
 function unselectResolution(list) {
 	for (var i = 0; i < list.length; i++) {

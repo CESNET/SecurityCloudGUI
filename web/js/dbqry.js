@@ -20,6 +20,20 @@ function Dbqry_parseSelectedTime() {
 	return timeSpec;
 }
 
+function Dbqry_getAggregation(tab) {
+	var sel = document.getElementById("Option_AggregateList_" + tab);
+	
+	var str = "";
+	for (var i = 0, L = sel.options.length; i < L; i++) {
+		if (sel.options[i].selected) {
+			if (i == 0) str = sel.options[i].value;
+			else		str += "," + sel.options[i].value;
+		}
+	}
+	
+	return str;
+}
+
 function Dbqry_parseQuerryParameter(tab) {
 	if (document.getElementById("DbMainOptPicker_"+tab).getElementsByTagName("li")[0].className == "active") {
 		/* Time window */
@@ -30,10 +44,8 @@ function Dbqry_parseQuerryParameter(tab) {
 		var limitTo = limitSel.options[limitSel.selectedIndex].value;
 	
 		/* Aggregation */
-		var aggreg = "";
-		if (document.getElementById("Option_AggregateList_"+tab).value != "") {
-			aggreg = "-a "+document.getElementById("Option_AggregateList_"+tab).value;	// "-a field1,field2,field3"
-		}
+		var aggreg = Dbqry_getAggregation(tab);
+		if (aggreg != "")	aggreg = "-a " + aggreg;	// "-a field1,field2,field3"
 	
 		/* Order by */
 		var orderSel = document.getElementById("Option_OrderBy_"+tab);
@@ -70,6 +82,22 @@ function Dbqry_parseQuerryParameter(tab) {
 	else {
 		var str = document.getElementById("Options_CustomTextarea_"+tab).value;
 	}
+	
+	return str;
+}
+
+function Dbqry_selectedChannelsToString(tab) {
+	var channels = document.getElementById("Channels_Dbqry_" + tab).getElementsByTagName("input");
+	
+	var str = "#";
+	for (var i = 0; i < channels.length; i++) {
+		if (channels[i].checked) {
+			if (str == "#")	str = channels[i].name;
+			else			str += ":" + channels[i].name;
+		}
+	}
+	
+	if (str == "#") str = "";
 	
 	return str;
 }
@@ -139,9 +167,7 @@ function Dbqry_processRequest(tab){
 	// *** Read the options ***
 	var opts = Dbqry_parseQuerryParameter(tab);
 	
-	// TODO: ipfixcol in a current version does not support multiple folders for channels
-	// TODO: Load available channels
-	var srcs = "./";
+	var srcs = Dbqry_selectedChannelsToString(tab);
 	
 	// *** Encode everything into URL friendly format ***
 	var profile = encodeURIComponent(PROFILE);

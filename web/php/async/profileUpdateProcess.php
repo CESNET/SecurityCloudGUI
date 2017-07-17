@@ -63,7 +63,7 @@
 	
 	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
 	$ARR_AVAILS = getAvailableProfiles('me');
-	$PROFILE = $prefix;
+	$PROFILE = $name == '/live' ? $name : $prefix;
 	if (!verifySelectedProfile($PROFILE, $ARR_AVAILS)) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert">
@@ -78,37 +78,28 @@
 	$parent = null;
 	findParentNode($xml, "", $prefix, $parent);
 	
-	if ($parent->type == "shadow") {
-		?>
-		<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			You cannot create a subprofile of a shadow profile.
-			<span style="display: none" id="AsyncQuerryResult">fail</span>
-		</div>
-		<?php
-		exit(1);
-	}
-	
-	if ($parent == null) {
-		?>
-		<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			The path <?php echo $parent; ?> does not even exist in the profiles hierarchy.
-			<span style="display: none" id="AsyncQuerryResult">fail</span>
-		</div>
-		<!--div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal">&times;</button>
-			<h4>Error</h4>
-		</div>
-		<div class="modal-body">
-			The path <?php echo $parent; ?> does not even exist in the profiles hierarchy.
-			<span style="display: none" id="AsyncQuerryResult">fail</span>
-		</div>
-		<div class="modal-footer">
-			<button class="btn btn-default" data-dismiss="modal">Okay</button>
-		</div-->
-		<?php
-		exit(1);
+	if ($name != '/live') {
+		if ($parent == null) {
+			?>
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				The path <?php echo $prefix; ?> does not even exist in the profiles hierarchy.
+				<span style="display: none" id="AsyncQuerryResult">fail</span>
+			</div>
+			<?php
+			exit(1);
+		}
+		
+		if ($parent->type == "shadow") {
+			?>
+			<div class="alert alert-danger alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				You cannot create a subprofile of a shadow profile.
+				<span style="display: none" id="AsyncQuerryResult">fail</span>
+			</div>
+			<?php
+			exit(1);
+		}
 	}
 	
 	/* ========= */
@@ -128,11 +119,11 @@
 			<?php
 			exit(2);
 		}
-		else if ($type != 'normal' && $type != 'shadow') {					// ERROR handling (BADTYPE)
+		else if ($type != 'normal'/* && $type != 'shadow'*/) {					// ERROR handling (BADTYPE)
 			?>
 			<div class="alert alert-danger alert-dismissible" role="alert">
 				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				Please stop trying to hack this... Profile type can be 'normal' or 'shadow', nothing else.
+				Please stop trying to hack this... Profile type can be 'normal', nothing else.
 				<span style="display: none" id="AsyncQuerryResult">fail</span>
 			</div>
 			<?php
@@ -216,9 +207,15 @@
 	// Rewrite the original ipfixcol cfg file
 	$xml->asXML($IPFIXCOL_CFG);
 	
-	// Find out the ipfixcol PID and reload it's configuration
-	$pid = exec("head -1 $PIDFILE");
-	$rtn = exec("kill -10 $pid && echo $?");
+	if ($SINGLE_MACHINE) {
+		// Find out the ipfixcol PID and reload it's configuration
+		$pid = exec("head -1 $PIDFILE");
+		$rtn = exec("kill -10 $pid && echo $?");
+	}
+	else {
+		$updater = fopen($IPFIXCOL_UPDATE_FILE, "w");
+		fclose($updater);
+	}
 	
 	// Release the lock
 	flock($lock, LOCK_UN);
