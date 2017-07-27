@@ -134,7 +134,6 @@ var Graph = {
 			stackedGraph: render,
 			fillGraph: render,
 			labelsKMG2: true,		// Kilo, Mega, Giga notations
-			labelsUTC: !USE_LOCAL_TIME,		// Hopefully, it'll fix the off-by-one hour
 			highlightCircleSize: 5,
 			panEdgeFraction: 0.1,
 			//plotter: barChartPlotter,

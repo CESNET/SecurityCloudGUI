@@ -7,14 +7,23 @@
 // adjusting the timestamp.
 
 function Dbqry_parseSelectedTime() {
-	var offset = HISTORIC_DATA ? SECONDS_PER_HOUR : 0;
-	var timeSpec = Graph.curTime1 + offset;
+	var timeSpec = Graph.curTime1;
 
-	if (Graph.interval) {
-		timeSpec = "-T "+timeSpec+"#"+(Graph.curTime2 + offset);
+	if (HISTORIC_DATA) {
+		if (Graph.interval) {
+			timeSpec = "-T \"U " + timeSpec + "\"#\"U " + Graph.curTime2 + "\"";
+		}
+		else {
+			timeSpec = "-t \"U "+timeSpec + "\"";
+		}
 	}
 	else {
-		timeSpec = "-t "+timeSpec;
+		if (Graph.interval) {
+			timeSpec = "-T " + timeSpec + "#" + Graph.curTime2;
+		}
+		else {
+			timeSpec = "-t "+timeSpec;
+		}
 	}
 	
 	return timeSpec;
@@ -71,10 +80,6 @@ function Dbqry_parseQuerryParameter(tab) {
 		}
 		else {
 			output += " --output-items=r,p";
-		}
-		
-		if (USE_LOCAL_TIME) {
-			output += " --output-ts-localtime";
 		}
 	
 		var str = timeSpec+" "+limitTo+" "+aggreg+" "+orderBy+" "+output;
