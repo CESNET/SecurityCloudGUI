@@ -9,24 +9,11 @@
 	*/
 	function createDefinitions($sources, $profile, $var) {
 		$result = "";
-		$fooname = 'foo';
-		if(preg_match('/traffic/',$var)) {
-			$fooname = 'bar';
-		}
 		
 		$size = sizeof($sources);
 		for ($i = 0; $i < $size; $i++) {
-			$result .= "DEF:$fooname".strval($i+1).'='.$sources[$i].".rrd:$var:MAX ";
+			$result .= "DEF:foo".strval($i+1).'='.$sources[$i].".rrd:$var:MAX ";
 			//NOTE: $result .= "DEF:foo".strval($i+1)."=$FDUMP_FOLDER/$profile/$sources[$i].rrd:$var:MAX ";
-		}
-		
-		// Because traffic must be converted from bytes to bits
-		if($fooname == "bar") {
-			$size = sizeof($sources);
-			for ($i = 0; $i < $size; $i++) {
-			$result .= 'CDEF:foo'.strval($i+1).'=bar'.strval($i+1).',8,* ';
-			//NOTE: $result .= "CDEF:foo0=bar0,8,* "
-			}
 		}
 
 		return $result;
