@@ -18,7 +18,7 @@ and manage export profiles of the ipfixcol.
 ## <a name="screen"></a> Screenshots
 ### Workbench tab
 #### Overview
-![Overview](/screen/overview.png)
+![Overview](/screens/overview.png)
 
 #### Graphs section
 ![Graphs](/screens/graph.png)

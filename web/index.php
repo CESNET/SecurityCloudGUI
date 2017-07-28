@@ -77,7 +77,20 @@
 		/* CONSTANTS */
 		/* ========= */
 		var USERSTAMP = "<?php echo $USERSTAMP; ?>";
-		var ARR_RESOLUTION = [ 0.25 * 24, 0.5 * 24, 24, 2 * 24, 7 * 24, 14 * 24, 30 * 24, (2 * 30 + 1) * 24, (6 * 30 + 3) * 24, (8 * 30 + 4) * 24, 365 * 24 ];
+		var ARR_RESOLUTION = [
+			0.25 * 24, // 6 Hours
+			0.5 * 24, // 12 Hours
+			24, // 1 Day
+			2 * 24, // 2 Days
+			4 * 24, // 4 Days
+			7 * 24, // 1 Week
+			14 * 24, // 2 Weeks
+			30 * 24, // 1 Month
+			(2 * 30 + 1) * 24, // 2 Months
+			(6 * 30 + 3) * 24, // 6 Months
+			(8 * 30 + 4) * 24, // 8 Months
+			365 * 24 // 1 Year
+		];
 		var PROFILE = <?php echo "\"$PROFILE\""; ?>;
 		var ARR_SOURCES	= [<?php $size = sizeof($ARR_SOURCES); for($i = 0; $i < $size; $i++) echo "\"$ARR_SOURCES[$i]\", "; ?>];
 		var ARR_GRAPH_VARS = [<?php $size = sizeof($ARR_GRAPH_VARS); for($i = 0; $i < $size; $i++) echo "\"$ARR_GRAPH_VARS[$i]\", "; ?>];

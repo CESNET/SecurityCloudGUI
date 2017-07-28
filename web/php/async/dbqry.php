@@ -83,6 +83,12 @@ function execDbRequest() {														// This gets called when this thread is 
 		}
 		unset($path);
 
+		// What will be printed to user
+		$cmdBackup  = "$MPIEXEC_CMD $MPIEXEC_ARGS -env OMP_NUM_THREADS 4 ";
+		$cmdBackup .= "$FDISTDUMP_CMD $filter $opts ";
+		$cmdBackup .= implode(" ", $pathsArr);
+
+		// What will be executed
 		$cmd  = "$MPIEXEC_CMD $MPIEXEC_ARGS -env OMP_NUM_THREADS 4 ";
 		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
 		$cmd .= implode(" ", $pathsArr);
@@ -93,7 +99,13 @@ function execDbRequest() {														// This gets called when this thread is 
 		}
 		unset($path);
 
-		$cmd  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." --verbose ";
+		// What will be printed to user
+		$cmdBackup  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." ";
+		$cmdBackup .= "$MPIEXEC_CMD -env OMP_NUM_THREADS 4 ";
+		$cmdBackup .= "$FDISTDUMP_CMD $filter $opts";
+
+		// What will be executed
+		$cmd  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." "; // NOTE: add --verbose for debug
 		$cmd .= "$MPIEXEC_CMD -env OMP_NUM_THREADS 4 ";
 		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json";
 	}
@@ -174,7 +186,7 @@ function execDbRequest() {														// This gets called when this thread is 
 	// BOOTSTRAP CODE:
 	echo '<div class=\'panel panel-info\'>';
 	echo '<div class=\'panel-heading\'><div class=\'row\'><div class=\'col-md-11\'>Output</div><div class=\'col-md-1\'><a href=\'#\' onclick=\'Local_clearTab("1");\'>Clear results</a></div></div></div>';
-	echo '<div class=\'panel-body\'><pre>',$cmd,'</pre><pre>';
+	echo '<div class=\'panel-body\'><pre>',$cmdBackup,'</pre><pre>';
 
 	if (strlen($buffer) > 0) {
 		$auxbuf = "";
