@@ -1,6 +1,6 @@
 <script>
 	function Local_clearTextarea(tab) {
-		document.getElementById("Filter_"+tab).value = "";
+		document.getElementById("Dbqry_Filter_" + tab).value = "";
 	}
 	
 	function generateCustomOptions (tab) {

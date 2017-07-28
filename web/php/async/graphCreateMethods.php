@@ -9,29 +9,16 @@
 	*/
 	function createDefinitions($sources, $profile, $var) {
 		$result = "";
-		$fooname = 'foo';
-		if(preg_match('/traffic/',$var)) {
-			$fooname = 'bar';
-		}
-		
+
 		$size = sizeof($sources);
 		for ($i = 0; $i < $size; $i++) {
-			$result .= "DEF:$fooname".strval($i+1).'='.$sources[$i].".rrd:$var:MAX ";
+			$result .= "DEF:foo".strval($i+1).'='.$sources[$i].".rrd:$var:MAX ";
 			//NOTE: $result .= "DEF:foo".strval($i+1)."=$FDUMP_FOLDER/$profile/$sources[$i].rrd:$var:MAX ";
-		}
-		
-		// Because traffic must be converted from bytes to bits
-		if($fooname == "bar") {
-			$size = sizeof($sources);
-			for ($i = 0; $i < $size; $i++) {
-			$result .= 'CDEF:foo'.strval($i+1).'=bar'.strval($i+1).',8,* ';
-			//NOTE: $result .= "CDEF:foo0=bar0,8,* "
-			}
 		}
 
 		return $result;
 	}
-	
+
 	/**
 	*	Takes an array of sources, their respective colours
 	*	and user defined mode and produces the string
@@ -50,18 +37,18 @@
 		$base = 224;
 		$size = sizeof($sources);
 		$ratio = 192 / $size;
-		
+
 		$c = dechex($base - $ratio);
 		$result	= "AREA:foo1#$c".$c."$c:\"$sources[0]\" ";
-			
+
 		for($i = 1; $i < $size; $i++) {
 			$c = dechex($base - ($i + 1) * $ratio);
 			$result .= 'AREA:foo'.strval($i+1)."#$c".$c."$c:\"$sources[$i]\":STACK ";
 		}
-		
+
 		return $result;
 	}
-	
+
 	/**
 	 * Based on $cmd, retrieves JSON string for rrd graph.
 	 * Each line of loaded rrd output is yielded. $slave
@@ -70,22 +57,21 @@
 	 */
 	function getGraphJSON($cmd, &$desc, &$pipes, $slave) {
 		global $IPFIXCOL_DATA, $profile;
-		
-		//$cmd = "exec $RRDTOOL graph - $format --start \"$timeSplit[0]\" --end \"$timeSplit[1]\" $def $render";
+
 		$desc = array(0 => array ('pipe', 'r'), 1 => array ('pipe', 'w'), 2 => array ('pipe', 'w') );
 		$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$slave."$profile/rrd/channels/");
-		
+
 		$buffer = "";
 		if(is_resource($p))
 			while($f = fgets($pipes[1]))
 				$buffer .= $f;
-			
+
 		return $buffer;
 	}
-	
+
 	/**
 	 *  @brief Retrieves graph as png image binary source
-	 *  
+	 *
 	 *  @param [in] $cmd rrdtool command
 	 *  @param [in] $desc Array of descriptors
 	 *  @param [in] $pipes Communication pipes
@@ -94,17 +80,17 @@
 	 */
 	function getGraphThumb($cmd, &$desc, &$pipes, $slave) {
 		global $IPFIXCOL_DATA, $profile;
-		
+
 		$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$slave."$profile/rrd/channels/");
-		
+
 		$buffer = "";
 		if(is_resource($p))
 			while($f = fgets($pipes[1]))
 				$buffer .= $f;
-			
+
 		return $buffer;
 	}
-	
+
 	/**
 	 *  When not $SINGLE_MACHINE then the resulting JSON
 	 *  needs to be merge from all slaves. This function

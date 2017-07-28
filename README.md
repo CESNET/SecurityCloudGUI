@@ -1,7 +1,7 @@
 # SecurityCloud GUI
 ## Table of Contents
 1. [Introduction](#intro)
-2. [Screenshots] (#screen)
+2. [Screenshots](#screen)
 3. [Prerequisities](#pre)
 4. [Instalation](#install)
 5. [Analyzing historical data](#historic)
@@ -9,18 +9,24 @@
 7. [Todolist](#todo)
 
 ## <a name="intro"></a> Introduction
-This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows you to visualize and analyze your internet flows collected by the ipfix collector.
+This web application is a part of the SecurityCloud project. Like nfsen or flowmon, this GUI allows 
+you to visualize and analyze your internet flows collected by the ipfix collector.
 
-The GUI also allows you to perform queries on the flow data using the fdistdump and also to organize and manage export profiles of the ipfixcol.
+The GUI also allows you to perform queries on the flow data using the fdistdump and also to organize
+and manage export profiles of the ipfixcol.
 
 ## <a name="screen"></a> Screenshots
-### Graphs tab
+### Workbench tab
+#### Overview
+![Overview](/screens/overview.png)
+
+#### Graphs section
 ![Graphs](/screens/graph.png)
 
-### Statistics tab
+#### Statistics section
 ![Statistics](/screens/stats.png)
 
-### Database queries tab
+#### Database queries section
 ![Database query](/screens/dbqry.png)
 
 ### Profile management tab
@@ -37,9 +43,11 @@ The GUI also allows you to perform queries on the flow data using the fdistdump 
 - webserver with php5 or higher
 
 ## <a name="install"></a> Instalation
-**NOTE:** These installation notes work for the default configuration on CentOS 7. For custom configuration see [Troubleshooting & Advanced installation](#trouble).
+**NOTE:** These installation notes work for the default configuration on CentOS 7. For custom 
+configuration see [Troubleshooting & Advanced installation](#trouble).
 
-After installing all prerequisities, clone the Github repo and copy all relevant data to the folders as shown below:
+After installing all prerequisities, clone the Github repo and copy all relevant data to the folders
+as shown below:
 ```
 git clone https://github.com/CESNET/SecurityCloudGUI
 cd SecurityCloudGUI/web
@@ -49,14 +57,16 @@ cd ../ipfix_configuration
 cp * /data
 ```
 
-The '/data' folder is the place where the flow data will be stored. Files copied from the 'ipfix_configuration' are the default settings for profiles and plugins of ipfixcol.
+The '/data' folder is the place where the flow data will be stored. Files copied from the
+'ipfix_configuration' are the default settings for profiles and plugins of ipfixcol.
 
 Now make sure that 'html' folder has read permissions for everybody. If not do:
 ```
 chmod -R o+rX /var/www/html
 ```
 
-Now you should set up permissions for the '/data' folder. I recommend to create a group for users who should have the direct access to this directory:
+Now you should set up permissions for the '/data' folder. I recommend to create a group for users who
+should have the direct access to this directory:
 ```
 groupadd ipfixcol
 usermod root -a -G ipfixcol
@@ -66,7 +76,10 @@ chmod -R a-rwxX /data
 chmod -R g+rwX /data
 ```
 
-Now the apache will be able to read and write the '/data' folder where it has the 'profiles.xml' configuration and where the flow data will be stored. At this point you can start the collector. The collector **has** to be launched under the apache user, otherwise ipfixcol configuration won't be automatically updated when the new profile is added or when another gets removed:
+Now the apache will be able to read and write the '/data' folder where it has the 'profiles.xml'
+configuration and where the flow data will be stored. At this point you can start the collector. The
+collector **has** to be launched under the apache user, otherwise ipfixcol configuration won't be
+automatically updated when the new profile is added or when another gets removed:
 ```
 su apache --shell "/bin/bash" -c "ipfixcol -c /data/startup.xml -v 2 -p /data/pidfile.txt -d"
 ```
@@ -74,26 +87,48 @@ su apache --shell "/bin/bash" -c "ipfixcol -c /data/startup.xml -v 2 -p /data/pi
 At this point, if your webserver is set up properly, the GUI should work.
 
 ## <a name="historic"></a> Analyzing historical data
-It may happen to you that you only have a bunch of nfdump files and you want to analyze them with the help of the GUI. This can be done. The following lines are a complete guide to importing historical data to the GUI. First and foremost please note that GUI was not originally meant for this and the process of importing is clunky at best. You also need a separate instance of the GUI for analyzing the historical data. Mixing it with ipfixcol and live traffic is a highway to hell.
+It may happen to you that you only have a bunch of nfdump files and you want to analyze them with
+the help of the GUI. This can be done. The following lines are a complete guide to importing
+historical data to the GUI. First and foremost please note that GUI was not originally meant for
+this and the process of importing is clunky at best. You also need a separate instance of the GUI
+for analyzing the historical data. Mixing it with ipfixcol and live traffic is a highway to hell.
 
 ### Preparations
-Let's say you have a clean instance of SCGUI with properly set 'config.php'. At this point there's one additional value to be set in the config. You have to set variable '$HISTORIC_DATA' to true to enable some timestamp corrections. For purpose of this tutorial I suppose that '$IPFIXCOL_DATA' is set to '/data'. You also need some data for processing. This tutorial uses folder '~/shared/nfcapd-replay'. Within this folder there are three subfolders: 'pop3', 'smtp' and 'imap'. Internal structure of these subfolders is not important. Names of these three subfolders will define names of channels of a resulting SCGui profile. The final prerequisition is a 'replay' folder from this repo. This can be placed anywhere as it only contains scripts and templates.
+Let's say you have a clean instance of SCGUI with properly set 'config.php'. At this point there's
+one additional value to be set in the config. You have to set variable '$HISTORIC_DATA' to true to
+enable some timestamp corrections. For purpose of this tutorial I suppose that '$IPFIXCOL_DATA' is
+set to '/data'. You also need some data for processing. This tutorial uses folder
+'~/shared/nfcapd-replay'. Within this folder there are three subfolders: 'pop3', 'smtp' and 'imap'.
+Internal structure of these subfolders is not important. Names of these three subfolders will define
+names of channels of a resulting SCGui profile. The final prerequisition is a 'replay' folder from
+this repo. This can be placed anywhere as it only contains scripts and templates.
 
 ### Configure replay script
-Open the 'replay' folder and edit the 'replay' script in a text editor. At the start of the script there are three variables that needs to be configured prior to data import. Value of the variable 'RRDTOOL' has to be the same as in the 'config.php'. Variable 'MPI_MODULE' specifies the module you use for executing fdistdump. I use mpich (version 3.2) so for me it would have value 'mpi/mpich-3.2-x86_64'. You can find out how the modules are named by executing command 'module avails'. Last line of the output lists installed modules. Last variable to be set is the 'DATA_DIR'. It's the location of data folder for the live profile. If your '$IPFIXCOL_DATA' variable in 'config.php' is set to '/data', 'DATA_DIR' will be set to '/data/live'. You save and close the file.
+Open the 'replay' folder and edit the 'replay' script in a text editor. At the start of the script
+there are three variables that needs to be configured prior to data import. Value of the variable
+'RRDTOOL' has to be the same as in the 'config.php'. Variable 'MPI_MODULE' specifies the module you
+use for executing fdistdump. I use mpich (version 3.2) so for me it would have value
+'mpi/mpich-3.2-x86_64'. You can find out how the modules are named by executing command
+'module avails'. Last line of the output lists installed modules. Last variable to be set is the
+'DATA_DIR'. It's the location of data folder for the live profile. If your '$IPFIXCOL_DATA' variable
+in 'config.php' is set to '/data', 'DATA_DIR' will be set to '/data/live'. You save and close the file.
 
 ![Configuring replay script](/screens/r-tutor.png)
 
 ### Run the scripts
-At this point the processing can commence. Open shell in the 'replay' folder and execute following command:
+At this point the processing can commence. Open shell in the 'replay' folder and execute following
+command:
 ```
 ./replay.sh ~/share/nfcapd-replay demo
 ```
 
-First argument of the script specifies location of data of all channels within a profile. Second argument specifies name of a resulting profile. After script finishes, follow the instructions and explore the newly created profile.
+First argument of the script specifies location of data of all channels within a profile. Second
+argument specifies name of a resulting profile. After script finishes, follow the instructions and
+explore the newly created profile.
 
 ### Rinse and repeat
-At this point if you wish to import new data, you just have to create a new profile and then only execute 'replay.sh' script.
+At this point if you wish to import new data, you just have to create a new profile and then only
+execute 'replay.sh' script.
 
 ## <a name="trouble"></a> Troubleshooting & Advanced Installation
 For many reasons the default configuration might failed or you just want to put the data somewhere else. In that case, consult this part of the guide.

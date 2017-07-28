@@ -21,8 +21,8 @@ function printResourceError() {
 }
 
 for ($ch = 0; $ch < $chnlSize; $ch++) {
-	$cmd = "exec $RRDTOOL fetch $chnl[$ch].rrd AVERAGE -r 300 $time -a | tail -n +3 | tr ' ' ','";
-	
+	$cmd = "$RRDTOOL_CMD fetch $chnl[$ch].rrd AVERAGE -r 300 $time -a | tail -n +3 | tr ' ' ','";
+
 	if ($SINGLE_MACHINE) {
 		$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/rrd/channels");// Execute the program command
 		if(!$p) printResourceError();
@@ -39,7 +39,7 @@ for ($ch = 0; $ch < $chnlSize; $ch++) {
 			$intervals = 0;
 			$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$sh."$profile/rrd/channels");
 			if (!$p) printResourceError();
-			
+
 			if (is_resource($p)) {
 				while ($f = fgets($pipes[1])) {
 					processChannel($f, $ch, $rate, $sums);
@@ -47,7 +47,7 @@ for ($ch = 0; $ch < $chnlSize; $ch++) {
 				}
 			}
 		}
-		
+
 		$intervals /= sizeof($SLAVE_HOSTNAMES);	// normalization
 	}
 }
@@ -58,7 +58,7 @@ if (sizeof($timeSplit) != 2) {
 }
 else {
 	$intervals /= $chnlSize;
-	
+
 	if ($intervals != 0) {
 		$interval = (intval($timeSplit[1]) - intval($timeSplit[0])) / $intervals;
 	}
@@ -89,14 +89,14 @@ for ($t = 0; $t < 2; $t++) {
 		echo '<caption>',$types[$t],'</caption>';
 		echo '<thead><tr><th>Channel</th><th>All</th><th>TCP</th><th>UDP</th><th>ICMP</th><th>Other</th></thead>';
 		echo '<tbody>';
-		
+
 		for ($p = 0; $p < $chnlSize; $p++) {
 			$label = ($t == 0) ? '/s' : '';
 			printRow($chnl[$p], $t == 0 ? $rate : $sums, ($p * 15 + $i * 5), ($p * 15 + ($i + 1) * 5), ($i == 2 ? "B$label" : "$label"), $p == $maxima[$t * 3 + $i]);
 		}
-		
+
 		printRow("Total", $total, ($t * 15 + $i * 5), ($t * 15 + ($i + 1) * 5), ($i == 2 ? "B$label" : "$label"), false);
-		
+
 		echo '</tbody></table></div></div></div>';
 	}
 	echo '</div>';
