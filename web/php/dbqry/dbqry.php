@@ -12,6 +12,15 @@
 	function Local_clearTab(tab) {
 		document.getElementById("Dbqry_Output_" + tab).innerHTML = "";
 	}
+	
+	function Local_setChannelsTo(tab, value) {
+		var dom = document.getElementById("Channels_Dbqry_" + tab);
+		var checks = dom.getElementsByTagName("input");
+
+		for (var i = 0; i < checks.length; i++) {
+			checks[i].checked = value;
+		}
+	}
 </script>
 
 <div class="panel panel-primary">

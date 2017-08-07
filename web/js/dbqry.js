@@ -29,18 +29,23 @@ function Dbqry_parseSelectedTime() {
 	return timeSpec;
 }
 
+function customTrim(str) {
+	return str.replace(/^[,]+|[,]+$/gm, '');
+}
+
 function Dbqry_getAggregation(tab) {
 	var sel = document.getElementById("Option_AggregateList_" + tab);
 	
 	var str = "";
 	for (var i = 0, L = sel.options.length; i < L; i++) {
 		if (sel.options[i].selected) {
-			if (i == 0) str = sel.options[i].value;
-			else		str += "," + sel.options[i].value;
+			str += "," + sel.options[i].value;
+			/*if (i == 0) str = sel.options[i].value;
+			else		str += "," + sel.options[i].value;*/
 		}
 	}
 	
-	return str;
+	return customTrim(str);
 }
 
 function Dbqry_parseQuerryParameter(tab) {

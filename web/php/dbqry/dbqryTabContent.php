@@ -14,6 +14,16 @@
 					?>
 				</div>
 			</div>
+			<div class="panel-footer">
+				<div class="btn-group chnls-group-justified">
+					<button class="btn btn-default" onclick="Local_setChannelsTo(<?php echo $tab; ?>, true);">
+						All
+					</button>
+					<button class="btn btn-default" onclick="Local_setChannelsTo(<?php echo $tab; ?>, false);">
+						None
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="col-md-4">

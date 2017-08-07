@@ -62,3 +62,11 @@ body {
 	height: 500px;*/
 	text-align: justify;
 }
+
+.chnls-group-justified {
+	width: 100%;
+}
+
+.chnls-group-justified>button {
+	width: 50%;
+}

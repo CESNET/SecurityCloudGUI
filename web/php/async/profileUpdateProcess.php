@@ -140,7 +140,13 @@
 		$profile = $list->addChild('profile');								// 	Add <profile> element
 		$profile->addAttribute('name', $flname);							// 	Modify <profile name="">
 		$profile->addChild('type', $type);									// 	Add <type> to <profile>
-		$profile->addChild('directory', $IPFIXCOL_DATA.$name);				// 	Add <directory> to <profile>
+		
+		if ($SINGLE_MACHINE) {
+			$profile->addChild('directory', $IPFIXCOL_DATA.$name);			// 	Add <directory> to <profile>
+		}
+		else {
+			$profile->addChild('directory', $IPFIXCOL_DATA.'/%h'.$name);	// 	Add <directory> to <profile>
+		}
 		
 		$chlist = $profile->addChild('channelList');						// 	Add <channelList> to <profile>
 		$channels = explode(';', $chnls);									//	Break $chnls to list of channels
