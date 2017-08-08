@@ -23,12 +23,6 @@ function collectStatistics() {
 	ajax.onreadystatechange = function () {
 		if (ajax.readyState == 4) {
 			document.getElementById("StatsContent").innerHTML = ajax.responseText;
-			
-			/*var txt = "Statistics for: " + Utility.timestampToNiceReadable(Graph.curTime1);
-			if(Graph.interval) {
-				txt += " - " + Utility.timestampToNiceReadable(Graph.curTime2);
-			}
-			document.getElementById("StatsContentHeader").innerHTML = txt;*/
 		}
 	}
 	
@@ -104,7 +98,6 @@ function lookupGrabWhois(ipaddr) {
 			var json = JSON.parse(ajax.responseText);
 			
 			var modal = document.getElementById("LookupModalContentWhois");
-			modal.innerHTML = "";
 			for(var p = 0; p < 2; p++) {
 				var size = json.contents.objects.object[p].attributes.attribute.length;
 				for(var i = 0; i < size; i++) {
@@ -169,6 +162,10 @@ function lookupGrabRvdns(ipaddr) {
 }
 
 function lookupGrab(ipaddr) {
+	document.getElementById("LookupModalContentWhois").innerHTML = "";
+	document.getElementById("LookupModalContentGeolc").innerHTML = "";
+	document.getElementById("LookupModalContentRvdns").innerHTML = "";
+	
 	lookupGrabRvdns(ipaddr);
 	lookupGrabWhois(ipaddr);
 	lookupGrabGeolc(ipaddr);
