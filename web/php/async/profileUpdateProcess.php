@@ -39,6 +39,7 @@
 
 	include '../config.php';
 	include '../misc/profileMethods.php';
+	include '../misc/filterValidator.php';
 	
 	$mode = $_GET['mode'];
 	$name = $_GET['name'];
@@ -47,8 +48,11 @@
 	if(!flock($lock, LOCK_EX)) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		The GUI was not set up properly. You have to set up corrent privileges for the app.lock file. Consult the installation guide.
+			<button type="button" class="close" data-dismiss="alert">
+				<span>&times;</span>
+			</button>
+			The GUI was not set up properly. You have to set up corrent privileges for the app.lock 
+			file. Consult the installation guide.
 			<span style="display: none" id="AsyncQuerryResult">fail</span>
 		</div>
 		<?php
@@ -58,8 +62,8 @@
 	$xml = simplexml_load_file($IPFIXCOL_CFG);
 	
 	// Example: /live/path/to/profile
-	$prefix = preg_replace('/\/[a-zA-Z_][a-zA-Z0-9_]*$/', "", $name);		// Output: /live/path/to
-	$flname	= preg_replace('/^(\/[a-zA-Z_][a-zA-Z0-9_]*)*\//', "", $name);	// Output: profile
+	$prefix = preg_replace('/\/[a-zA-Z_][a-zA-Z0-9_\-]*$/', "", $name);		// Output: /live/path/to
+	$flname	= preg_replace('/^(\/[a-zA-Z_][a-zA-Z0-9_\-]*)*\//', "", $name);	// Output: profile
 	
 	/* COLLECT USER-AVAILABLE PROFILES, COLLECT USER-SELECTED PROFILE AND VERIFY IT */
 	$ARR_AVAILS = getAvailableProfiles('me');
@@ -67,7 +71,9 @@
 	if (!verifySelectedProfile($PROFILE, $ARR_AVAILS)) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert">
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<button type="button" class="close" data-dismiss="alert">
+				<span>&times;</span>
+			</button>
 			You don't have the privileges to access the profile <?php echo $PROFILE; ?>
 			<span style="display: none" id="AsyncQuerryResult">fail</span>
 		</div>
@@ -82,7 +88,9 @@
 		if ($parent == null) {
 			?>
 			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="alert">
+					<span>&times;</span>
+				</button>
 				The path <?php echo $prefix; ?> does not even exist in the profiles hierarchy.
 				<span style="display: none" id="AsyncQuerryResult">fail</span>
 			</div>
@@ -93,7 +101,9 @@
 		if ($parent->type == "shadow") {
 			?>
 			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="alert">
+					<span>&times;</span>
+				</button>
 				You cannot create a subprofile of a shadow profile.
 				<span style="display: none" id="AsyncQuerryResult">fail</span>
 			</div>
@@ -105,29 +115,40 @@
 	/* ========= */
 	/* MAIN CODE */
 	/* ========= */
+	$dry_run = false; // If error occures, dry_run will test for all possible errors but will not save changes
 	if ($mode == 'create') {
 		$type	= $_GET['type'];
 		$chnls	= $_GET['channels'];
 		
-		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $flname)) {			// ERROR handling (BADNAME)
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_\-]*$/', $flname)) {			// ERROR handling (BADNAME)
 			?>
+			<!-- This error probably never happens due to regex based chackes above -->
 			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				The profile name does not comply with the ipfixcol naming convention. First letter of the name must be a alphabetical letter, rest can be letters, numbers or underscores.
-				<span style="display: none" id="AsyncQuerryResult">fail</span>
+				<button type="button" class="close" data-dismiss="alert">
+					<span>&times;</span>
+				</button>
+				The profile name does not comply with the ipfixcol naming convention. All names must
+				comply with regex [a-zA-Z_][a-zA-Z0-9_\-]
+				<?php if (!$dry_run) { 
+					echo '<span style="display: none" id="AsyncQuerryResult">fail</span>';
+					$dry_run = true;
+				} ?>
 			</div>
 			<?php
-			exit(2);
 		}
 		else if ($type != 'normal'/* && $type != 'shadow'*/) {					// ERROR handling (BADTYPE)
 			?>
 			<div class="alert alert-danger alert-dismissible" role="alert">
-				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="alert">
+					<span>&times;</span>
+				</button>
 				Please stop trying to hack this... Profile type can be 'normal', nothing else.
-				<span style="display: none" id="AsyncQuerryResult">fail</span>
+				<?php if (!$dry_run) {
+					echo '<span style="display: none" id="AsyncQuerryResult">fail</span>';
+					$dry_run = true;
+				} ?>
 			</div>
 			<?php
-			exit(3);
 		}
 	
 		if (empty($parent->subprofileList)) {								//	If profile has no children [
@@ -154,19 +175,37 @@
 		foreach ($channels as $c) {											//	For every channel [
 			$buf = explode (':', $c);										// 		break it to bits
 			
-			if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $buf[0])) {
+			if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_\-]*$/', $buf[0])) {
 				?>
 				<div class="alert alert-danger alert-dismissible" role="alert">
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					The channel name does not comply with the ipfixcol naming convention. First letter of the name must be a alphabetical letter, rest can be letters, numbers or underscores.
-					<span style="display: none" id="AsyncQuerryResult">fail</span>
+					<button type="button" class="close" data-dismiss="alert">
+						<span>&times;</span>
+					</button>
+					The channel name <?php echo $buf[0]; ?> does not comply with the ipfixcol naming
+					convention. All names must meet the regex [a-zA-Z_][a-zA-Z0-9_\-]
+					<?php if (!$dry_run) {
+						echo '<span style="display: none" id="AsyncQuerryResult">fail</span>';
+						$dry_run = true;
+					} ?>
 				</div>
 				<?php
-				exit(4);
 			}
 			
-			// TODO: somehow test the filter (safely)
-			// Build a PROFILE_TREE and check agains source names?!
+			if (($filter_error = validateFilter($buf[1])) != null) {
+				?>
+				<div class="alert alert-danger alert-dismissible" role="alert">
+					<button type="button" class="close" data-dismiss="alert">
+						<span>&times;</span>
+					</button>
+					Filter for channel <?php echo $buf[0]; ?> is not valid:
+					<pre><?php echo $filter_error; ?></pre>
+					<?php if (!$dry_run) {
+						echo '<span style="display: none" id="AsyncQuerryResult">fail</span>';
+						$dry_run = true;
+					} ?>
+				</div>
+				<?php
+			}
 			
 			$channel = $chlist->addChild('channel');						//		add <channel> to <channelList>
 			$channel->addAttribute('name', $buf[0]);						//		modify <channel name="">
@@ -210,8 +249,25 @@
 		exit(69);
 	}
 	
+	// If error occured, exit w/o saving changes
+	if ($dry_run) {
+		exit(2);
+	}
+	
 	// Rewrite the original ipfixcol cfg file
-	$xml->asXML($IPFIXCOL_CFG);
+	if (!$xml->asXML($IPFIXCOL_CFG)) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert">
+				<span>&times;</span>
+			</button>
+			Ipfixcol configuration couldn't be overwritten. Contact your administrator or if you're
+			the administrator, check access privileges for the file <?php echo $IPFIXCOL_CFG; ?>
+			<span style="display: none" id="AsyncQuerryResult">fail</span>
+		</div>
+		<?php
+		exit(3);
+	}
 	
 	if ($SINGLE_MACHINE) {
 		// Find out the ipfixcol PID and reload it's configuration
@@ -230,7 +286,9 @@
 	?>
 <!-- Success msg back to GUI -->
 <div class="alert alert-success alert-dismissible" role="alert">
-	<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	<button type="button" class="close" data-dismiss="alert">
+		<span>&times;</span>
+	</button>
 	Success. Page will reload shortly...
 	<span style="display: none" id="AsyncQuerryResult">success</span>
 </div>
