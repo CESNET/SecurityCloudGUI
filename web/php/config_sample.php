@@ -22,7 +22,7 @@
 	$FDISTDUMP_HA_CMD	= 'fdistdump-ha';
 	$MPIEXEC_CMD		= '/usr/lib64/mpich/bin/mpiexec';
 	$MPIEXEC_ARGS		= '-n 2';
-	$RRDTOOL_CMD		= '/opt/rrdtool-1.7.0-no-mmap/bin/rrdtool';
+	$RRDTOOL_CMD		= '/opt/rrdtool-1.7.0/bin/rrdtool';
 
 	/* =========== */
 	/* DIRECTORIES */
