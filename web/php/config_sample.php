@@ -54,4 +54,7 @@
 
 	// In distributed environment, IPFIXcol configuration reload is handled by creation of this file
 	$IPFIXCOL_UPDATE_FILE = $IPFIXCOL_DATA.'updatecfg';
+
+	// How ipfixcol-filter-check will be executed. Should be in $PATH by default
+	$IPFIXCOL_FILTER_CHECK = 'ipfixcol-filter-check';
 ?>

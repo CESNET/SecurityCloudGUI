@@ -34,7 +34,7 @@ and manage export profiles of the ipfixcol.
 
 
 ## <a name="pre"></a> Prerequisities:
-- [rrdtool 1.6](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
+- [rrdtool 1.6+](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
 - [ipfixcol](https://github.com/CESNET/ipfixcol/) with the following 3rd party plugins:
 	* profile_stats (intermediate)
 	* profiler (intermediate)
