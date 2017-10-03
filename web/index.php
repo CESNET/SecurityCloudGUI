@@ -117,6 +117,10 @@
 	/* DOCUMENT READY STUFF */
 	/* ==================== */
 	$(document).ready(function(){
+		$('#lookupModal').on('shown.bs.modal', function () {
+			$('#LookupToNERD').focus();
+		});
+
 		$(document).ready(function() {
 			$('#Option_AggregateList_1').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%', } );
 		});

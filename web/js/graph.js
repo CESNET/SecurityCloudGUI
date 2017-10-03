@@ -1,28 +1,4 @@
-﻿/* COPY PASTE THESE ELEMENTS: */
-/*
-	<div id="genericGraphWrapper" style="left: 0px; position:relative; width: 100%; height: 500px;">
-		<div id="GraphArea" style="position: absolute; width: 1000px; height: 500px;">
-			<div id="GraphArea_Cursor1"></div>
-			<div id="GraphArea_CurSpan"></div>
-			<div id="GraphArea_Cursor2"></div>
-		</div>
-		<div id="dygraph" style="width: 100%; height: 500px;"></div>
-	</div>
-*/
-/* AT DOCUMENT READY, CALL THESE FUNCTIONS: */
-/*
-	Graph.createGraph("dygraph", graphData, graphLegend, graphTitle, 0);
-	Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-	Graph.initTime(graphTimeBegin, graphTimeEnd);
-	document.getElementById("dygraph").onmousedown = Graph.moveCursor;
-	
-	$(window).resize(function(){
-		Graph.initCursor(["GraphArea_Cursor1", "GraphArea_Cursor2", "GraphArea_CurSpan"]);
-		Graph.initTime(graphTimeBegin, graphTimeEnd);
-	});
-*/
-
-var Graph = {
+﻿var Graph = {
 	cursor1: null,
 	cursor2: null,
 	curspan: null,
@@ -37,7 +13,7 @@ var Graph = {
 
 	area: null,
 	rows: 0,
-	ppr: 0,							// Pixels per row
+	ppr: 0, // Pixels per row
 	sources: null,
 	timeHandle: null,
 	
@@ -45,18 +21,37 @@ var Graph = {
 	/* PRIVATE */
 	/* ======= */
 	generateColours: function(n) {
-		var colours = [];
-	
-		if (n <= 10) {
-			var step = 360 / n;
+		var colours_fixed = [
+			"rgb(255,0,0)",
+			"rgb(0,255,0)",
+			"rgb(0,0,255)",
+			"rgb(255,255,0)",
+			"rgb(255,0,255)",
+			"rgb(0,255,255)",
+			"rgb(128,0,0)",
+			"rgb(0,128,0)",
+			"rgb(255,128,0)",
+			"rgb(162,96,64)", // brown
+			"rgb(128,128,128)"
+		];
 		
-				for(var i = 0; i < n; i++) {
-					colours[i] =  "hsl("+(step*i)+", 75%, 50%)";
-				}
-			}
-			else if (n <= 24) {
-			}
-			
+		var colours = [];
+		
+		var p = 0;
+		var i = 9;
+		while (i > 0 && n > 0) {
+			colours[p] = colours_fixed[p];
+			p++;
+			i--;
+			n--;
+		}
+
+		var step = 360 / n;
+		for (var i = 0; i < n; i++) {
+			colours[p] =  "hsl(" + (step * i) + ", 75%, 50%)";
+			p++;
+		}
+
 		return colours;
 	},
 	

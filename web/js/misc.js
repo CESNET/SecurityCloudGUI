@@ -162,6 +162,7 @@ function lookupGrabRvdns(ipaddr) {
 }
 
 function lookupGrab(ipaddr) {
+	document.getElementById("LookupModalHeading").innerHTML = ipaddr;
 	document.getElementById("LookupModalContentWhois").innerHTML = "";
 	document.getElementById("LookupModalContentGeolc").innerHTML = "";
 	document.getElementById("LookupModalContentRvdns").innerHTML = "";

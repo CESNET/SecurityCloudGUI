@@ -155,9 +155,6 @@ Even alternatively, your rrdtool is not in your $PATH or it is not in version wh
 ### fdistdump query cannot be killed
 Most probably you did request a lot of data that were processed quickly by the fdistdump and send to PHP which is currently struggling to process it and send it to the GUI. Querries can only be killed if the job is still performed by the fdistdump, at the PHP level you just have to wait.
 
-### Local time vs UTC
-By default, GUI tries to use and display local times. If this causes any kind of problem, you can always force the GUI to use UTC. Simply open config.php and change $USE_LOCAL_TIME variable to false.
-
 ### Transaction files could not be created
 You've probably changed the $TMP_DIR to the place where apache does not have read+write access. You have no reason to change this variable from the original '/tmp/scgui/' and I recommend you to keep it that way.
 

@@ -11,7 +11,6 @@
 	$tab		= $_GET['tab'];
 	$profile	= $_GET['profile'];
 	$mode		= $_GET['mode'];
-	$filename	= $stamp.'_'.$tab.'.json';
 	
 	if ($mode == 'read') {
 		// Read the file into array
