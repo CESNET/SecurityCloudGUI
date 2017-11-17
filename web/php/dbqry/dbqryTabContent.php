@@ -29,13 +29,32 @@
 	<div class="col-md-4">
 		<div class="panel panel-info">
 			<div class="panel-heading">
+				<!--button type="button" class="close">
+					<span class="glyphicon glyphicon-question-sign"></span>
+				</button-->
 				Filter
 			</div>
 			<div class="panel-body">
-				<textarea class="form-control" rows="4" id="Dbqry_Filter_<?php echo $tab; ?>"></textarea>
+				<a href="#" data-toggle="modal" data-target="#DbqryAddFilterModal">Save filter</a><br>
+				<textarea class="form-control" rows="4" id="Dbqry_Filter_<?php echo $tab; ?>" placeholder="Example: ip 127.0.0.1 and proto tcp and bytes > 1024"></textarea>
 			</div>
 			<div class="panel-footer">
-				<button class="btn btn-default btn-block" onclick="Local_clearTextarea(<?php echo $tab; ?>);">Clear filter</button>
+				<div class="row">
+					<div class="col-md-6">
+						<button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown">
+							Use saved filter
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<!--li><a href="#">Dropdown link</a></li-->
+						</ul>
+					</div>
+					<div class="col-md-6">
+						<button class="btn btn-default btn-block" onclick="Local_clearTextarea(<?php echo $tab; ?>);">
+							Clear filter
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -21,8 +21,8 @@
 				<fileFormat>lnfstore</fileFormat>
 				<profiles>yes</profiles>
 				<storagePath>/var/www/html/secloud-web-v2/data/</storagePath>
-				<prefix>nfcapd.</prefix>
-				<suffixMask>%Y%m%d%H%M</suffixMask>
+				<prefix>lnf.</prefix>
+				<suffixMask>%Y%m%d%H%M%S</suffixMask>
 				<identificatorField>ipfixcol</identificatorField>
 				<compress>yes</compress>
 				<dumpInterval>
