@@ -96,10 +96,6 @@
 			</label>
 
 			<label class="btn btn-default">
-				<input type="radio" name="OutputFormatRadio" value="long" autocomplete="off"> Long
-			</label>
-
-			<label class="btn btn-default">
 				<input type="radio" name="OutputFormatRadio" value="csv" autocomplete="off"> CSV
 			</label>
 			
@@ -109,12 +105,12 @@
 		</div>
 		
 		<div class="btn-group" data-toggle="buttons">
-			<label class="btn btn-default active">
-				<input type="radio" checked name="OutputVolumeConvRadio" value="" autocomplete="off"> Default
+			<label class="btn btn-default">
+				<input type="radio" name="OutputVolumeConvRadio" value="--output-volume-conv=none" autocomplete="off"> Raw
 			</label>
 
-			<label class="btn btn-default">
-				<input type="radio" name="OutputVolumeConvRadio" value="--output-volume-conv=metric-prefix" autocomplete="off"> K,M,B
+			<label class="btn btn-default active">
+				<input type="radio" checked name="OutputVolumeConvRadio" value="--output-volume-conv=metric-prefix" autocomplete="off"> K,M,B
 			</label>
 
 			<label class="btn btn-default">

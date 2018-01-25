@@ -68,18 +68,13 @@ function Dbqry_parseQuerryParameter(tab) {
 		var output;
 		var format = document.querySelector('input[name = "OutputFormatRadio"]:checked').value;
 		var volumeConv = document.querySelector('input[name = "OutputVolumeConvRadio"]:checked').value;
-		if (format == "long") { // See https://github.com/CESNET/SecurityCloudGUI/issues/10
-			output = "--output-format=pretty";
-			if (volumeConv == "") output += " --output-volume-conv=none";
-			else output += " " + volumeConv;
-		}
-		else if (format == "prettycsv") {
+		if (format == "prettycsv") {
 			output = "--output-format=csv --output-tcpflags-conv=str --output-addr-conv=str --output-proto-conv=str --output-duration-conv=str";
-			if (volumeConv != "") output += " " + volumeConv;
+			output += " " + volumeConv;
 		}
 		else {
 			output = "--output-format=" + format;// "pretty"/"csv"
-			if (volumeConv != "") output += " " + volumeConv;
+			output += " " + volumeConv;
 		}
 	
 		if (document.getElementById("Option_OutputNoSummary_" + tab).checked) {
