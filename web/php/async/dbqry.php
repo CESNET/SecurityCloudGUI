@@ -84,12 +84,12 @@ function execDbRequest() {														// This gets called when this thread is 
 		unset($path);
 
 		// What will be printed to user
-		$cmdBackup  = "$MPIEXEC_CMD $MPIEXEC_ARGS -env OMP_NUM_THREADS 4 ";
+		$cmdBackup  = "$MPIEXEC_CMD $MPIEXEC_ARGS "; // -env OMP_NUM_THREADS 4
 		$cmdBackup .= "$FDISTDUMP_CMD $filter $opts ";
 		$cmdBackup .= implode(" ", $pathsArr);
 
 		// What will be executed
-		$cmd  = "$MPIEXEC_CMD $MPIEXEC_ARGS -env OMP_NUM_THREADS 4 ";
+		$cmd  = "$MPIEXEC_CMD $MPIEXEC_ARGS "; // -env OMP_NUM_THREADS 4
 		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
 		$cmd .= implode(" ", $pathsArr);
 	}

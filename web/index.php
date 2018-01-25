@@ -125,6 +125,10 @@
 		$(document).ready(function() {
 			$('#Option_AggregateList_1').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%', } );
 		});
+		
+		$(document).ready(function() {
+			$('#Option_FieldList').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%',numberDisplayed: 9 } );
+		});
 
 		
 		$('#TimePicker').datetimepicker({								// Initialize datetimepicker
@@ -190,6 +194,8 @@
 		// *** ALL SET, INITIALIZE ***
 		Core.initResolution(resolutionPtr);		
 		Core.initWorkbench();
+		
+		toggleFieldsSelector()
 	});
 	</script>
 </body>

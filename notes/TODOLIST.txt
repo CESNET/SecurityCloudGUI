@@ -1,27 +1,17 @@
-TODOLIST:
-general:
-[ ] nemea hook
-[ ] nerd call
-
-devel:
-[X] Repair nemea hook in devel branch
-[X] Copy zero division solution of stats
-[X] Copy Rate/Sum labels of stats
-
-no_sidebar:
-[X] Create a replacement for SidebarSelectedTime box -> Graph panel
-[X] Deal with zero division bug in Statistics
-[X] Make statistics update automatically when are shown
-[X] New readme images
-[X] Repair graph resizing
-[X] Topbar
-[ ] Topbar scroll
-[X] Clickable panels
-[ ] Hierarchy vs Profile dropdown with -
-[X] Manage profiles in dedicated window
-[X] Keep original lookup and make only link to NERD
-[X] Graph miniature
-[ ] Graph miniature cursor
-[X] Move thumbnails
-[X] Thumbnails reorder
-[ ] Cannot create a subprofile of a subprofile
+TODOLIST
+[x] pevná paleta barev a po vyčerpání generovat
+[x] nastavit parametr fields z quick options
+[ ] lepší whois (zahrnout jiné servery než jen RIPE)
+[x] custom options by neměly zahrnovat time (CHECK)
+[x] filtr help
+[x] top 5 orderby/aggreg položek, zbytek nějak rozházet (fixed parse)
+	mě by vyhovovaly následující položky:
+	Agregace: srcip, dstip, ip, srcport, dstport, port, proto
+	Řazení: first, flows, packets, bytes, (může být i bps, pps, bpp)
+[ ] tooltipy pro nováčka, nedělat tam explicitní popisky
+[ ] historie dotazů pro znovupoužití
+[ ] při použití agregace rozklik do flow -> leda sestavení dotazu?
+[ ] in/out filtr a +- hodnoty (CHECK)
+[ ] mpiexec OMP_NUM_THREADS
+[x] předělání quick options
+	[-] orderby?

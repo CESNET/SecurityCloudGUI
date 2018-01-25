@@ -33,8 +33,8 @@ function customTrim(str) {
 	return str.replace(/^[,]+|[,]+$/gm, '');
 }
 
-function Dbqry_getAggregation(tab) {
-	var sel = document.getElementById("Option_AggregateList_" + tab);
+function Dbqry_getMultiselectAsString(id) {
+	var sel = document.getElementById(id);
 	
 	var str = "";
 	for (var i = 0, L = sel.options.length; i < L; i++) {
@@ -53,7 +53,7 @@ function Dbqry_parseQuerryParameter(tab) {
 		var limitTo = limitSel.options[limitSel.selectedIndex].value;
 	
 		/* Aggregation */
-		var aggreg = Dbqry_getAggregation(tab);
+		var aggreg = Dbqry_getMultiselectAsString("Option_AggregateList_" + tab);
 		if (aggreg != "") aggreg = "-a " + aggreg; // "-a field1,field2,field3"
 	
 		/* Order by */
@@ -61,18 +61,25 @@ function Dbqry_parseQuerryParameter(tab) {
 		var orderBy = "";
 		if(orderSel.options[orderSel.selectedIndex].value != "none") {
 			orderBy = "-o " + orderSel.options[orderSel.selectedIndex].value; // "-o field"
-			orderSel = document.getElementById("Option_OrderDirection_" + tab);
-			orderBy += orderSel.options[orderSel.selectedIndex].value; // ""/"#asc"/"#dsc"
+			orderBy += document.querySelector('input[name = "OrderByDirRadio"]:checked').value;
 		}
 	
 		/* Output */
-		var outputSel = document.getElementById("Option_OutputFormat_"+tab);
 		var output;
-		if (outputSel.options[outputSel.selectedIndex].value == "long") { // See https://github.com/CESNET/SecurityCloudGUI/issues/10
-			output = "--output-format=pretty --output-volume-conv=none";
+		var format = document.querySelector('input[name = "OutputFormatRadio"]:checked').value;
+		var volumeConv = document.querySelector('input[name = "OutputVolumeConvRadio"]:checked').value;
+		if (format == "long") { // See https://github.com/CESNET/SecurityCloudGUI/issues/10
+			output = "--output-format=pretty";
+			if (volumeConv == "") output += " --output-volume-conv=none";
+			else output += " " + volumeConv;
+		}
+		else if (format == "prettycsv") {
+			output = "--output-format=csv --output-tcpflags-conv=str --output-addr-conv=str --output-proto-conv=str --output-duration-conv=str";
+			if (volumeConv != "") output += " " + volumeConv;
 		}
 		else {
-			output = "--output-format=" + outputSel.options[outputSel.selectedIndex].value;// "pretty"/"csv"
+			output = "--output-format=" + format;// "pretty"/"csv"
+			if (volumeConv != "") output += " " + volumeConv;
 		}
 	
 		if (document.getElementById("Option_OutputNoSummary_" + tab).checked) {
@@ -81,8 +88,14 @@ function Dbqry_parseQuerryParameter(tab) {
 		else {
 			output += " --output-items=r,p";
 		}
+		
+		/* Fields */
+		var fields = "";
+		if (document.getElementById("FieldsSelectorCheckbox").checked) {
+			fields = "--fields=" + Dbqry_getMultiselectAsString("Option_FieldList");
+		}
 	
-		var str = limitTo + " " + aggreg + " " + orderBy + " " + output;
+		var str = limitTo + " " + aggreg + " " + orderBy + " " + output + " " + fields;
 	}
 	else {
 		var str = document.getElementById("Options_CustomTextarea_" + tab).value;
