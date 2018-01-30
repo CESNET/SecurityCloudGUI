@@ -84,7 +84,12 @@ automatically updated when the new profile is added or when another gets removed
 su apache --shell "/bin/bash" -c "ipfixcol -c /data/startup.xml -v 2 -p /data/pidfile.txt -d"
 ```
 
-At this point, if your webserver is set up properly, the GUI should work.
+One last thing before you can actually boot up the GUI. User can store their filter expression for
+later use. This file is identified by config value FILTER_STORAGE_PATH. If this points to location
+where apache has RW permissions, the filter save and loading will work just fine. If you wish
+to have file with stored filters somewhere else, please create that file and give it proper
+permissions and ownership. Filter storage file has a very basic CSV structure and thus can be easily edited by hand if the
+neccessity arises.
 
 ## <a name="historic"></a> Analyzing historical data
 It may happen to you that you only have a bunch of nfdump files and you want to analyze them with

@@ -9,9 +9,10 @@ TODOLIST
 	Agregace: srcip, dstip, ip, srcport, dstport, port, proto
 	Řazení: first, flows, packets, bytes, (může být i bps, pps, bpp)
 [ ] tooltipy pro nováčka, nedělat tam explicitní popisky
-[ ] historie dotazů pro znovupoužití
+[x] historie dotazů pro znovupoužití
 [ ] při použití agregace rozklik do flow -> leda sestavení dotazu?
 [ ] in/out filtr a +- hodnoty (CHECK)
-[ ] mpiexec OMP_NUM_THREADS
+[x] mpiexec OMP_NUM_THREADS
 [x] předělání quick options
 	[-] orderby?
+[x] dokumentace a parametrizace ukládání filtrů

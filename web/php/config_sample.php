@@ -21,7 +21,7 @@
 	$FDISTDUMP_CMD		= '/usr/lib64/mpich/bin/fdistdump_mpich';
 	$FDISTDUMP_HA_CMD	= 'fdistdump-ha';
 	$MPIEXEC_CMD		= '/usr/lib64/mpich/bin/mpiexec';
-	$MPIEXEC_ARGS		= '-n 2';
+	$MPIEXEC_ARGS		= '-n 2'; // -env OMP_NUM_THREADS 4
 	$RRDTOOL_CMD		= '/opt/rrdtool-1.7.0/bin/rrdtool';
 
 	/* =========== */
@@ -57,4 +57,8 @@
 
 	// How ipfixcol-filter-check will be executed. Should be in $PATH by default
 	$IPFIXCOL_FILTER_CHECK = 'ipfixcol-filter-check';
+	
+	// Also make sure this file exists and apache has RW permissions for it
+	// This file is meant for storing filter expressions from GUI
+	$FILTER_STORAGE_PATH = '/data/filters.txt';
 ?>

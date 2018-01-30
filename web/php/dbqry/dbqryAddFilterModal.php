@@ -10,12 +10,12 @@
 				<div class="form-group">
 					<label for="fname">Filter name</label>
 					<input class="form-control" type="text"
-					placeholder="Use short filter description" name="fname" required />
+					placeholder="Use short filter description" id="DbqrySavedFilterName" required />
 				</div>
 			</div>
 			
 			<div class="modal-footer">
-				<a href="#" class="btn btn-primary" data-dismiss="modal" onclick="dbqrySaveFilter();">Save</a>
+				<a href="#" class="btn btn-primary" data-dismiss="modal" onclick="Filter.saveFilter();">Save</a>
 				<a href="#" class="btn btn-default" data-dismiss="modal">Close</a>
 			</div>
 		</div>

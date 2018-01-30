@@ -194,8 +194,6 @@
 		// *** ALL SET, INITIALIZE ***
 		Core.initResolution(resolutionPtr);		
 		Core.initWorkbench();
-		
-		toggleFieldsSelector()
 	});
 	</script>
 </body>

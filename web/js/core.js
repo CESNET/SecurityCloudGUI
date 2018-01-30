@@ -3,6 +3,8 @@ var Core = {
 	initWorkbench : function() {
 		gotoWindow("Workbench");
 		acquireGraphData(initializeGraph, null);
+		toggleFieldsSelector();
+		Filter.loadFilterList();
 	},
 	
 	swapCheck : function () {
