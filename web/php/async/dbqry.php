@@ -41,34 +41,6 @@ function execDbRequest() {														// This gets called when this thread is 
 		exit(2);
 	}
 
-	/*
-	ipfixcol currently has different filter syntax than fdistdump, thus shadow profiles can't be
-	supported
-	if($aux->getShadow()) {
-		$profile = $aux->getParentName();
-
-		$aaux = $aux->getParent();
-		foreach ($aaux->getChannels() as $c) {
-			$src = "";
-			$src .= $c->getName().'/ ';
-		}
-
-		$f = "";
-		foreach($aux->getChannels() as $c) {
-			if (strlen($f) != 0) {
-				$f .= ' or ';
-			}
-			$f .= '('.$c->getFilter().')';
-		}
-
-		if ($filter == "") {
-			$filter = "($f)";
-		}
-		else {
-			$filter = "(($filter) and ($f))";
-		}
-	}*/
-
 	if(strlen($filter) > 2) {
 		$filter = escapeshellarg($filter);
 		$filter = "-f $filter";
@@ -84,12 +56,12 @@ function execDbRequest() {														// This gets called when this thread is 
 		unset($path);
 
 		// What will be printed to user
-		$cmdBackup  = "$MPIEXEC_CMD $MPIEXEC_ARGS -env OMP_NUM_THREADS 4 ";
+		$cmdBackup  = "$MPIEXEC_CMD $MPIEXEC_ARGS ";
 		$cmdBackup .= "$FDISTDUMP_CMD $filter $opts ";
 		$cmdBackup .= implode(" ", $pathsArr);
 
 		// What will be executed
-		$cmd  = "$MPIEXEC_CMD $MPIEXEC_ARGS -env OMP_NUM_THREADS 4 ";
+		$cmd  = "$MPIEXEC_CMD $MPIEXEC_ARGS ";
 		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
 		$cmd .= implode(" ", $pathsArr);
 	}
@@ -101,12 +73,12 @@ function execDbRequest() {														// This gets called when this thread is 
 
 		// What will be printed to user
 		$cmdBackup  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." ";
-		$cmdBackup .= "$MPIEXEC_CMD -env OMP_NUM_THREADS 4 ";
+		$cmdBackup .= "$MPIEXEC_CMD $MPIEXEC_ARGS ";
 		$cmdBackup .= "$FDISTDUMP_CMD $filter $opts";
 
 		// What will be executed
 		$cmd  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." "; // NOTE: add --verbose for debug
-		$cmd .= "$MPIEXEC_CMD -env OMP_NUM_THREADS 4 ";
+		$cmd .= "$MPIEXEC_CMD $MPIEXEC_ARGS ";
 		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json";
 	}
 
@@ -196,10 +168,9 @@ function execDbRequest() {														// This gets called when this thread is 
 				if (strlen($auxbuf) == 0) {
 					echo $buffer[$i];
 				}
-				else {//http://rest.db.ripe.net/search.json?query-string=194.228.92.50&flags=no-filtering
+				else {
 					if (@inet_pton($auxbuf)) {								// Convert string into binary ip. If the function returned valid string, $auxbuf is an ip
 						$auxbuf = "<a href='#' onclick=\"lookupGrab('$auxbuf');\" data-toggle='modal' data-target='#lookupModal'>$auxbuf</a>";
-						//$auxbuf = "<a target=\"_blank\" href=\"https://nerd.cesnet.cz/nerd/ip/$auxbuf\">$auxbuf</a>";
 					}
 
 					echo $auxbuf.$buffer[$i];

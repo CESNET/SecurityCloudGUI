@@ -18,3 +18,4 @@
 <script src="js/profiles.js"></script>
 <script src="js/core.js"></script>
 <script src="js/default.js"></script>
+<script src="js/filter.js"></script>

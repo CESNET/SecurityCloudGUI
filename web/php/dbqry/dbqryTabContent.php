@@ -45,9 +45,7 @@
 							Use saved filter
 							<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu">
-							<!--li><a href="#">Dropdown link</a></li-->
-						</ul>
+						<ul class="dropdown-menu" id="SavedFilterList"></ul>
 					</div>
 					<div class="col-md-6">
 						<button class="btn btn-default btn-block" onclick="Local_clearTextarea(<?php echo $tab; ?>);">
