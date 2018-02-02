@@ -1,5 +1,5 @@
 var Filter = {
-	insertFilter(filterText) {
+	insertFilter : function(filterText) {
 		document.getElementById("Dbqry_Filter_1").value = filterText;
 	}, 
 	
