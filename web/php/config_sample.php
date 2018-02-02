@@ -23,6 +23,7 @@
 	$MPIEXEC_CMD		= '/usr/lib64/mpich/bin/mpiexec';
 	$MPIEXEC_ARGS		= '-n 2'; // -env OMP_NUM_THREADS 4
 	$RRDTOOL_CMD		= '/opt/rrdtool-1.7.0/bin/rrdtool';
+	$FDISTDUMP_LOG_LEVEL = 0; // 0 - disable, 1 - error, 2 - also warnings, 3 - also logs, 4 - also debug
 
 	/* =========== */
 	/* DIRECTORIES */

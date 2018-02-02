@@ -7,6 +7,7 @@
 <?php
 /* MAIN EXECUTION CODE */
 function execDbRequest() {														// This gets called when this thread is started
+	date_default_timezone_set('UTC');
 	// *** include ***
 	include '../config.php';													// Grab some constants from the config
 	include '../misc/transactionsInclude.php';									// And get some functions related to transactions
@@ -63,6 +64,9 @@ function execDbRequest() {														// This gets called when this thread is 
 		// What will be executed
 		$cmd  = "$MPIEXEC_CMD $MPIEXEC_ARGS ";
 		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
+		if ($FDISTDUMP_LOG_LEVEL > 0 && $FDISTDUMP_LOG_LEVEL < 5) {
+			$cmd .= "-v $FDISTDUMP_LOG_LEVEL ";
+		}
 		$cmd .= implode(" ", $pathsArr);
 	}
 	else {
@@ -79,7 +83,10 @@ function execDbRequest() {														// This gets called when this thread is 
 		// What will be executed
 		$cmd  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." "; // NOTE: add --verbose for debug
 		$cmd .= "$MPIEXEC_CMD $MPIEXEC_ARGS ";
-		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json";
+		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
+		if ($FDISTDUMP_LOG_LEVEL > 0 && $FDISTDUMP_LOG_LEVEL < 5) {
+			$cmd .= "-v $FDISTDUMP_LOG_LEVEL";
+		}
 	}
 
 	$desc = array(
