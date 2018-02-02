@@ -29,13 +29,9 @@
 	<div class="col-md-4">
 		<div class="panel panel-info">
 			<div class="panel-heading">
-				<!--button type="button" class="close">
-					<span class="glyphicon glyphicon-question-sign"></span>
-				</button-->
 				Filter
 			</div>
 			<div class="panel-body">
-				<!--a href="#" data-toggle="modal" data-target="#DbqryAddFilterModal">Save filter</a><br!-->
 				<textarea class="form-control" rows="4" id="Dbqry_Filter_<?php echo $tab; ?>" placeholder="Example: ip 127.0.0.1 and proto tcp and bytes > 1024"></textarea>
 			</div>
 			<div class="panel-footer">
