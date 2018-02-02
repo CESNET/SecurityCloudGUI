@@ -35,19 +35,24 @@
 				Filter
 			</div>
 			<div class="panel-body">
-				<a href="#" data-toggle="modal" data-target="#DbqryAddFilterModal">Save filter</a><br>
+				<!--a href="#" data-toggle="modal" data-target="#DbqryAddFilterModal">Save filter</a><br!-->
 				<textarea class="form-control" rows="4" id="Dbqry_Filter_<?php echo $tab; ?>" placeholder="Example: ip 127.0.0.1 and proto tcp and bytes > 1024"></textarea>
 			</div>
 			<div class="panel-footer">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
+						<button type="button" class="btn btn-default btn-block" data-toggle="modal" data-target="#DbqryAddFilterModal">
+							Save filter
+						</button>
+					</div>
+					<div class="col-md-4">
 						<button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown">
 							Use saved filter
 							<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu" id="SavedFilterList"></ul>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<button class="btn btn-default btn-block" onclick="Local_clearTextarea(<?php echo $tab; ?>);">
 							Clear filter
 						</button>
