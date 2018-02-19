@@ -58,6 +58,7 @@
 
 	<!-- MODALS -->
 	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php';	// Fdistdump manpage modal ?>
+	<?php include 'php/dbqry/dbqryAddFilterModal.php';	// Fdistdump manpage modal ?>
 	<?php include 'php/profiles/profilesModifyModal.php'	// Modal for profile management ?>
 	<?php include 'php/misc/lookup.php';					// IPaddr lookup ?>
 	<?php include 'php/graph/thumbGraphs.php';				// Graph thumbnails?>
@@ -117,8 +118,16 @@
 	/* DOCUMENT READY STUFF */
 	/* ==================== */
 	$(document).ready(function(){
+		$('#lookupModal').on('shown.bs.modal', function () {
+			$('#LookupToNERD').focus();
+		});
+
 		$(document).ready(function() {
 			$('#Option_AggregateList_1').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%', } );
+		});
+		
+		$(document).ready(function() {
+			$('#Option_FieldList').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%',numberDisplayed: 9 } );
 		});
 
 		

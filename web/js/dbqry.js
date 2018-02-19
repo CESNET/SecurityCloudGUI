@@ -29,63 +29,71 @@ function Dbqry_parseSelectedTime() {
 	return timeSpec;
 }
 
-function Dbqry_getAggregation(tab) {
-	var sel = document.getElementById("Option_AggregateList_" + tab);
+function customTrim(str) {
+	return str.replace(/^[,]+|[,]+$/gm, '');
+}
+
+function Dbqry_getMultiselectAsString(id) {
+	var sel = document.getElementById(id);
 	
 	var str = "";
 	for (var i = 0, L = sel.options.length; i < L; i++) {
 		if (sel.options[i].selected) {
-			if (i == 0) str = sel.options[i].value;
-			else		str += "," + sel.options[i].value;
+			str += "," + sel.options[i].value;
 		}
 	}
 	
-	return str;
+	return customTrim(str);
 }
 
 function Dbqry_parseQuerryParameter(tab) {
 	if (document.getElementById("DbMainOptPicker_"+tab).getElementsByTagName("li")[0].className == "active") {
-		/* Time window */
-		var timeSpec = Dbqry_parseSelectedTime();
-	
 		/* Limit to */
 		var limitSel = document.getElementById("Option_LimitTo_"+tab);
 		var limitTo = limitSel.options[limitSel.selectedIndex].value;
 	
 		/* Aggregation */
-		var aggreg = Dbqry_getAggregation(tab);
-		if (aggreg != "")	aggreg = "-a " + aggreg;	// "-a field1,field2,field3"
+		var aggreg = Dbqry_getMultiselectAsString("Option_AggregateList_" + tab);
+		if (aggreg != "") aggreg = "-a " + aggreg; // "-a field1,field2,field3"
 	
 		/* Order by */
 		var orderSel = document.getElementById("Option_OrderBy_"+tab);
 		var orderBy = "";
 		if(orderSel.options[orderSel.selectedIndex].value != "none") {
-			orderBy = "-o "+orderSel.options[orderSel.selectedIndex].value;				// "-o field"
-			orderSel = document.getElementById("Option_OrderDirection_"+tab);
-			orderBy += orderSel.options[orderSel.selectedIndex].value;					// ""/"#asc"/"#dsc"
+			orderBy = "-o " + orderSel.options[orderSel.selectedIndex].value; // "-o field"
+			orderBy += document.querySelector('input[name = "OrderByDirRadio"]:checked').value;
 		}
 	
 		/* Output */
-		var outputSel = document.getElementById("Option_OutputFormat_"+tab);
 		var output;
-		if (outputSel.options[outputSel.selectedIndex].value == "long") { // See https://github.com/CESNET/SecurityCloudGUI/issues/10
-			output = "--output-format=pretty --output-volume-conv=none";
+		var format = document.querySelector('input[name = "OutputFormatRadio"]:checked').value;
+		var volumeConv = document.querySelector('input[name = "OutputVolumeConvRadio"]:checked').value;
+		if (format == "prettycsv") {
+			output = "--output-format=csv --output-tcpflags-conv=str --output-addr-conv=str --output-proto-conv=str --output-duration-conv=str";
+			output += " " + volumeConv;
 		}
 		else {
-			output = "--output-format="+outputSel.options[outputSel.selectedIndex].value;// "pretty"/"csv"
+			output = "--output-format=" + format;// "pretty"/"csv"
+			output += " " + volumeConv;
 		}
 	
-		if (document.getElementById("Option_OutputNoSummary_"+tab).checked) {
+		if (document.getElementById("Option_OutputNoSummary_" + tab).checked) {
 			output += " --output-items=r";
 		}
 		else {
 			output += " --output-items=r,p";
 		}
+		
+		/* Fields */
+		var fields = "";
+		if (document.getElementById("FieldsSelectorCheckbox").checked) {
+			fields = "--fields=" + Dbqry_getMultiselectAsString("Option_FieldList");
+		}
 	
-		var str = timeSpec+" "+limitTo+" "+aggreg+" "+orderBy+" "+output;
+		var str = limitTo + " " + aggreg + " " + orderBy + " " + output + " " + fields;
 	}
 	else {
-		var str = document.getElementById("Options_CustomTextarea_"+tab).value;
+		var str = document.getElementById("Options_CustomTextarea_" + tab).value;
 	}
 	
 	return str;
@@ -97,8 +105,12 @@ function Dbqry_selectedChannelsToString(tab) {
 	var str = "#";
 	for (var i = 0; i < channels.length; i++) {
 		if (channels[i].checked) {
-			if (str == "#")	str = channels[i].name;
-			else			str += ":" + channels[i].name;
+			if (str == "#") {
+				str = channels[i].name;
+			}
+			else {
+				str += ":" + channels[i].name;
+			}
 		}
 	}
 	
@@ -121,7 +133,7 @@ function Dbqry_stopRequest(tab) {
 		}
 	}*/
 	
-	ajaxRequest.open("GET", "php/async/dbqry.php?mode=kill&stamp="+USERSTAMP+"&tab="+tab, true);
+	ajaxRequest.open("GET", "php/async/dbqry.php?mode=kill&stamp=" + USERSTAMP + "&tab=" + tab, true);
 	ajaxRequest.send();
 }
 
@@ -137,13 +149,13 @@ function Dbqry_trackProgress(tab) {
 	ajax.onreadystatechange = function() {
 		if(ajax.readyState == 4) {
 			var data = JSON.parse(ajax.responseText);
-			var progress = document.getElementById("Dbqry_ProgressBar_"+tab);
-			progress.innerHTML = data.total+"%";
-			progress.style.width = data.total+"%";
+			var progress = document.getElementById("Dbqry_ProgressBar_" + tab);
+			progress.innerHTML = data.total + "%";
+			progress.style.width = data.total + "%";
 		}
 	}
 	
-	ajax.open("GET", "php/async/readProgress.php?mode=read&userstamp="+USERSTAMP+"&tab="+tab+"&profile="+PROFILE+"&nocache="+new Date().getTime(), true);
+	ajax.open("GET", "php/async/readProgress.php?mode=read&userstamp=" + USERSTAMP + "&tab=" + tab + "&profile=" + PROFILE + "&nocache=" + new Date().getTime(), true);
 	ajax.send();
 }
 
@@ -162,23 +174,25 @@ function Dbqry_processRequest(tab){
 	
 	// *** Read the filter texteara ***
 	var filter;
-	if (document.getElementById("Dbqry_Filter_"+tab).value.length >= 1) {
-		filter = document.getElementById("Dbqry_Filter_"+tab).value;
+	if (document.getElementById("Dbqry_Filter_" + tab).value.length >= 1) {
+		filter = document.getElementById("Dbqry_Filter_" + tab).value;
 	}
 	else {
 		filter = "";
 	}
 	
 	// *** Read the options ***
-	var opts = Dbqry_parseQuerryParameter(tab);
+	/* Time window */
+	var timeSpec = Dbqry_parseSelectedTime();
+	var opts = timeSpec + " " + Dbqry_parseQuerryParameter(tab);
 	
 	var srcs = Dbqry_selectedChannelsToString(tab);
 	
 	// *** Encode everything into URL friendly format ***
 	var profile = encodeURIComponent(PROFILE);
-		filter	= encodeURIComponent(filter);
-		opts	= encodeURIComponent(opts);
-		srcs	= encodeURIComponent(srcs);
+		filter  = encodeURIComponent(filter);
+		opts    = encodeURIComponent(opts);
+		srcs    = encodeURIComponent(srcs);
 	
 	// *** Register ajax callback ***
 	ajaxRequest.onreadystatechange = function(){								// callback
@@ -187,8 +201,8 @@ function Dbqry_processRequest(tab){
 			document.getElementById("Dbqry_Output_"+tab).innerHTML = ajaxRequest.responseText;
 			
 			// *** Change the caption of Kill button to Progress button ***
-			document.getElementById("Dbqry_ProcessButton_"+tab).style.display = "";
-			document.getElementById("Dbqry_StopButton_"+tab).style.display = "none";
+			document.getElementById("Dbqry_ProcessButton_" + tab).style.display = "";
+			document.getElementById("Dbqry_StopButton_" + tab).style.display = "none";
 			
 			// *** Kill the progress bar *** 
 			progress.style.display="none";
@@ -196,23 +210,23 @@ function Dbqry_processRequest(tab){
 			
 			// *** Clear the auxiliary progress bar file
 			var ajax = Utility.initAjax();
-			ajax.open("GET", "php/async/readProgress.php?mode=delete&userstamp="+USERSTAMP+"&tab="+tab+"&profile="+profile+"&nocache="+new Date().getTime(), true);
+			ajax.open("GET", "php/async/readProgress.php?mode=delete&userstamp=" + USERSTAMP + "&tab=" + tab + "&profile=" + profile + "&nocache=" + new Date().getTime(), true);
 			ajax.send(null);
 		}
 	}
 	
 	// *** Change the caption of Process button to Kill button ***
-	document.getElementById("Dbqry_ProcessButton_"+tab).style.display = "none";
-	document.getElementById("Dbqry_StopButton_"+tab).style.display = "";
+	document.getElementById("Dbqry_ProcessButton_" + tab).style.display = "none";
+	document.getElementById("Dbqry_StopButton_" + tab).style.display = "";
 
 	// *** Initialize the progress bar ***
 	var progress = document.getElementById("Dbqry_ProgressBar_"+tab);
-	progress.innerHTML		= "0%";
-	progress.style.width	= "0%";
-	progress.style.display	= "";
+	progress.innerHTML     = "0%";
+	progress.style.width   = "0%";
+	progress.style.display = "";
 	
 	// *** Make async call to progress bar update and dbqry request
 	intervalHandle = window.setInterval(Dbqry_trackProgress, 1000, tab);
-	ajaxRequest.open("GET", "php/async/dbqry.php?mode=exec&stamp="+USERSTAMP+"&tab="+tab+"&profile="+profile+"&opts="+opts+"&filter="+filter+"&src="+srcs, true);
+	ajaxRequest.open("GET", "php/async/dbqry.php?mode=exec&stamp=" + USERSTAMP + "&tab=" + tab + "&profile=" + profile + "&opts=" + opts + "&filter=" + filter + "&src=" + srcs, true);
 	ajaxRequest.send(null);
 }

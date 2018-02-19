@@ -34,7 +34,7 @@ and manage export profiles of the ipfixcol.
 
 
 ## <a name="pre"></a> Prerequisities:
-- [rrdtool 1.6](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
+- [rrdtool 1.6+](http://oss.oetiker.ch/rrdtool/pub/?M=D) (must be in $PATH for default installation)
 - [ipfixcol](https://github.com/CESNET/ipfixcol/) with the following 3rd party plugins:
 	* profile_stats (intermediate)
 	* profiler (intermediate)
@@ -84,7 +84,12 @@ automatically updated when the new profile is added or when another gets removed
 su apache --shell "/bin/bash" -c "ipfixcol -c /data/startup.xml -v 2 -p /data/pidfile.txt -d"
 ```
 
-At this point, if your webserver is set up properly, the GUI should work.
+One last thing before you can actually boot up the GUI. User can store their filter expression for
+later use. This file is identified by config value FILTER_STORAGE_PATH. If this points to location
+where apache has RW permissions, the filter save and loading will work just fine. If you wish
+to have file with stored filters somewhere else, please create that file and give it proper
+permissions and ownership. Filter storage file has a very basic CSV structure and thus can be easily edited by hand if the
+neccessity arises.
 
 ## <a name="historic"></a> Analyzing historical data
 It may happen to you that you only have a bunch of nfdump files and you want to analyze them with
@@ -154,9 +159,6 @@ Even alternatively, your rrdtool is not in your $PATH or it is not in version wh
 
 ### fdistdump query cannot be killed
 Most probably you did request a lot of data that were processed quickly by the fdistdump and send to PHP which is currently struggling to process it and send it to the GUI. Querries can only be killed if the job is still performed by the fdistdump, at the PHP level you just have to wait.
-
-### Local time vs UTC
-By default, GUI tries to use and display local times. If this causes any kind of problem, you can always force the GUI to use UTC. Simply open config.php and change $USE_LOCAL_TIME variable to false.
 
 ### Transaction files could not be created
 You've probably changed the $TMP_DIR to the place where apache does not have read+write access. You have no reason to change this variable from the original '/tmp/scgui/' and I recommend you to keep it that way.

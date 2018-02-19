@@ -41,10 +41,7 @@
 						<source>ch2</source>
 					</sourceList>
 					<filter>
-						sourceTransportPort == 110 OR
-						destinationTransportPort == 110 OR
-						sourceTransportPort == 995 OR
-						destinationTransportPort == 995
+						srcport = 110 or dstport = 110 or srcport = 995 or dstport = 995
 					</filter>
 				</channel>
 
@@ -55,10 +52,7 @@
 						<source>ch2</source>
 					</sourceList>
 					<filter>
-						sourceTransportPort == 143 OR
-						destinationTransportPort == 143 OR
-						sourceTransportPort == 993 OR
-						destinationTransportPort == 993
+						srcport = 143 or dstport = 143 or srcport = 993 or dstport = 993
 					</filter>
 				</channel>
 				
@@ -69,10 +63,7 @@
 						<source>ch2</source>
 					</sourceList>
 					<filter>
-						sourceTransportPort == 25 OR
-						destinationTransportPort == 25 OR
-						sourceTransportPort == 465 OR
-						destinationTransportPort == 465
+						srcport = 25 or dstport = 25 or srcport = 465 or dstport = 465
 					</filter>
 				</channel>
 			</channelList>

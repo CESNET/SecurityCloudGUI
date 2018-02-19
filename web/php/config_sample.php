@@ -21,8 +21,9 @@
 	$FDISTDUMP_CMD		= '/usr/lib64/mpich/bin/fdistdump_mpich';
 	$FDISTDUMP_HA_CMD	= 'fdistdump-ha';
 	$MPIEXEC_CMD		= '/usr/lib64/mpich/bin/mpiexec';
-	$MPIEXEC_ARGS		= '-n 2';
-	$RRDTOOL_CMD		= '/opt/rrdtool-1.7.0-no-mmap/bin/rrdtool';
+	$MPIEXEC_ARGS		= '-n 2'; // -env OMP_NUM_THREADS 4
+	$RRDTOOL_CMD		= '/opt/rrdtool-1.7.0/bin/rrdtool';
+	$FDISTDUMP_LOG_LEVEL = 0; // 0 - disable, 1 - error, 2 - also warnings, 3 - also logs, 4 - also debug
 
 	/* =========== */
 	/* DIRECTORIES */
@@ -54,4 +55,11 @@
 
 	// In distributed environment, IPFIXcol configuration reload is handled by creation of this file
 	$IPFIXCOL_UPDATE_FILE = $IPFIXCOL_DATA.'updatecfg';
+
+	// How ipfixcol-filter-check will be executed. Should be in $PATH by default
+	$IPFIXCOL_FILTER_CHECK = 'ipfixcol-filter-check';
+	
+	// Also make sure this file exists and apache has RW permissions for it
+	// This file is meant for storing filter expressions from GUI
+	$FILTER_STORAGE_PATH = '/data/filters.txt';
 ?>
