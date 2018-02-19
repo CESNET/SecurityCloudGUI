@@ -8,12 +8,18 @@
 	include '../config.php';
 
 	if (!isset($_GET['action'])) {
-		echo '{"status": "failure", "message": "No action parameter!" data: []}';
+		echo '{"status": "failure", "message": "No action parameter!", data: []}';
 		exit(1);
 	}
 	$action = $_GET['action'];
 	
 	if ($action == "load") {
+		$lock = fopen('../app.lock', 'r');
+		if(!flock($lock, LOCK_EX)) {
+			echo '{"status: "failure", "message": "Cannot acquire app.lock mutex!", data: []}';
+			exit(1);
+		}
+		
 		// Load all filters and their names from dedicated file and send them back
 		$file = fopen($FILTER_STORAGE_PATH, "r");
 		$output = "";
@@ -27,23 +33,30 @@
 			fclose($file);
 		}
 		
+		flock($lock, LOCK_UN);
+		fclose($lock);
+		
 		echo '{"status":"success", "data": ['.$output.']}';
 	}
 	else if ($action == "save") {
 		// Append new filter to dedicated file
 		if (!isset($_GET['name']) || !isset($_GET['filter'])) {
-			echo '{"status": "failure", "message": "No name or filter parameter!" data: []}';
+			echo '{"status": "failure", "message": "No name or filter parameter!", data: []}';
+			exit(1);
 		}
 		$name = $_GET['name'];
 		$filter = $_GET['filter'];
 		
 		if (($file = fopen($FILTER_STORAGE_PATH, "a")) == false) {
-			echo '{"status": "failure", "message": "Could not open file for storing filters!" data: []}';
+			echo '{"status": "failure", "message": "Could not open file for storing filters!", data: []}';
 			exit(1);
 		}
 		fwrite($file, "\"$name\",\"$filter\"\n");
 		fclose($file);
 		
 		echo '{"status": "success", "data": []}';
+	}
+	else if ($action == "delete") {
+		
 	}
 ?>
