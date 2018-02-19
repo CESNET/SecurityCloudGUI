@@ -171,7 +171,7 @@ function execDbRequest() {														// This gets called when this thread is 
 		$auxbuf = "";
 		$size = strlen($buffer);
 		for ($i = 0; $i < $size; $i++) {
-			if ($buffer[$i] == ' ' || $buffer[$i] == '\n' || $buffer[$i] == ',') {
+			if ($buffer[$i] == ' ' || $buffer[$i] == PHP_EOL || $buffer[$i] == ',') {
 				if (strlen($auxbuf) == 0) {
 					echo $buffer[$i];
 				}
