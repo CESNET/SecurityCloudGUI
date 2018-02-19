@@ -70,3 +70,8 @@ body {
 .chnls-group-justified>button {
 	width: 50%;
 }
+
+/* https://stackoverflow.com/questions/15844533/bootstrap-dropdown-menu-two-links-on-same-horizontal-row */
+.open> ul>li.hz{
+    display: inline-flex !important;
+}
