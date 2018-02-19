@@ -41,7 +41,7 @@
 							Save filter
 						</button>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-4 open">
 						<button type="button" class="btn btn-default btn-block dropdown-toggle" data-toggle="dropdown">
 							Use saved filter
 							<span class="caret"></span>

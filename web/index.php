@@ -58,7 +58,8 @@
 
 	<!-- MODALS -->
 	<?php include 'php/dbqry/dbqryFdistdumpHelpModal.php';	// Fdistdump manpage modal ?>
-	<?php include 'php/dbqry/dbqryAddFilterModal.php';	// Fdistdump manpage modal ?>
+	<?php include 'php/dbqry/dbqryAddFilterModal.php'; ?>
+	<?php include 'php/dbqry/dbqryDelFilterModal.php'; ?>
 	<?php include 'php/profiles/profilesModifyModal.php'	// Modal for profile management ?>
 	<?php include 'php/misc/lookup.php';					// IPaddr lookup ?>
 	<?php include 'php/graph/thumbGraphs.php';				// Graph thumbnails?>
@@ -154,6 +155,16 @@
 				Graph.miniature.resize();
 			}
 			else							resizeGraph();
+		});
+		
+		$('#DbqryDelFilterModal').on('show.bs.modal', function (event) {
+			var button = $(event.relatedTarget) // Button that triggered the modal
+			var name = button.data('name');
+			var filter = button.data('filter');
+			
+			var modal = $(this);
+			modal.find('.modal-body #DbqryDelFilterModalNameValue').val(name);
+			modal.find('.modal-body #DbqryDelFilterModalFilterValue').val(filter);
 		});
 		
 		// *** PARSE URL PARAMS ***
