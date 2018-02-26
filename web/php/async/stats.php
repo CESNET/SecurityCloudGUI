@@ -28,7 +28,7 @@ for ($ch = 0; $ch < $chnlSize; $ch++) {
 		if(!$p) printResourceError();
 
 		if(is_resource($p)) {
-			while($f = fgets($pipes[1])) {											// While any stdout is inbound, load line
+			while($f = fgets($pipes[1])) { // While any stdout is inbound, load line
 				processChannel($f, $ch, $rate, $sums);
 				$intervals++;
 			}
@@ -36,7 +36,6 @@ for ($ch = 0; $ch < $chnlSize; $ch++) {
 	}
 	else {
 		foreach ($SLAVE_HOSTNAMES as $sh) {
-			$intervals = 0;
 			$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$sh."$profile/rrd/channels");
 			if (!$p) printResourceError();
 
@@ -47,9 +46,11 @@ for ($ch = 0; $ch < $chnlSize; $ch++) {
 				}
 			}
 		}
-
-		$intervals /= sizeof($SLAVE_HOSTNAMES);	// normalization
 	}
+}
+
+if (!$SINGLE_MACHINE) {
+	$intervals /= sizeof($SLAVE_HOSTNAMES);
 }
 
 if (sizeof($timeSplit) != 2) {
@@ -58,7 +59,7 @@ if (sizeof($timeSplit) != 2) {
 }
 else {
 	$intervals /= $chnlSize;
-
+	
 	if ($intervals != 0) {
 		$interval = (intval($timeSplit[1]) - intval($timeSplit[0])) / $intervals;
 	}

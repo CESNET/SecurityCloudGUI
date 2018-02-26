@@ -129,6 +129,7 @@
 		
 		$(document).ready(function() {
 			$('#Option_FieldList').multiselect( { enableFiltering: true, maxHeight: 200, buttonWidth: '100%',numberDisplayed: 9 } );
+			$('#Option_FieldList').multiselect('select', ["first", "bytes", "packets", "srcport", "dstport", "srcip", "dstip", "proto"]);
 		});
 
 		
