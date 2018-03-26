@@ -58,15 +58,12 @@ function execDbRequest() {														// This gets called when this thread is 
 
 		// What will be printed to user
 		$cmdBackup  = "$MPIEXEC_CMD $MPIEXEC_ARGS ";
-		$cmdBackup .= "$FDISTDUMP_CMD $filter $opts ";
+		$cmdBackup .= "$FDISTDUMP_CMD $FDISTDUMP_ARGS $filter $opts ";
 		$cmdBackup .= implode(" ", $pathsArr);
 
 		// What will be executed
 		$cmd  = "$MPIEXEC_CMD $MPIEXEC_ARGS ";
-		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
-		if ($FDISTDUMP_LOG_LEVEL > 0 && $FDISTDUMP_LOG_LEVEL < 5) {
-			$cmd .= "-v $FDISTDUMP_LOG_LEVEL ";
-		}
+		$cmd .= "$FDISTDUMP_CMD $FDISTDUMP_ARGS $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
 		$cmd .= implode(" ", $pathsArr);
 	}
 	else {
@@ -76,17 +73,14 @@ function execDbRequest() {														// This gets called when this thread is 
 		unset($path);
 
 		// What will be printed to user
-		$cmdBackup  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." ";
+		$cmdBackup  = "$FDISTDUMP_HA_CMD $FDISTDUMP_HA_ARGS ".implode(" ", $pathsArr)." ";
 		$cmdBackup .= "$MPIEXEC_CMD $MPIEXEC_ARGS ";
-		$cmdBackup .= "$FDISTDUMP_CMD $filter $opts";
+		$cmdBackup .= "$FDISTDUMP_CMD $FDISTDUMP_ARGS $filter $opts";
 
 		// What will be executed
-		$cmd  = "$FDISTDUMP_HA_CMD ".implode(" ", $pathsArr)." "; // NOTE: add --verbose for debug
+		$cmd  = "$FDISTDUMP_HA_CMD $FDISTDUMP_HA_ARGS ".implode(" ", $pathsArr)." "; // NOTE: add --verbose for debug
 		$cmd .= "$MPIEXEC_CMD $MPIEXEC_ARGS ";
-		$cmd .= "$FDISTDUMP_CMD $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
-		if ($FDISTDUMP_LOG_LEVEL > 0 && $FDISTDUMP_LOG_LEVEL < 5) {
-			$cmd .= "-v $FDISTDUMP_LOG_LEVEL";
-		}
+		$cmd .= "$FDISTDUMP_CMD $FDISTDUMP_ARGS $filter $opts --progress-bar-type=json --progress-bar-dest=".$TMP_DIR.$stamp.".$tab.json ";
 	}
 
 	$desc = array(
@@ -104,6 +98,10 @@ function execDbRequest() {														// This gets called when this thread is 
 		echo '</div>';
 		exit(2);															// And end this thread )
 	}																		// Else
+
+	if (isset($LOG_DIR)) {
+		file_put_contents("$LOG_DIR/query.log", date('r').": $cmd\n", FILE_APPEND);
+	}
 
 	$p = proc_open($cmd, $desc, $pipes);					// Execute the program command
 	if($p == false) {														// If execution failed (

@@ -57,21 +57,23 @@
 	// Either return .png data of an image
 	if ($mode == 'thumb') {
 		if ($SINGLE_MACHINE) {
-			echo getGraphThumb(strval($cmd), $desc, $pipes, "");
+			echo getGraphThumb(strval($cmd), $desc, $pipes);
 		}
 		else {
-			echo getGraphThumb(strval($cmd), $desc, $pipes, $SLAVE_HOSTNAMES[0]);
+			$ssh_cmd = 'ssh '.$SLAVE_HOSTNAMES[0].' -- '.$cmd;
+			echo getGraphThumb(strval($ssh_cmd), $desc, $pipes);
 		}
 		exit;
 	}
 
 	// Or return graph JSON data
 	if ($SINGLE_MACHINE)
-		echo getGraphJSON(strval($cmd), $desc, $pipes, "");
+		echo getGraphJSON(strval($cmd), $desc, $pipes);
 	else {
 		$js = null;
-		foreach ($SLAVE_HOSTNAMES as $sh) {
-			$buffer = getGraphJSON(strval($cmd), $desc, $pipes, $sh);
+		foreach ($SLAVE_HOSTNAMES as $hostname) {
+			$ssh_cmd = 'ssh '.$hostname.' -- '.$cmd;
+			$buffer = getGraphJSON(strval($cmd), $desc, $pipes);
 
 			if ($js == null)
 				$js = json_decode($buffer, true);

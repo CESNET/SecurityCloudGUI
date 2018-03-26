@@ -68,7 +68,7 @@
 			<div class="panel-body">
 				<div class="tab-content">
 					<div id="DbMainOpt1_<?php echo $tab; ?>" class="tab-pane fade in active clearfix">
-						<?php include 'dbgryOptions.php'; ?>
+						<?php include 'dbqryOptions.php'; ?>
 					</div>
 					<div id="DbMainOpt2_<?php echo $tab; ?>" class="tab-pane fade">
 						<a href="#" data-toggle="modal" data-target="#DbqryFdistdumpHelpModal">fdistdump options overview</a><br>

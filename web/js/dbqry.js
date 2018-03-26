@@ -87,7 +87,7 @@ function Dbqry_parseQuerryParameter(tab) {
 		/* Fields */
 		var fields = "";
 		if (document.getElementById("FieldsSelectorCheckbox").checked) {
-			fields = "--fields=" + Dbqry_getMultiselectAsString("Option_FieldList");
+			fields = "--output-fields=" + Dbqry_getMultiselectAsString("Option_FieldList");
 		}
 	
 		var str = limitTo + " " + aggreg + " " + orderBy + " " + output + " " + fields;
