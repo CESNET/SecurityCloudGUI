@@ -9,7 +9,7 @@
 	$HISTORIC_DATA = false;
 
 	// Maximum of tabs for parallel fdistdump querries
-	$MAX_TABS = 8;
+	$_MAX_TABS = 8; // Deprecated option, do not use
 
 	// Length of the userstamp identifying the transactions. The userstamp is a combination of symbols respecting the regex: [a-zA-Z0-9]
 	$USERSTAMP_LENGTH = 16;
