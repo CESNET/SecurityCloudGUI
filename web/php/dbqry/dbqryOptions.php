@@ -119,7 +119,11 @@
 		</div>
 		
 		<label class="btn btn-default">
-			<input type="checkbox" id="Option_OutputNoSummary_<?php echo $tab; ?>"> No summary
+			<input type="checkbox" id="Option_OutputNoEllipsize"> No Ellipsize
+		</label>
+		
+		<label class="btn btn-default">
+			<input type="checkbox" id="Option_OutputNoSummary"> No summary
 		</label>
 		
 		<label class="btn btn-default" onclick="toggleFieldsSelector()">

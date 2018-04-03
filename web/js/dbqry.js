@@ -77,11 +77,15 @@ function Dbqry_parseQuerryParameter(tab) {
 			output += " " + volumeConv;
 		}
 	
-		if (document.getElementById("Option_OutputNoSummary_" + tab).checked) {
+		if (document.getElementById("Option_OutputNoSummary").checked) {
 			output += " --output-items=r";
 		}
 		else {
 			output += " --output-items=r,p";
+		}
+		
+		if (document.getElementById("Option_OutputNoEllipsize").checked) {
+			output += " --output-no-ellipsize";
 		}
 		
 		/* Fields */
