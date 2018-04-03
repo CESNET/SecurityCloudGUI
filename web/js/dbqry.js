@@ -88,6 +88,11 @@ function Dbqry_parseQuerryParameter(tab) {
 			output += " --output-no-ellipsize";
 		}
 		
+		var timezone = new Intl.DateTimeFormat().resolvedOptions().timeZone;
+		if (timezone != "") {
+			output += " --time-zone=\"" + timezone + "\"";
+		}
+		
 		/* Fields */
 		var fields = "";
 		if (document.getElementById("FieldsSelectorCheckbox").checked) {
