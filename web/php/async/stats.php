@@ -21,10 +21,14 @@ function printResourceError() {
 }
 
 for ($ch = 0; $ch < $chnlSize; $ch++) {
-	$cmd = "$RRDTOOL_CMD fetch $chnl[$ch].rrd AVERAGE -r 300 $time -a | tail -n +3 | tr ' ' ','";
+	# format: rrdtool fetch filename CF [--resolution resolution] [--start start] [--end end] [--align-start] [--daemon|-d address]
+	$filename = "$IPFIXCOL_DATA/$profile/rrd/channels/$chnl[$ch].rrd";
+	$cf = "AVERAGE";
+	$resolution = "300";
+	$cmd = "$RRDTOOL_CMD fetch $filename $cf --resolution $resolution --align-start $time | tail -n +3 | tr ' ' ','";
 
 	if ($SINGLE_MACHINE) {
-		$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA."$profile/rrd/channels");// Execute the program command
+		$p = proc_open($cmd, $desc, $pipes);// Execute the program command
 		if(!$p) printResourceError();
 
 		if(is_resource($p)) {
@@ -35,8 +39,9 @@ for ($ch = 0; $ch < $chnlSize; $ch++) {
 		}
 	}
 	else {
-		foreach ($SLAVE_HOSTNAMES as $sh) {
-			$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$sh."$profile/rrd/channels");
+		foreach ($SLAVE_HOSTNAMES as $hostname) {
+			$ssh_cmd = 'ssh '.$hostname.' -- '.$cmd;
+			$p = proc_open($ssh_cmd, $desc, $pipes);
 			if (!$p) printResourceError();
 
 			if (is_resource($p)) {

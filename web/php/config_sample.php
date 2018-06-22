@@ -9,7 +9,7 @@
 	$HISTORIC_DATA = false;
 
 	// Maximum of tabs for parallel fdistdump querries
-	$MAX_TABS = 8;
+	$_MAX_TABS = 8; // Deprecated option, do not use
 
 	// Length of the userstamp identifying the transactions. The userstamp is a combination of symbols respecting the regex: [a-zA-Z0-9]
 	$USERSTAMP_LENGTH = 16;
@@ -19,11 +19,15 @@
 	/* =========== */
 	// use absolute paths or command names (relative to the PATH env. var.)
 	$FDISTDUMP_CMD		= '/usr/lib64/mpich/bin/fdistdump_mpich';
+	$FDISTDUMP_ARGS		= '--num-threads 8 --output-rich-header';
+
 	$FDISTDUMP_HA_CMD	= 'fdistdump-ha';
+	$FDISTDUMP_HA_ARGS	= '';
+
 	$MPIEXEC_CMD		= '/usr/lib64/mpich/bin/mpiexec';
-	$MPIEXEC_ARGS		= '-n 2'; // -env OMP_NUM_THREADS 4
+	$MPIEXEC_ARGS		= '-n 2';
+
 	$RRDTOOL_CMD		= '/opt/rrdtool-1.7.0/bin/rrdtool';
-	$FDISTDUMP_LOG_LEVEL = 0; // 0 - disable, 1 - error, 2 - also warnings, 3 - also logs, 4 - also debug
 
 	/* =========== */
 	/* DIRECTORIES */
@@ -31,14 +35,15 @@
 	// Absolute path to the index.php file of the GUI
 	$BASE_DIR = '/var/www/html/';
 
-	// Names of slave nodes in distributed environment
-	// Do not omit final slashes
-	$SLAVE_HOSTNAMES = array ('slave1/', 'slave2/', 'slave3/');
+	// Slave hostnames in distributed environment
+	$SLAVE_HOSTNAMES = array ('slave1.example.org', 'slave2.example.org', 'slave3.example.org');
 
 	// Folder for storing transactions of the GUI.
 	// User apache needs privileges to write into this
 	// folder.
 	$TMP_DIR = '/tmp/scgui/';
+
+	//$LOG_DIR = '/var/log/scgui/';
 
 	// Path to folder where query and graph data will be stored (live folder will be there)
 	$IPFIXCOL_DATA = '/data/';

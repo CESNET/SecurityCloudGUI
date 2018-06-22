@@ -2,18 +2,20 @@
 	/**
 	*	Takes the array of sources, variable to display
 	*	and produces the string containing all required
-	*	variable definitions for rrdtool.
+        *	variable definitions for rrdtool.
+        *	Required format: DEF:<vname>=<rrdfile>:<ds-name>:<CF>
 	*
 	*	\return A properly formatted string with all
 	*	definitions.
 	*/
-	function createDefinitions($sources, $profile, $var) {
-		$result = "";
+	function createDefinitions($sources, $profile, $ds_name) {
+		global $IPFIXCOL_DATA;
 
-		$size = sizeof($sources);
-		for ($i = 0; $i < $size; $i++) {
-			$result .= "DEF:foo".strval($i+1).'='.$sources[$i].".rrd:$var:MAX ";
-			//NOTE: $result .= "DEF:foo".strval($i+1)."=$FDUMP_FOLDER/$profile/$sources[$i].rrd:$var:MAX ";
+		$result = "";
+		for ($i = 0; $i < sizeof($sources); $i++) {
+			$vname = $sources[$i];
+			$rrdfile = "$IPFIXCOL_DATA/$profile/rrd/channels/$sources[$i].rrd";
+			$result .= "DEF:$vname=$rrdfile:$ds_name:MAX ";
 		}
 
 		return $result;
@@ -23,6 +25,7 @@
 	*	Takes an array of sources, their respective colours
 	*	and user defined mode and produces the string
 	*	containing all required render definitions for rrd.
+	*	Required format: AREA:value[#color][:[legend][:STACK][:skipscale]]
 	*
 	*	If $mode has it's last bit set ($mode % 2 == 1) then
 	*	the graph will be rendered with lines instead of areas
@@ -38,12 +41,18 @@
 		$size = sizeof($sources);
 		$ratio = 192 / $size;
 
+		$value = $sources[0];
 		$c = dechex($base - $ratio);
-		$result	= "AREA:foo1#$c".$c."$c:\"$sources[0]\" ";
+		$color = "$c$c$c";
+		$legend = "\"$sources[0]\"";
+		$result	= "AREA:$value#$color:$legend ";
 
 		for($i = 1; $i < $size; $i++) {
+			$value = $sources[$i];
 			$c = dechex($base - ($i + 1) * $ratio);
-			$result .= 'AREA:foo'.strval($i+1)."#$c".$c."$c:\"$sources[$i]\":STACK ";
+			$color = "$c$c$c";
+			$legend = "\"$sources[$i]\"";
+			$result	.= "AREA:$value#$color:$legend:STACK ";
 		}
 
 		return $result;
@@ -51,15 +60,11 @@
 
 	/**
 	 * Based on $cmd, retrieves JSON string for rrd graph.
-	 * Each line of loaded rrd output is yielded. $slave
-	 * is either "" for $SINGLE_MACHINE or any valid name
-	 * from $SLAVE_HOSTNAMES.
+	 * Each line of loaded rrd output is yielded.
 	 */
-	function getGraphJSON($cmd, &$desc, &$pipes, $slave) {
-		global $IPFIXCOL_DATA, $profile;
-
+	function getGraphJSON($cmd, &$desc, &$pipes) {
 		$desc = array(0 => array ('pipe', 'r'), 1 => array ('pipe', 'w'), 2 => array ('pipe', 'w') );
-		$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$slave."$profile/rrd/channels/");
+		$p = proc_open($cmd, $desc, $pipes);
 
 		$buffer = "";
 		if(is_resource($p))
@@ -75,13 +80,10 @@
 	 *  @param [in] $cmd rrdtool command
 	 *  @param [in] $desc Array of descriptors
 	 *  @param [in] $pipes Communication pipes
-	 *  @param [in] $slave Name of a slave (or empty string)
 	 *  @return Binary source of an image
 	 */
-	function getGraphThumb($cmd, &$desc, &$pipes, $slave) {
-		global $IPFIXCOL_DATA, $profile;
-
-		$p = proc_open($cmd, $desc, $pipes, $IPFIXCOL_DATA.$slave."$profile/rrd/channels/");
+	function getGraphThumb($cmd, &$desc, &$pipes) {
+		$p = proc_open($cmd, $desc, $pipes);
 
 		$buffer = "";
 		if(is_resource($p))

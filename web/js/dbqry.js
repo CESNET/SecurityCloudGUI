@@ -77,17 +77,26 @@ function Dbqry_parseQuerryParameter(tab) {
 			output += " " + volumeConv;
 		}
 	
-		if (document.getElementById("Option_OutputNoSummary_" + tab).checked) {
+		if (document.getElementById("Option_OutputNoSummary").checked) {
 			output += " --output-items=r";
 		}
 		else {
 			output += " --output-items=r,p";
 		}
 		
+		if (document.getElementById("Option_OutputNoEllipsize").checked) {
+			output += " --output-no-ellipsize";
+		}
+		
+		var timezone = new Intl.DateTimeFormat().resolvedOptions().timeZone;
+		if (timezone != "") {
+			output += " --time-zone=\"" + timezone + "\"";
+		}
+		
 		/* Fields */
 		var fields = "";
 		if (document.getElementById("FieldsSelectorCheckbox").checked) {
-			fields = "--fields=" + Dbqry_getMultiselectAsString("Option_FieldList");
+			fields = "--output-fields=" + Dbqry_getMultiselectAsString("Option_FieldList");
 		}
 	
 		var str = limitTo + " " + aggreg + " " + orderBy + " " + output + " " + fields;
